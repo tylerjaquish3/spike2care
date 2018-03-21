@@ -192,7 +192,7 @@ require_once('../stripe/init.php');
 			if (IS_DEV) {
 		        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
 		    } else {
-				\Stripe\Stripe::setApiKey("sk_live_kCwBBQwdqRSl73g16v4d5GPP");
+				\Stripe\Stripe::setApiKey(LIVE_KEY);
 			}
 
 			// Token is created using Stripe.js or Checkout!
@@ -254,7 +254,7 @@ require_once('../stripe/init.php');
 			if (IS_DEV) {
 		        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
 		    } else {
-				\Stripe\Stripe::setApiKey("sk_live_kCwBBQwdqRSl73g16v4d5GPP");
+				\Stripe\Stripe::setApiKey(LIVE_KEY);
 			}
 
 			// Token is created using Stripe.js or Checkout!
@@ -330,7 +330,7 @@ require_once('../stripe/init.php');
 			if (IS_DEV) {
 		        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
 		    } else {
-				\Stripe\Stripe::setApiKey("sk_live_kCwBBQwdqRSl73g16v4d5GPP");
+				\Stripe\Stripe::setApiKey(LIVE_KEY);
 			}
 
 			// Token is created using Stripe.js or Checkout!
@@ -617,7 +617,7 @@ require_once('../stripe/init.php');
 			if (IS_DEV) {
 		        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
 		    } else {
-				\Stripe\Stripe::setApiKey("sk_live_kCwBBQwdqRSl73g16v4d5GPP");
+				\Stripe\Stripe::setApiKey(LIVE_KEY);
 			}
 
 			$re = \Stripe\Refund::create(array(
