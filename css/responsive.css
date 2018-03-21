@@ -1,0 +1,100 @@
+
+@media only screen and (max-width: 480px) {
+
+	.modal#loginForm, .modal#passwordForm {
+	    width: 100%;
+	    margin-top: 50px;
+	    margin-left: auto;
+	    margin-right: auto;
+	}
+
+	body>section {
+	    padding: 30px 0;
+	}
+	
+	div.checkout {
+	    font-size: 14px;
+	}
+	
+	.frame {
+	    height: 200px;
+	    max-width: none;
+	}
+
+	#footer {
+    	height: 85px;
+	}
+
+	.desktop {
+		display: none;
+	}
+
+	.mobile {
+		display: block;
+	}
+
+	.format {
+		margin: 25px 0px;
+	}
+
+	#s2cVideo {
+	    height: 260px;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+
+	.navbar-header #logo {
+	    width: 76px;
+	    height: 50px;
+	}
+
+	h1 {
+		font-size: 24px;
+	}
+
+	h2 {
+		font-size: 20px;
+	}
+
+	h3 {
+		font-size: 18px;
+	}
+
+	h4 {
+		font-size: 16px;
+	}
+
+	p { 
+		font-size: 14px;
+	}
+
+	h1, h2, h3, h4 {
+	    margin-bottom: 2px;
+	}
+
+	div.quote {
+	    padding: 20px 20px;
+	    line-height: 16px;
+	    font-style: italic;
+	    font-size: 14px;
+	}
+
+	div.checkout {
+		/*width: 100%;*/
+		padding: 0px;
+	}
+
+	.event-card {
+	    margin-top: 20px;
+	    height: 600px;
+	}
+
+	form#registration-form {
+	    margin-bottom: 20px;
+	}
+}
+
+@media only screen and (max-width: 992px) {
+
+}

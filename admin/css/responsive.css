@@ -1,0 +1,60 @@
+
+@media only screen and (max-width: 480px) {
+	.x_panel {
+    	padding: 5px;
+	}
+
+	.right_col {
+	    padding: 55px 5px 10px !important;
+	}
+
+	.table_panel {
+    	width: fit-content !important;
+	}
+
+	.col-md-3.left_col {
+    	max-width: 70px;
+	}
+
+	.nav-sm .container.body .col-md-3.left_col .left_col.scroll-view {
+	    max-width: 70px;
+	}
+
+	ul {
+	    padding: 0px;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+
+	h1 {
+		font-size: 24px;
+	    line-height: 24px;	
+	}
+
+	h2 {
+		font-size: 20px;
+	    line-height: 20px;
+	}
+
+	h3 {
+		font-size: 18px;
+		line-height: 18px;
+	}
+
+	h4 {
+		font-size: 16px;
+	}
+
+	p { 
+		font-size: 14px;
+	}
+
+	h1, h2, h3, h4 {
+	    margin-bottom: 2px;
+	}
+}
+
+@media only screen and (max-width: 992px) {
+
+}

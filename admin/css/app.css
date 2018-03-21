@@ -1,0 +1,31 @@
+.edit-content .form-control {
+	max-width: none;
+}
+
+.control-label {
+	font-weight: bold !important;
+}
+
+#cke_1_contents[style] {
+	height: 100px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+     background-color: #399dbe !important; 
+}	
+
+.select2-selection__choice__remove {
+     color: #fff !important; 
+}	
+
+.nav-sm .site_title #small {
+    width: 90%;
+}
+
+#statusSelect {
+	max-width: 200px;
+}
+
+.inline {
+    display: inline-block;
+}

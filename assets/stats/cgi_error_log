@@ -1,0 +1,309 @@
+20170822T225452: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225505: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225612: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225614: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225703: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225705: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225722: spike2care.org/test/events.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225723: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225727: spike2care.org/test/about.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225728: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225732: spike2care.org/test/photos.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225733: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225737: spike2care.org/test/contact.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225738: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225752: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225753: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T225755: spike2care.org/test/checkout.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T225801: spike2care.org/test/getEvents.php
+PHP Warning:  include(admin/includes/datalogin.php): failed to open stream: No such file or directory in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  include(): Failed opening 'admin/includes/datalogin.php' for inclusion (include_path='.:/usr/local/lib/php-5.5.22-amd64/lib/php') in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 3
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You ar
+20170822T230216: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T230224: spike2care.org/test/about.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T230225: spike2care.org/test/about.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T230936: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T231232: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T231237: spike2care.org/test/about.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T231239: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T231246: spike2care.org/test/photos.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T231255: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T231306: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T231322: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T232218: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T232239: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T232525: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T232535: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T235712: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T235713: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T235748: spike2care.org/test/showSpecialEvent.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T235750: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T235914: spike2care.org/test/showSpecialEvent.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T235915: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170822T235919: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170822T235920: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T000200: spike2care.org/test/showSpecialEvent.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T000202: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T000254: spike2care.org/test/photos.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T000255: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T002143: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T002145: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T002306: spike2care.org/test/contact.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T002307: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T010105: spike2care.org/test/photos.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T010106: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T014132: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T014134: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T014454: spike2care.org/test/showSpecialEvent.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T014455: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T094417: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T094419: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T094449: spike2care.org/test/admin/includes/checkLogin.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e0d1311f65d02eca8182742e94ff86d6, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/checkLogin.php on line 40
+PHP Warning:  Unknown: open(/var/php_sessions/sess_e0d1311f65d02eca8182742e94ff86d6, O_RDWR) failed: No such file or directory (2) in Unknown on line 0
+PHP Warning:  Unknown: Failed to write session data (files). Please verify that the current setting of session.sav
+20170823T094449: spike2care.org/test/admin/index.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e0d1311f65d02eca8182742e94ff86d6, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/index.php on line 2
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled
+20170823T094505: spike2care.org/test/admin/messages.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e0d1311f65d02eca8182742e94ff86d6, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/messages.php on line 2
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspel
+20170823T094509: spike2care.org/test/admin/index.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e0d1311f65d02eca8182742e94ff86d6, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/index.php on line 2
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled
+20170823T111540: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T111542: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T111550: spike2care.org/test/photos.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T111551: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T111650: spike2care.org/test/about.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T111650: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T111721: spike2care.org/test/contact.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T111722: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T111735: spike2care.org/test/admin/includes/checkLogin.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e864ccc7d560c4d662e7d2d03383479e, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/checkLogin.php on line 40
+PHP Warning:  Unknown: open(/var/php_sessions/sess_e864ccc7d560c4d662e7d2d03383479e, O_RDWR) failed: No such file or directory (2) in Unknown on line 0
+PHP Warning:  Unknown: Failed to write session data (files). Please verify that the current setting of session.sav
+20170823T111735: spike2care.org/test/admin/index.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e864ccc7d560c4d662e7d2d03383479e, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/index.php on line 2
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled
+20170823T113044: spike2care.org/test/admin/index.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e864ccc7d560c4d662e7d2d03383479e, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/index.php on line 2
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled
+20170823T113137: spike2care.org/test/index.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/header.php on line 26
+PHP Warning:  date(): I
+20170823T113138: spike2care.org/test/getEvents.php
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/getEvents.php on line 10
+PHP Warning:  date()
+20170823T113143: spike2care.org/test/admin/includes/checkLogin.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e864ccc7d560c4d662e7d2d03383479e, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/checkLogin.php on line 40
+PHP Warning:  Unknown: open(/var/php_sessions/sess_e864ccc7d560c4d662e7d2d03383479e, O_RDWR) failed: No such file or directory (2) in Unknown on line 0
+PHP Warning:  Unknown: Failed to write session data (files). Please verify that the current setting of session.sav
+20170823T113144: spike2care.org/test/admin/index.php
+PHP Warning:  session_start(): open(/var/php_sessions/sess_e864ccc7d560c4d662e7d2d03383479e, O_RDWR) failed: No such file or directory (2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/index.php on line 2
+PHP Warning:  date(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled
+20170823T114244: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T020924: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021018: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021030: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021129: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021247: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021444: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021507: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021525: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T021704: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170824T024053: spike2care.org/test/admin/createEvent.php
+PHP Warning:  in_array() expects parameter 2 to be array, null given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/createEvent.php on line 145
+PHP Warning:  in_array() expects parameter 2 to be array, null given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/createEvent.php on line 145
+PHP Warning:  in_array() expects parameter 2 to be array, null given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/createEvent.php on line 145
+PHP W
+20170824T161637: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170825T003408: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170825T003807: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170825T003830: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170825T003855: spike2care.org/test/admin/content.php
+PHP Warning:  session_start(): Cannot send session cache limiter - headers already sent (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php:2) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/content.php on line 3
+
+20170826T235533: spike2care.org/test/admin/index.php
+PHP Warning:  Cannot modify header information - headers already sent by (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/header.php:19) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/sidebar.php on line 4
+PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/sidebar.php on line 10
+PHP Warning:  Cannot modify he
+20170827T002521: spike2care.org/test/admin/index.php
+PHP Warning:  Cannot modify header information - headers already sent by (output started at /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/header.php:19) in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/sidebar.php on line 4
+PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/sidebar.php on line 10
+PHP Warning:  Cannot modify he
+20170827T015059: spike2care.org/test/admin/createEvent.php
+PHP Warning:  in_array() expects parameter 2 to be array, null given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/createEvent.php on line 145
+PHP Warning:  in_array() expects parameter 2 to be array, null given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/createEvent.php on line 145
+PHP Warning:  in_array() expects parameter 2 to be array, null given in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/createEvent.php on line 145
+PHP W
+20170827T020652: spike2care.org/test/admin/includes/handleForm.php
+PHP Warning:  exif_read_data(phpIuISTT): File not supported in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/functions.php on line 18
+
+20170827T020959: spike2care.org/test/admin/includes/handleForm.php
+PHP Warning:  exif_read_data(phpr8OJgN): File not supported in /hermes/bosnacweb01/bosnacweb01bp/b1552/ipg.spike2careorg/test/admin/includes/functions.php on line 18
+

@@ -1,0 +1,692 @@
+AWSTATS DATA FILE 6.9 (build 1.925)
+# If you remove this file, all statistics for date 201708 will be lost/reset.
+
+# Position (offset in bytes) in this file of beginning of each section for
+# direct I/O access. If you made changes somewhere in this file, you should
+# also remove completely the MAP section (AWStats will rewrite it at next
+# update).
+BEGIN_MAP 27
+POS_GENERAL 1864                
+POS_TIME 2537                
+POS_VISITOR 3511                
+POS_DAY 12282               
+POS_DOMAIN 12573               
+POS_LOGIN 12806               
+POS_ROBOT 12961               
+POS_WORMS 13402               
+POS_EMAILSENDER 13533               
+POS_EMAILRECEIVER 13676               
+POS_SESSION 13752               
+POS_SIDER 13959               
+POS_FILETYPES 15906               
+POS_OS 16133               
+POS_BROWSER 16271               
+POS_SCREENSIZE 16497               
+POS_UNKNOWNREFERER 16571               
+POS_UNKNOWNREFERERBROWSER 16973               
+POS_ORIGIN 17289               
+POS_SEREFERRALS 17432               
+POS_PAGEREFS 17589               
+POS_SEARCHWORDS 18006               
+POS_KEYWORDS 18179               
+POS_MISC 2201                
+POS_ERRORS 18259               
+POS_CLUSTER 12662               
+POS_SIDER_404 18405               
+END_MAP
+
+# LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
+# FirstTime   = Date of first visit for history file
+# LastTime    = Date of last visit for history file
+# LastUpdate  = Date of last update - Nb of parsed records - Nb of parsed old records - Nb of parsed new records - Nb of parsed corrupted - Nb of parsed dropped
+# TotalVisits = Number of visits
+# TotalUnique = Number of unique visitors
+# MonthHostsKnown   = Number of hosts known
+# MonthHostsUnKnown = Number of hosts unknown
+BEGIN_GENERAL 8
+LastLine 20170827222458 4011 876035 0
+FirstTime 20170822140117
+LastTime 20170827222458
+LastUpdate 20170828000740 4011 0 4011 0 0
+TotalVisits 314                 
+TotalUnique 222                 
+MonthHostsKnown 0                   
+MonthHostsUnknown 230                 
+END_GENERAL
+
+# Misc ID - Pages - Hits - Bandwidth
+BEGIN_MISC 10
+QuickTimeSupport 0 0 0
+JavaEnabled 0 0 0
+JavascriptDisabled 0 0 0
+PDFSupport 0 0 0
+WindowsMediaPlayerSupport 0 0 0
+AddToFavourites 0 0 0
+RealPlayerSupport 0 0 0
+TotalMisc 0 0 0
+DirectorSupport 0 0 0
+FlashSupport 0 0 0
+END_MISC
+
+# Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
+BEGIN_TIME 24
+0 116 253 6132908 53 64 22275
+1 134 282 5089291 46 57 17532
+2 187 513 20912310 118 183 124978
+3 44 44 69030 48 48 11339
+4 20 20 33420 28 28 9613
+5 10 10 13056 21 21 20089
+6 12 12 20306 13 13 11024
+7 9 9 11268 13 13 13401
+8 7 7 11076 7 7 6041
+9 32 67 2613053 15 19 16752
+10 12 12 18556 25 26 24404
+11 120 340 10604583 26 50 94452
+12 89 185 3967054 14 14 11797
+13 66 139 2491699 9 10 8986
+14 34 38 99310 50 50 19441
+15 75 109 2356995 146 147 131733
+16 69 144 662666 54 54 21284
+17 41 41 49385 55 55 14748
+18 58 99 200155 54 61 22914
+19 83 159 3613816 49 49 13397
+20 48 48 79858 50 50 17620
+21 27 27 49842 44 44 8870
+22 74 126 1413198 44 62 24768
+23 78 131 1268890 45 58 24524
+END_TIME
+
+# Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
+# [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
+# The 10 first Hits must be first (order not required for others)
+BEGIN_VISITOR 230
+98.125.213.143 433 1174 34967145 20170827021436
+76.28.216.75 324 324 534264 20170823154847
+173.160.206.245 194 553 14164568 20170825185308
+50.245.146.69 91 220 4497020 20170824155547
+209.210.121.148 75 195 4693228 20170825161717
+178.79.176.192 49 49 89614 20170827222458 20170827222458 /
+184.154.139.23 7 7 12922 20170825153044
+184.154.139.26 7 7 11172 20170827153531
+199.193.251.133 7 7 0 20170827172420
+69.175.67.58 6 6 7576 20170827110356
+35.196.231.47 1 1 1846 20170826202416
+103.83.186.66 1 1 1846 20170826045141
+45.32.128.51 1 1 1846 20170827015812
+196.252.164.61 1 1 1846 20170824170545
+198.50.200.129 1 1 1846 20170823102018
+179.198.120.198 1 1 1846 20170825114636
+173.252.123.134 0 1 34439 
+185.170.42.18 1 1 96 20170824074740
+191.96.249.110 1 1 1006 20170822164548
+46.101.127.145 1 1 1006 20170822151510
+218.186.28.181 1 1 1846 20170826181347
+203.192.219.90 1 1 1846 20170824092906
+202.46.48.200 1 1 0 20170823050544
+66.102.6.155 2 6 903384 20170827002522
+163.172.162.106 1 1 1846 20170824155842
+103.213.128.65 1 1 1846 20170822222259
+87.21.104.127 1 1 1846 20170825084554
+202.46.52.176 1 1 1846 20170824140233
+202.46.58.51 1 1 1846 20170824033202
+188.209.49.34 1 1 1846 20170823125642
+177.107.116.4 1 1 1006 20170822173112
+86.2.30.21 1 1 1846 20170824115143
+114.201.59.67 1 1 1846 20170827094650
+159.147.255.254 1 1 1846 20170823005822
+179.192.85.164 1 1 1846 20170824132706
+107.77.97.96 4 4 7384 20170826163608
+178.137.88.27 1 1 1846 20170822191003
+35.196.145.194 2 2 1942 20170826201529
+204.12.222.250 3 3 5538 20170824035552
+94.23.172.135 1 1 1846 20170823061246
+69.171.225.22 1 1 0 20170827112351
+208.102.165.52 1 1 1846 20170827054939
+49.146.44.42 1 1 1846 20170823110702
+94.199.50.13 1 1 1006 20170822151941
+112.134.138.196 1 1 1846 20170824091612
+5.39.146.91 1 1 1846 20170823123002
+46.29.226.117 1 1 1846 20170826234300
+142.116.218.133 1 1 1846 20170822200803
+212.47.195.48 4 4 384 20170827203232
+79.124.59.202 1 1 134 20170823034210
+78.109.23.1 3 3 5538 20170826161131
+176.10.104.240 1 1 1846 20170823012831
+14.139.186.6 1 1 1006 20170822144301
+204.8.156.142 1 1 1846 20170825195808
+23.253.160.244 1 1 96 20170824091043
+202.136.92.67 1 1 1846 20170823091419
+62.210.138.77 1 1 1846 20170827193736
+88.3.56.88 1 1 1846 20170826123444
+117.198.52.187 1 1 1846 20170827153159
+182.185.128.135 1 1 1846 20170827075447
+93.115.95.204 1 1 1846 20170825210409
+73.252.4.168 1 1 1846 20170825022356
+176.126.252.12 2 2 1942 20170825230722
+138.246.253.19 2 2 0 20170824160816
+179.217.57.221 1 1 1846 20170825173313
+66.220.146.30 0 1 34439 
+124.106.135.104 1 1 1846 20170824010050
+94.225.149.4 1 1 1846 20170823165247
+110.44.123.126 1 1 1846 20170824001548
+45.63.99.129 1 1 1846 20170825152152
+31.13.110.106 0 1 34439 
+163.172.139.161 1 1 1846 20170824035555
+46.139.127.87 1 1 1846 20170827142251
+89.121.152.114 1 1 1846 20170825120302
+199.249.223.68 1 1 96 20170824045016
+35.196.51.30 2 2 1942 20170825201246
+52.71.64.37 1 1 1846 20170823130540
+202.46.53.44 1 1 1846 20170824200021
+173.252.92.116 1 1 1846 20170823091213
+193.75.39.237 1 1 1846 20170825161512
+169.255.236.102 1 1 1846 20170827093424
+79.73.70.60 1 1 1846 20170824104246
+71.195.173.32 1 1 1846 20170822204253
+109.180.151.248 1 1 1846 20170827002220
+204.12.226.250 2 2 3692 20170824124158
+202.46.51.82 1 1 96 20170825013801
+173.252.123.144 0 1 34439 
+65.55.210.36 1 1 1846 20170824100713
+103.214.139.8 1 1 1846 20170827120231
+35.185.88.149 1 1 1846 20170824123415
+73.93.140.154 1 1 1846 20170826002505
+49.206.122.236 1 1 1846 20170824144124
+23.88.37.115 3 3 5538 20170827205817
+77.205.48.20 1 1 1846 20170825072925
+139.195.85.27 1 1 1846 20170824023942
+35.196.202.102 2 2 1942 20170827200226
+199.30.24.47 1 1 1846 20170827141448
+146.185.177.103 1 1 1846 20170824182032
+196.203.70.113 1 1 1846 20170824232309
+158.69.229.134 2 2 1942 20170824014041
+94.53.188.2 1 1 1846 20170823050905
+92.73.191.140 1 1 1846 20170824230634
+35.185.109.232 1 1 1846 20170823202415
+62.210.115.87 1 1 1846 20170824085526
+46.101.139.248 2 2 3692 20170825155958
+202.46.54.71 1 1 134 20170823035904
+200.75.24.242 1 1 1846 20170824074427
+103.22.173.154 1 1 1846 20170823081030
+202.46.57.209 1 1 96 20170824033201
+94.1.176.168 1 1 1846 20170823160659
+188.2.154.155 1 1 1846 20170823091314
+40.77.178.117 1 1 1846 20170825150135
+202.46.52.110 1 1 0 20170823035905
+109.122.76.155 1 1 1846 20170825101957
+152.234.132.83 1 1 1846 20170823203403
+104.196.105.162 2 2 1942 20170824123909
+68.224.9.179 1 1 1846 20170826035841
+65.19.167.131 1 1 1846 20170823233810
+74.107.30.2 1 1 1846 20170826095815
+67.190.244.240 1 1 1846 20170826181646
+178.235.40.117 1 1 1846 20170826150521
+50.117.89.222 1 1 96 20170826024120
+113.203.238.66 1 1 1846 20170823073206
+220.227.89.237 2 2 2852 20170823000019
+184.154.36.163 1 1 96 20170826110701
+41.188.108.50 1 1 1846 20170824184535
+78.192.233.42 1 1 1846 20170827131649
+51.15.56.11 1 1 1846 20170824231354
+188.51.150.99 1 1 1846 20170822211653
+92.245.5.46 1 1 1846 20170824090412
+35.196.103.127 2 2 1942 20170823200931
+80.89.73.243 1 1 1846 20170826033917
+43.248.34.188 1 1 1846 20170823092518
+78.20.122.169 1 1 1846 20170826054444
+185.203.118.150 1 1 1846 20170822191726
+200.120.7.100 1 1 1846 20170827205242
+208.93.124.5 1 1 1846 20170825211907
+162.243.166.137 1 1 96 20170824030750
+110.164.69.196 1 1 1846 20170823132713
+189.68.91.106 1 1 1846 20170825092121
+90.34.218.50 1 1 1846 20170826152800
+190.72.11.126 1 1 1846 20170823042500
+49.35.9.71 1 1 1846 20170826042343
+115.112.108.32 1 1 1846 20170823032248
+203.221.30.181 1 1 1846 20170827052612
+173.252.123.131 0 1 34439 
+95.103.116.160 1 1 1846 20170824180654
+49.49.171.122 1 1 1846 20170823070217
+84.200.68.153 1 1 134 20170823121312
+89.136.227.223 1 1 1846 20170825025342
+178.148.154.205 1 1 1846 20170827085511
+116.8.122.225 1 1 1846 20170823031346
+88.156.129.116 1 1 1846 20170824010203
+89.32.127.178 1 1 1846 20170826205507
+5.12.208.231 1 1 1846 20170826205649
+115.31.30.12 1 1 1846 20170823012525
+170.250.140.52 1 1 134 20170823115836
+84.200.84.234 1 1 1846 20170823121828
+104.196.61.118 1 1 1846 20170827201838
+92.233.252.110 1 1 1846 20170827111943
+144.64.127.158 1 1 1846 20170826050853
+193.90.12.89 1 1 1006 20170822170244
+176.10.104.243 1 1 1846 20170824132944
+27.34.18.18 1 1 1846 20170823051112
+174.21.14.255 1 1 1846 20170827160105
+90.148.95.171 1 1 1846 20170824061350
+117.226.246.42 1 1 1846 20170826182328
+190.46.188.252 1 1 1846 20170824134459
+66.102.6.157 2 7 473874 20170827002522
+62.210.82.244 1 1 1846 20170825174147
+202.173.173.128 1 1 1846 20170824223321
+92.8.111.210 1 1 1846 20170823010746
+83.240.94.95 1 1 1846 20170823060433
+92.236.0.158 1 1 1846 20170824143151
+176.212.138.159 1 1 1846 20170823064736
+111.69.75.27 1 1 1846 20170827020238
+216.218.222.12 2 2 1942 20170826094811
+80.195.223.100 1 1 1846 20170826152507
+209.95.183.213 1 1 1846 20170824190119
+5.254.79.66 1 1 134 20170823031010
+183.78.94.104 1 1 1846 20170823133546
+113.199.133.233 1 1 1006 20170822152038
+79.172.193.32 2 2 2852 20170823010039
+78.158.11.226 1 1 1846 20170824160123
+109.67.89.27 1 1 1846 20170827163823
+66.102.6.156 3 7 790642 20170827002522
+82.131.4.215 1 1 1846 20170825032434
+76.65.108.150 1 1 1846 20170825204129
+95.57.133.194 1 1 1846 20170824034722
+108.119.66.240 1 1 1846 20170826014548
+154.70.29.251 1 1 1846 20170823124148
+162.247.72.200 1 1 1006 20170822150223
+41.230.2.62 1 1 1846 20170827110035
+81.182.58.8 1 1 1846 20170824081213
+185.38.14.171 2 2 1102 20170823234558
+93.144.90.43 1 1 1846 20170827170741
+104.181.4.189 1 1 1846 20170825224616
+139.226.144.62 1 1 96 20170826103535
+217.115.10.131 1 1 134 20170823033054
+185.163.1.11 2 2 3692 20170825015136
+203.112.130.14 1 1 1846 20170824061226
+78.133.50.198 1 1 1846 20170824165533
+35.196.215.94 1 1 1846 20170825201745
+182.170.87.146 1 1 1846 20170827150956
+98.148.236.88 1 1 1846 20170825043615
+35.196.102.30 3 3 3788 20170825003504
+145.239.83.199 1 1 1846 20170824201642
+83.39.188.125 1 1 1846 20170823001640
+158.69.229.69 1 1 96 20170824002215
+52.90.203.225 4 4 3692 20170823170846
+202.46.49.135 1 1 96 20170824140232
+143.255.110.40 1 1 1846 20170824194715
+202.46.55.13 1 1 134 20170823050543
+66.220.148.168 0 1 34439 
+188.48.215.183 1 1 1846 20170824023517
+182.64.249.225 1 1 1846 20170827030001
+154.16.149.35 1 1 96 20170825070648
+49.151.63.1 1 1 1846 20170827044940
+174.138.65.112 1 1 1846 20170827111330
+173.252.123.129 0 1 34439 
+69.63.188.112 0 1 34439 
+112.198.72.63 1 1 1846 20170826013134
+202.46.49.207 1 1 96 20170824040521
+213.127.26.154 1 1 1006 20170822140918
+51.15.40.233 1 1 1846 20170822192618
+195.54.162.240 1 1 1846 20170822191156
+103.218.238.231 1 1 1846 20170823222911
+176.52.32.153 1 1 1846 20170827151408
+95.122.69.147 1 1 1846 20170825025218
+192.157.254.197 5 5 0 20170827055717
+END_VISITOR
+
+# Date - Pages - Hits - Bandwidth - Visits
+BEGIN_DAY 6
+20170822 331 434 2906789 27
+20170823 300 516 9106638 69
+20170824 403 1010 32001586 75
+20170825 154 361 8813601 48
+20170826 52 54 117464 43
+20170827 205 440 8835647 52
+END_DAY
+
+# Domain - Pages - Hits - Bandwidth
+# The 10 first Pages must be first (order not required for others)
+BEGIN_DOMAIN 1
+ip 1445 2815 61781725
+END_DOMAIN
+
+# Cluster ID - Pages - Hits - Bandwidth
+BEGIN_CLUSTER 0
+END_CLUSTER
+
+# Login - Pages - Hits - Bandwidth - Last visit
+# The 10 first Pages must be first (order not required for others)
+BEGIN_LOGIN 0
+END_LOGIN
+
+# Robot ID - Hits - Bandwidth - Last visit - Hits on robots.txt
+# The 10 first Hits must be first (order not required for others)
+BEGIN_ROBOT 9
+no_user_agent 496 5826 20170826163707 0
+spider 49 87030 20170827181900 0
+bot[+:,\.\;\/\\-] 9 10524 20170827141144 0
+googlebot 6 9326 20170827204323 0
+yandex 3 5538 20170826073834 0
+java 2 3692 20170827042232 0
+mail\.ru 2 3692 20170826213230 0
+baiduspider 2 1942 20170825155518 0
+phantom 1 96 20170823195225 0
+END_ROBOT
+
+# Worm ID - Hits - Bandwidth - Last visit
+# The 5 first Hits must be first (order not required for others)
+BEGIN_WORMS 0
+END_WORMS
+
+# EMail - Hits - Bandwidth - Last visit
+# The 20 first Hits must be first (order not required for others)
+BEGIN_EMAILSENDER 0
+END_EMAILSENDER
+
+# EMail - Hits - Bandwidth - Last visit
+# The 20 first hits must be first (order not required for others)
+BEGIN_EMAILRECEIVER 0
+END_EMAILRECEIVER
+
+# Session range - Number of visits
+BEGIN_SESSION 7
+1h+ 8
+5mn-15mn 5
+2mn-5mn 1
+30s-2mn 3
+15mn-30mn 7
+0s-30s 284
+30mn-1h 5
+END_SESSION
+
+# URL - Pages - Bandwidth - Entry - Exit
+# The 10 first Pages must be first (order not required for others)
+BEGIN_SIDER 46
+/ 652 1027329 291 286
+/test/getEvents.php 123 3654 0 0
+/test/tmpls/month.html 115 107870 0 0
+/test/tmpls/month-day.html 115 72335 1 10
+/test/ 27 539533 10 1
+/test/admin/fonts/lato/lato-bold-webfont.woff2 20 280280 1 1
+/test/admin/fonts/fa/fontawesome-webfont.woff2 20 848760 0 1
+/test/admin/fonts/lato/lato-regular-webfont.woff2 20 275220 1 0
+/test/admin/fonts/LatoLight/lato-light-webfont.woff2 20 323312 0 1
+/test/admin/index.php 19 110207 2 3
+/test/admin/sales.php 6 33361 0 0
+/test/fonts/fjallaone-regular-webfont.woff 18 222624 0 0
+/test/photos.php 14 193554 1 0
+/test/admin/ 1 6029 0 0
+/test/includes/handleForm.php 14 1130 0 0
+/test/passwordReset.php 2 25328 0 0
+/test/admin/createUser.php 7 60122 0 0
+/test/admin/applications.php 3 17257 0 0
+/blank.html 6 0 2 3
+/test/showSpecialEvent.php 5 70050 1 0
+/test/admin/messages.php 17 98029 1 2
+/test/index.php 14 271084 0 0
+/test/about.php 16 327329 0 0
+/test/admin/viewMessage.php 2 12253 0 0
+/test/sendemail.php 1 96 0 1
+/test/admin/editRecap.php 4 31512 0 0
+/test/admin/content.php 15 380960 0 0
+/test/admin/minutes.php 9 54163 0 0
+/test/application.php 3 72954 0 0
+/test/register.php 3 69856 0 0
+/test/admin/teams.php 2 12319 0 0
+/test/bootstrap/fonts/glyphicons-halflings-regular.woff2 14 126196 0 0
+/test/showEvent.php 6 133001 0 0
+/test/events.php 12 169614 0 0
+/test/admin/users.php 12 87709 1 0
+/test/admin/includes/handleForm.php 16 1563 0 0
+/test/admin/events.php 19 129830 2 3
+/test/admin/testimonials.php 11 84167 0 1
+/test/contact.php 9 127368 0 0
+/test/admin/createEvent.php 3 41426 0 0
+/test/admin/editTestimonial.php 6 45230 0 0
+/test/admin/includes/checkLogin.php 12 492 0 0
+/test/fonts/fontawesome-webfont.woff2 18 617280 0 0
+/test/admin/fonts/lato/lato-black-webfont.woff2 3 74160 0 0
+/test/checkout.php 9 217747 0 0
+/test/admin/entrants.php 2 11847 0 0
+END_SIDER
+
+# Files type - Hits - Bandwidth - Bandwidth without compression - Bandwidth after compression
+BEGIN_FILETYPES 9
+css 662 19765278 0 0
+png 80 885268 0 0
+ico 32 149824 0 0
+woff 18 222624 0 0
+woff2 115 2545208 0 0
+php 396 2895212 0 0
+html 916 1753096 0 0
+jpg 83 10551069 0 0
+js 513 23014146 0 0
+END_FILETYPES
+
+# OS ID - Hits
+BEGIN_OS 9
+winlong 1
+winxp 47
+winnt 1918
+linuxubuntu 49
+linux 24
+winvista 4
+macosx 78
+Unknown 352
+win2008 342
+END_OS
+
+# Browser ID - Hits
+BEGIN_BROWSER 14
+msie6.0 4
+msie8.0 4
+mozilla 25
+chrome 2125
+msie10.0 2
+firefox40.1 118
+firefox2.0.0.10 49
+lynx 1
+msie9.0 39
+firefox7.0.1 42
+Unknown 351
+firefox15.0.1 1
+safari 50
+firefox45.0 4
+END_BROWSER
+
+# Screen size - Hits
+BEGIN_SCREENSIZE 0
+END_SCREENSIZE
+
+# Unknown referer OS - Last visit date
+BEGIN_UNKNOWNREFERER 4
+facebookexternalhit/1.1_(_http://www.facebook.com/externalhit_uatext.php) 20170827112351
+Lynx/2.8.5rel.1_libwww-FM/2.15FC_SSL-MM/1.4.1c_OpenSSL/0.9.7e-dev 20170824160123
+Mechanize/2.7.5_Ruby/2.2.3p173_(http://github.com/sparklemotion/mechanize/) 20170827201838
+OC/16.0.8326.2073_(Skype_for_Business) 20170823154847
+END_UNKNOWNREFERER
+
+# Unknown referer Browser - Last visit date
+BEGIN_UNKNOWNREFERERBROWSER 3
+facebookexternalhit/1.1_(_http://www.facebook.com/externalhit_uatext.php) 20170827112351
+Mechanize/2.7.5_Ruby/2.2.3p173_(http://github.com/sparklemotion/mechanize/) 20170827201838
+OC/16.0.8326.2073_(Skype_for_Business) 20170823154847
+END_UNKNOWNREFERERBROWSER
+
+# Origin - Pages - Hits 
+BEGIN_ORIGIN 6
+From0 629 639
+From1 0 0
+From2 24 24
+From3 26 26
+From4 766 2126
+From5 0 0
+END_ORIGIN
+
+# Search engine referers ID - Pages - Hits
+BEGIN_SEREFERRALS 1
+google 24 24
+END_SEREFERRALS
+
+# External page referers - Pages - Hits
+# The 10 first Pages must be first (order not required for others)
+BEGIN_PAGEREFS 7
+https://www.inboundlinks.win/InboundLinks/www.spike2care.org 12 12
+https://l.facebook.com 4 4
+http://burger-imperia.com 3 3
+http://www.domain2008.com/domains/www.spike2care.org 3 3
+http://m.facebook.com 2 2
+http://pizza-imperia.com 1 1
+http://www.marinetraffic.com 1 1
+END_PAGEREFS
+
+# Search keyphrases - Number of search
+# The 10 first number of search must be first (order not required for others)
+BEGIN_SEARCHWORDS 1
+www.spike2care.org 1
+END_SEARCHWORDS
+
+# Search keywords - Number of search
+# The 10 first number of search must be first (order not required for others)
+BEGIN_KEYWORDS 1
+www.spike2care.org 1
+END_KEYWORDS
+
+# Errors - Hits - Bandwidth
+BEGIN_ERRORS 6
+403 1 248
+302 10 2213
+206 5 60989
+406 2 548
+301 21 4956
+404 574 495362
+END_ERRORS
+
+# URL with 404 errors - Hits - Last URL referer
+BEGIN_SIDER_404 127
+/dump.tar.gz 1 http://spike2care.org
+/robots.txt 50 -
+/test/css/main.css 1 https://spike2care.org/test/
+/wordpress/ 1 -
+/manager/ 1 -
+/wp-admin/index.php 1 -
+/mysql.sql 1 http://spike2care.org
+/test/admin/js/ckeditor/contents.css 30 http://spike2care.org/test/admin/content.php
+/admin.php 3 -
+/spike2care.org 1 -
+/test/admin/js/ckeditor/plugins/scayt/skins/moono-lisa/scayt.css 1 http://spike2care.org/test/admin/content.php
+/.well-known/apple-app-site-association 1 -
+/s2c-cathy-winners/ 1 http://www.google.com/url
+/feed/ 2 -
+/contact/ 1 http://www.google.com/url
+/test/admin/css/full_sparkle.css.map 27 -
+/backup.sql.gz 1 http://spike2care.org
+/test/admin/js/ckeditor/plugins/icons.png 1 http://spike2care.org/test/admin/content.php
+/test/css/select2.min.css 1 https://spike2care.org/test/
+/category/tournaments/feed/ 1 http://www.google.com/url
+/admin/index.php 1 -
+/comments/feed/ 1 http://www.google.com/url
+/home.html 1 -
+/test/css/responsive.css 1 https://spike2care.org/test/
+/wp-config.php.save 2 http://spike2care.com/wp-config.php.save
+/s2c-world-wide.html 1 -
+/test/images/dev/s2c-cathy-winners.jpg 4 https://spike2care.org/test/photos.php
+/wp-content/plugins/revslider/css/admin.css 1 http://www.spike2care.org/wp-content/plugins/revslider/css/admin.css
+/xmlrpc.php 2 -
+/fonts/lato/lato-regular-webfont.woff2 1 http://spike2care.org/test/admin/css/full_sparkle.css
+/dump.sql.zip 1 http://spike2care.org
+/test/admin/js/ckeditor/plugins/wsc/skins/moono-lisa/wsc.css 4 http://spike2care.org/test/admin/content.php
+/passwordReset.php 2 -
+/index.php/admin 1 -
+/donations.html 1 -
+/wp-content/plugins/ubh/up.php 1 http://www.spike2care.org/wp-content/plugins/ubh/up.php
+/test/admin/js/ckeditor/plugins/scayt/dialogs/dialog.css 1 http://spike2care.org/test/admin/content.php
+/th1s_1s_a_4o4.html 14 -
+/test/admin/js/ckeditor/plugins/tableselection//styles/tableselection.css 11 http://spike2care.org/test/admin/content.php
+/db.tar 1 http://spike2care.org
+/apply-for-help/ 3 -
+/fonts/lato/lato-regular-webfont.ttf 1 http://spike2care.org/test/admin/css/full_sparkle.css
+/upcoming-events/ 29 -
+/test/images/dev/s2c-kids2.jpg 4 https://spike2care.org/test/photos.php
+/test/images/dev/s2c-beach.jpg 4 https://spike2care.org/test/photos.php
+/test/images/dev/s2c-ladies.jpg 4 https://spike2care.org/test/photos.php
+/dump.sql 1 http://spike2care.org
+/db.sql.bz2 1 http://spike2care.org
+/contact-us.html 2 -
+/fonts/lato/lato-regular-webfont.woff 1 http://spike2care.org/test/admin/css/full_sparkle.css
+/s2c-cathy-silver-winners/ 2 -
+/s2c-bronze-winners/ 1 http://www.google.com/url
+/test/admin/js/ckeditor/styles.js 1 http://spike2care.org/test/admin/content.php
+/db.zip 1 http://spike2care.org
+/s2c-dhig-finals/ 1 http://www.google.com/url
+/test/images/dev/s2c-seaside.jpg 4 https://spike2care.org/test/photos.php
+/dump.zip 1 http://spike2care.org
+/test/admin/js/ckeditor/ckeditor.js 32 http://spike2care.org/test/admin/content.php
+/wp-login.php 149 -
+/test/images/dev/team-s2c.jpg 4 https://spike2care.org/test/photos.php
+/sql.zip 1 http://spike2care.org
+/users.sql 1 http://spike2care.org
+/dbdump.sql.gz 1 http://spike2care.org
+/tes 1 -
+/test/bootstrap/css/bootstrap.min.css 2 https://spike2care.org/test/
+/dbdump.sql 1 http://spike2care.org
+/data.sql 1 http://spike2care.org
+/test/images/events/149572965287.jpg 2 https://spike2care.org/test/showSpecialEvent.php
+/autodiscover/autodiscover.xml 5 -
+/.well-known/assetlinks.json 1 -
+/contact-us/ 10 https://spike2care.org
+/te 2 http://m.facebook.com
+/stats/index.html 1 -
+/libraries/sfn.php 1 -
+/db.sql.zip 1 http://spike2care.org
+/test/images/dev/s2c-vb3.jpg 4 https://spike2care.org/test/photos.php
+/sql.tgz 1 http://spike2care.org
+/test/css/calendar.min.css 1 https://spike2care.org/test/
+/blog/ 3 -
+/spike2care.org/s2c-dhig-finals/ 1 -
+/s2c-cure4cathy/ 1 http://www.google.com/url
+/s2c-cathy-rivera/ 1 http://www.google.com/url
+/typo3/ 1 -
+/db_backup.sql 1 http://spike2care.org
+/page/2/ 1 http://www.google.com/url
+/wp/ 1 -
+/test/images/dev/s2c-gorman-classic.jpg 4 https://spike2care.org/test/photos.php
+/backup.sql 1 http://spike2care.org
+/test/admin/js/full_sparkle.js.map 8 -
+/test/admin/js/ckeditor/skins/moono-lisa/icons.png 4 http://spike2care.org/test/admin/js/ckeditor/skins/moono-lisa/editor.css
+/wp-comments-post.php 1 -
+/test/images/dev/s2c-youth-seaside.jpg 4 https://spike2care.org/test/photos.php
+/category/tournaments/ 1 -
+/1.sql 1 http://spike2care.org
+/t 1 -
+/donate/ 2 http://www.google.com/url
+/searchreplacedb2.php 2 -
+/sql.tar.gz 1 http://spike2care.org
+/temp.sql 1 http://spike2care.org
+/blog/robots.txt 1 -
+/user/ 1 -
+/dump.tar 1 http://spike2care.org
+/test 2 -
+/db.sql.gz 1 http://spike2care.org
+/test/images/dev/s2c-manhattan-beach-bound.jpg 4 https://spike2care.org/test/photos.php
+/test/css/font-awesome.min.css 1 https://spike2care.org/test/
+/sql.gz 1 http://spike2care.org
+/page/3/ 1 http://www.google.com/url
+/administrator/index.php 1 -
+/wp-content/uploader.php 1 http://www.spike2care.org/wp-content/uploader.php
+/category/uncategorized/ 1 http://www.google.com/url
+/test/admin/js/ckeditor/config.js 2 http://spike2care.org/test/admin/content.php
+/db.sql 1 http://spike2care.org
+/test/images/dev/team-s2c-in-seattle-emerald-city-catfight.jpg 4 https://spike2care.org/test/photos.php
+/s2c-cure4cathy2/ 1 http://www.google.com/url
+/osd.xml 2 -
+/images/logo-symbol.png 1 -
+/2016/11/01/featured-content-3/ 2 -
+/test/admin/js/ckeditor/lang/en.js 2 http://spike2care.org/test/admin/content.php
+/test/admin/js/ckeditor/skins/moono-lisa/editor.css 4 http://spike2care.org/test/admin/content.php
+/dump.sql.gz 1 http://spike2care.org
+/home/ 1 http://www.google.com/url
+/apple-app-site-association 1 -
+/dump.sql.tgz 1 http://spike2care.org
+/test/admin/css/sparkle.css.map 29 -
+/site.sql 2 http://spike2care.org
+/mysql.zip 1 http://spike2care.org
+END_SIDER_404
