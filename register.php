@@ -16,7 +16,7 @@ while($row = mysqli_fetch_array($result))
     if ($row['special_event']) {
         $specialEvent = true;
     } else {
-        $teams = mysqli_query($conn,"SELECT *, count(*) as num_teams FROM teams WHERE is_active = 1 AND event_id = ".$eventId);
+        $teams = mysqli_query($conn,"SELECT *, count(*) as num_teams FROM teams WHERE is_active = 1 AND event_id = ".$eventId." GROUP BY id");
         if (mysqli_num_rows($teams) > 0) {
             while($team = mysqli_fetch_array($teams)) {
                 if ($team['num_teams'] == $row['max_teams']) {
@@ -271,13 +271,15 @@ include('footer.php');
     // Look for the team based on the passcode entered
     $('#search-passcode').click(function () {
         var passcode = $('#passcode-check').val();
+        var eventId = <?php echo $eventId; ?>;
 
         $.ajax({
             url: 'includes/handleForm.php',
             type: 'GET',
             dataType: 'json',
             data: {
-                'passcode': passcode
+                'passcode': passcode,
+                'eventId': eventId
             },
             complete: function(data){
                 response = $.parseJSON(data.responseText);
@@ -320,7 +322,8 @@ include('footer.php');
                 type: 'GET',
                 dataType: 'json',
                 data: {
-                    'passcode': passcode
+                    'passcode': passcode,
+                    'eventId': eventId
                 },
                 complete: function(data){
                     response = $.parseJSON(data.responseText);

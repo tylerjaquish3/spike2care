@@ -88,6 +88,7 @@ require_once('../stripe/init.php');
 				// else update user information with form data
 				$sql = "UPDATE people SET full_name = '".trim($_POST['full_name'])."', phone = '".$_POST['phone']."', email = '".trim($_POST['email'])."' WHERE id = $playerFoundId";
 				mysqli_query($conn, $sql);
+				$_SESSION['newPersonId'] = $playerFoundId;
 			}
 
 			if (isset($_POST['current-free-agent'])) {
@@ -129,9 +130,9 @@ require_once('../stripe/init.php');
 			foreach ($_POST['players'] as $player) {
 				if ($player != '') {
 
-					$sql = "INSERT INTO people (full_name, created_at) VALUES ('".$player."', '".$created_at."')";
+					$sql = "INSERT INTO people (full_name, paid, created_at) VALUES ('".$player."', 0,'".$created_at."')";
 					mysqli_query($conn, $sql);
-
+					
 					$newPlayerId = mysqli_insert_id($conn);
 					
 					$sql = "INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (".$newTeamId.",".$newPlayerId.",false, true)";
@@ -141,17 +142,18 @@ require_once('../stripe/init.php');
 		}
 
 		header("Location: ../checkout.php?eventId=".$eventId."&teamId=".$newTeamId);
-		die();
+		die;
 	}
 
 	if (isset($_GET['passcode'])) {
 		// Validate passcode
 		$passcode = trim($_GET['passcode']);
 		$now = date('Y-m-d H:i:s');
+		$eventId = $_GET['eventId'];
 
 		if ($passcode != '') {
 
-			$sql = "SELECT t.*, team_players, full_name FROM teams as t JOIN spike2care.`events` as e ON t.event_id = e.id JOIN people on people.id = t.captain_id WHERE t.is_active = 1 AND e.is_active = 1 AND BINARY t.passcode = '".$passcode."'";
+			$sql = "SELECT t.*, team_players, full_name FROM teams as t JOIN spike2care.`events` as e ON t.event_id = e.id JOIN people on people.id = t.captain_id WHERE t.is_active = 1 AND e.is_active = 1 AND BINARY t.passcode = '".$passcode."' AND event_id = ".$eventId;
 
 			$result = mysqli_query($conn, $sql);
 

@@ -1,6 +1,14 @@
 <?php
+
 $currentPage = 'Home';
 include('header.php');
+
+if(!IS_DEV && (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off")){
+    $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . $redirect);
+    exit();
+}
 
 $message = '';
 
@@ -123,7 +131,7 @@ if (mysqli_num_rows($content) > 0) {
                                     <h4>$ <?php echo $row['price']; ?> <small>(per player)</small></h4>
 
                                     <?php
-                                    $teams = mysqli_query($conn,"SELECT *, count(*) as num_teams FROM teams WHERE is_active = 1 AND event_id = ".$row['id']);
+                                    $teams = mysqli_query($conn,"SELECT *, count(*) as num_teams FROM teams WHERE is_active = 1 AND event_id = ".$row['id']." GROUP BY id");
                                     if (mysqli_num_rows($teams) == 1) {
                                         while($team = mysqli_fetch_array($teams)) {
                                     ?>
