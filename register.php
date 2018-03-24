@@ -251,6 +251,7 @@ include('footer.php');
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
+    var eventId = <?php echo $eventId; ?>;
 
     $('input[type=radio][name=type]').change(function() {
         if (this.value == 'new') {
@@ -271,7 +272,7 @@ include('footer.php');
     // Look for the team based on the passcode entered
     $('#search-passcode').click(function () {
         var passcode = $('#passcode-check').val();
-        var eventId = <?php echo $eventId; ?>;
+        eventId = <?php echo $eventId; ?>;
 
         $.ajax({
             url: 'includes/handleForm.php',
