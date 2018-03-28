@@ -1,4 +1,3 @@
-
 <?php
 $currentPage = 'Events';
 include('header.php');

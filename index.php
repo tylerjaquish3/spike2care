@@ -3,13 +3,6 @@
 $currentPage = 'Home';
 include('header.php');
 
-// if(!IS_DEV && (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off")){
-//     $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-//     header('HTTP/1.1 301 Moved Permanently');
-//     header('Location: ' . $redirect);
-//     exit();
-// }
-
 $message = '';
 
 if (isset($_GET['message']) && $_GET['message'] == 'thankyou') {
