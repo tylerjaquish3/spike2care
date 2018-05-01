@@ -213,7 +213,13 @@ require_once('../stripe/init.php');
 
 			$chargeToken = $charge->id;
 
-			$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$created_at."')";
+			// If the user donated to a specific cause, add the event_id to the payment
+			if ($cause != 0) {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+			} else {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$created_at."')";
+			}
+			
 			mysqli_query($conn, $sql);
 
 		} catch (Exception $e) {
@@ -359,7 +365,14 @@ require_once('../stripe/init.php');
 
 		if ($_POST['totalDonation'] != '' && $_POST['totalDonation'] != 0) {
 			$donation = $_POST['totalDonation'];
-			$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ($paidBy, $donation, '$chargeToken', '$createdAt')";
+
+			// If the user donated to a specific cause, add the event_id to the payment
+			if ($cause != 0) {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ($paidBy, $donation, $cause, '$chargeToken', '$createdAt')";
+			} else {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ($paidBy, $donation, '$chargeToken', '$createdAt')";
+			}
+
 			mysqli_query($conn, $sql);
 
 			$cause = (int)$_POST['cause'][0];

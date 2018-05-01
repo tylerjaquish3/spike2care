@@ -55,7 +55,7 @@ include('header.php');
                 </p>  
                 <p>
                     For IT and technical inquiries: <br />
-                    <i class="fa fa-envelope"></i> &nbsp;<a href="mailto: it@spike2care.org">it@spike2care.org</a>
+                    <i class="fa fa-envelope"></i> &nbsp;<a href="mailto: itResources@spike2care.org">itResources@spike2care.org</a>
                 </p>  
 
                 <p class="social-icons"> 
