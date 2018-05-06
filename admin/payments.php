@@ -33,12 +33,13 @@ if (!isset($_SESSION["user_id"])) {
                                 <th>Amount</th>
                                 <th>Type</th>
                                 <th>Event</th>
+                                <th>Refunded?</th>
                                 <th>Received</th>
                             </thead>
                             <tbody>
                                 <?php 
                                 $sql = "SELECT max(PB.full_name) as paid_by, max(PB.email) as email, max(PF.full_name) as paid_for, 
-                                    sum(donation_amount) as donation, sum(entry_amount) as entry, max(e.title) as event, max(p.created_at) as created_at
+                                    sum(donation_amount) as donation, sum(entry_amount) as entry, max(e.title) as event, max(is_refunded) as refund, max(p.created_at) as created_at
                                     FROM payments p 
                                     JOIN people as PB on PB.id = p.paid_by 
                                     LEFT JOIN people as PF on PF.id = p.paid_for 
@@ -57,6 +58,7 @@ if (!isset($_SESSION["user_id"])) {
                                             <td>$ <?php echo ($payment['donation']) ? $payment['donation']/100 : $payment['entry']/100; ?></td>
                                             <td><?php echo ($payment['donation']) ? 'Donation' : 'Event' ?></td>
                                             <td><?php echo $payment['event']; ?></td>
+                                            <td><?php echo ($payment['refund'] == 1) ? '<span class="badge badge-secondary">Yes</span>' : ''; ?></td>
                                             <td><?php echo $payment['created_at']; ?></td>
                                         </tr>
 
@@ -79,7 +81,8 @@ include('includes/footer.php');
 
     $(document).ready(function(){
         $('#datatable-payments').DataTable({
-            "order": [[ 6, "desc" ]]
+            stateSave: true,
+            "order": [[ 7, "desc" ]]
         });
     });
 

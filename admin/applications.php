@@ -76,6 +76,7 @@ include('includes/footer.php');
 
     $(document).ready(function(){
         $('#datatable-applications').DataTable({
+            stateSave: true,
             "order": [[ 2, "desc" ]]
         });
     });

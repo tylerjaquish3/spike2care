@@ -96,6 +96,7 @@ include('includes/footer.php');
         }
     
         $('#datatable-events').DataTable({
+            stateSave: true,
             "order": [[ 1, "desc" ]]
         });
     });

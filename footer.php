@@ -17,13 +17,6 @@
 </footer>
 <!--/Footer-->
 
-<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/font-awesome.min.css">
-<link rel="stylesheet" href="css/calendar.min.css">
-<link rel="stylesheet" href="css/select2.min.css">
-<link rel="stylesheet" href="css/main.css?<?php echo date('h:i:s'); ?>">
-<link rel="stylesheet" href="css/responsive.css?<?php echo date('h:i:s'); ?>">
-
 <!-- Latest compiled and minified JavaScript -->
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
 <script src="js/jquery.js"></script>

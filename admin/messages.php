@@ -76,6 +76,7 @@ include('includes/footer.php');
 
     $(document).ready(function(){
         $('#datatable-messages').DataTable({
+            stateSave: true,
             "order": [[ 3, "desc" ]]
         });
     });

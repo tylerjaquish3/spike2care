@@ -165,10 +165,12 @@ include('includes/footer.php');
 
     $(document).ready(function(){
         $('#datatable-teams').DataTable({
+            stateSave: true,
             "order": [[ 1, "desc" ]]
         });
 
         $('#datatable-freeagents').DataTable({
+            stateSave: true,
             "order": [[ 1, "desc" ]]
         });
     });
