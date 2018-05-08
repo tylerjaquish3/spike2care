@@ -36,11 +36,13 @@ require_once('../../stripe/init.php');
 		{
 			if ($field == 'special_event') {
 				$specialEvent = true;
-			}
-
+			} 
 			if ($field == 'registration_open') {
 				$registrationOpen = true;
 			} 
+			if ($field == 'max_teams' && $value == "") {
+				$value = 0;
+			}
 
 			if ($field != 'save-event' && $field != 'is-new' && $field != 'event_id' && $field != 'special_event' && $field != 'registration_open' && $field != 'divisions') {
 				// If new event, create insert statement
@@ -50,6 +52,9 @@ require_once('../../stripe/init.php');
 					if ($field == 'event_date') {
 						$date = date_create_from_format('m/d/Y', $value);
 						$insertItems .= '"'.date_format($date, 'Y-m-d').'",';
+					} elseif ($field == 'registration_deadline') {
+						$date = date_create_from_format('m/d/Y', $value);
+						$insertItems .= '"'.date_format($date, 'Y-m-d 23:59:59').'",';
 					} else {
 						$insertItems .= '"'.escape($value).'",';
 					}
@@ -58,8 +63,10 @@ require_once('../../stripe/init.php');
 					if ($field == 'event_date') {
 						$date = date_create_from_format('m/d/Y', $value);
 						$setValues .= $field."='".date_format($date, 'Y-m-d 00:00:00')."', ";
+					} elseif ($field == 'registration_deadline') {
+						$date = date_create_from_format('m/d/Y', $value);
+						$setValues .= $field."='".date_format($date, 'Y-m-d 23:59:59')."', ";
 					} else {
-					// if ($field != 'is-new' && $field != 'event_id') {
 						$setValues .= $field."='".escape($value)."', ";
 					}
 				}

@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Los_Angeles');
 //define('URL', 'https://spike2care.org');
-define('URL', 'http://dev.spike2care.org');
+define('URL', 'http://spike2care.local');
 
 function getUser($id)
 {

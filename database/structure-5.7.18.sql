@@ -151,12 +151,8 @@ CREATE TABLE IF NOT EXISTS `event_divisions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=138 DEFAULT CHARSET=latin1 AUTO_INCREMENT=138 ;
 
--- --------------------------------------------------------
 
--- 
--- Table structure for table `events`
--- 
-
+-- Dumping structure for table spike2care.events
 CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `special_event` tinyint(1) NOT NULL,
@@ -167,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `play_time` varchar(55) DEFAULT NULL,
   `location` varchar(255) NOT NULL,
   `price` decimal(8,2) NOT NULL,
-  `max_teams` int(11) NOT NULL,
+  `max_teams` int(11) DEFAULT NULL,
   `team_players` int(11) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `city` varchar(55) NOT NULL,
@@ -175,13 +171,15 @@ CREATE TABLE IF NOT EXISTS `events` (
   `description` text,
   `fb_link` varchar(1000) DEFAULT NULL,
   `registration_open` tinyint(4) NOT NULL DEFAULT '1',
+  `registration_deadline` datetime DEFAULT NULL,
   `additional_info` text,
   `image_path` varchar(255) DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `specified_donations` decimal(10,2) NOT NULL DEFAULT '0.00',
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1 AUTO_INCREMENT=48 ;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 

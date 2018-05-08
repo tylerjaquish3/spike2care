@@ -7,7 +7,7 @@ if (!isset($_SESSION["user_id"])) {
     header('location:'.URL);
 }
 
-$title = $checked = $registrationChecked = $eventDate = $checkinTime = $meetingTime = $playTime = $location = $price = $address = $city = $format = $fbLink = $additionalInfo = $description = $maxTeams = $eventId = $imagePath = '';
+$title = $checked = $registrationChecked = $eventDate = $checkinTime = $meetingTime = $playTime = $location = $price = $address = $city = $format = $fbLink = $additionalInfo = $description = $maxTeams = $eventId = $imagePath = $active = $registrationDeadline = '';
 $isNew = true;
 $specialEvent = false;
 
@@ -37,6 +37,8 @@ if (isset($_GET) && !empty($_GET)) {
             $imagePath = $row['image_path'];
             $fbLink = $row['fb_link'];
             $additionalInfo = $row['additional_info'];
+            $registrationDeadline = $row['registration_deadline'];
+            $active = $row['is_active'];
         }
     }
 
@@ -99,6 +101,16 @@ if (isset($_GET) && !empty($_GET)) {
                             <div class="form-group">
                                 <label for="registration_open">Registration Open?</label>
                                 <input type="checkbox" name="registration_open" id="registrationOpen" <?php echo $registrationChecked; ?>>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event_date">Registration Deadline <span class="required">*</span></label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input type='text' name="registration_deadline" required class="form-control" data-placeholder="Pick a date" placeholder="Pick a date">
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -193,7 +205,7 @@ if (isset($_GET) && !empty($_GET)) {
 
                                 <div class="form-group">
                                     <label for="price">Max. number of teams</label>
-                                    <input type="text" class="form-control" name="max_teams" placeholder="16, 20, etc" value="<?php echo $maxTeams; ?>">
+                                    <input type="text" class="form-control" name="max_teams" required placeholder="16, 20, etc" value="<?php echo $maxTeams; ?>">
                                 </div>
 
                                 <div class="form-group">
@@ -228,6 +240,9 @@ if (isset($_GET) && !empty($_GET)) {
                     <div class="row">
                         <div class="col-xs-12 center">
                             <br /><br />
+                            <?php if (!$isNew) { ?>
+                                <button id="cancel-event" name="cancel-event" class="btn btn-warning">Cancel Event</button>
+                            <?php } ?>
                             <button type="submit" name="save-event" class="btn btn-info">Save</button>
                         </div>
 
@@ -239,7 +254,24 @@ if (isset($_GET) && !empty($_GET)) {
         </div>
     </div>
 
+</div>
 
+<div class="modal fade" id="cancel-confirm" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirm Cancel</h4>
+            </div>
+            <div class="modal-body">
+                This will refund every paid entrant. Are you sure this is what you want to do?
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-warning" class="close" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-success" id="cancel-event-btn">Yes</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php
@@ -271,25 +303,53 @@ include('includes/footer.php');
     today = mm+'/'+dd+'/'+yyyy;
 
     var eventDate = "<?php echo $eventDate; ?>"; 
-    var defaultDate = "<?php echo date('m/d/Y', strtotime($eventDate)); ?>";
-    if (eventDate == '') {
-        defaultDate = today;
+    var registrationDeadline = "<?php echo $registrationDeadline; ?>"; 
+    var defaultEventDate = "";
+    var defaultRegistrationDeadline = "";
+
+    if (eventDate != '') {
+        defaultEventDate = "<?php echo date('m/d/Y', strtotime($eventDate)); ?>";
+    }
+    if (registrationDeadline != '') {
+        defaultRegistrationDeadline = "<?php echo date('m/d/Y', strtotime($registrationDeadline)); ?>";
     }
 
     $('#datetimepicker1').datetimepicker({
         format: 'MM/DD/YYYY',
-        defaultDate: defaultDate
+        defaultDate: defaultEventDate
     });
 
+    $('#datetimepicker2').datetimepicker({
+        format: 'MM/DD/YYYY',
+        defaultDate: defaultRegistrationDeadline
+    });
+
+    regularEvent = false;
     $('#specialEvent').click(function () {
         $('.regularEvent').toggle();
+
+        if (regularEvent) {
+            $('[name="max_teams"]').prop('required', true);
+            regularEvent = false;
+        } else {
+            $('[name="max_teams"]').prop('required', false);
+            regularEvent = true;
+        }
     });
 
     var specialEvent = "<?php echo $specialEvent ?>";
-
     if (specialEvent) {
         $('.regularEvent').hide();
     }
+
+    $('#cancel-event').click(function(e) {
+        e.preventDefault();
+        $('#cancel-confirm').modal('show');
+    });
+
+    $('#cancel-event-btn').click(function(e) {
+        // ajax request to handleForm for cancel and refund
+    });
 
 </script>
     
