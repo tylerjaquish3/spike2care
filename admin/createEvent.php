@@ -52,9 +52,11 @@ if (isset($_GET) && !empty($_GET)) {
     if ($specialEvent) {
         $checked = 'checked';
     }
-
     if ($registrationOpen) {
         $registrationChecked = 'checked';
+    }
+    if ($active) {
+        $active = 'checked';
     }
 }
 ?>
@@ -104,7 +106,13 @@ if (isset($_GET) && !empty($_GET)) {
                             </div>
 
                             <div class="form-group">
-                                <label for="event_date">Registration Deadline <span class="required">*</span></label>
+                                <label for="registration_open">Active on Site?</label>
+                                <input type="checkbox" name="is_active" id="isActive" <?php echo $active; ?>>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event_date">Registration Deadline <small>(Set to midnight by default)</small><span class="required">*</span></label>
+
                                 <div class='input-group date' id='datetimepicker2'>
                                     <input type='text' name="registration_deadline" required class="form-control" data-placeholder="Pick a date" placeholder="Pick a date">
                                     <span class="input-group-addon">
@@ -264,12 +272,13 @@ if (isset($_GET) && !empty($_GET)) {
                 <h4 class="modal-title">Confirm Cancel</h4>
             </div>
             <div class="modal-body">
-                This will refund every paid entrant. Are you sure this is what you want to do?
+                <h1>This is not ready yet, but will be soon.</h1>
+                This will refund every paid entrant and disable registration for this event. Are you sure this is what you want to do?
             </div>
-            <div class="modal-buttons">
+            <!-- <div class="modal-buttons pull-right">
                 <button type="button" class="btn btn-warning" class="close" data-dismiss="modal">No</button>
                 <button type="button" class="btn btn-success" id="cancel-event-btn">Yes</button>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -348,7 +357,24 @@ include('includes/footer.php');
     });
 
     $('#cancel-event-btn').click(function(e) {
+        var eventId = "<?php echo $eventId; ?>";
         // ajax request to handleForm for cancel and refund
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: "POST",
+            data: {
+                id: eventId,
+                action: 'cancelEvent'
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.type == 'error') {
+                    addAlertToPage('error', 'Error', response.message, 10);
+                } else {
+                    addAlertToPage('success', 'Success', response.message, 10);
+                }
+            },
+        });
     });
 
 </script>

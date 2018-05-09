@@ -127,8 +127,6 @@ include('includes/footer.php');
 
     $('#save-user-btn').click(function (e) {
         var formData = $('#save-user').serialize();
-
-        console.log(formData);
     
         $.ajax({
             url: 'includes/handleForm.php',

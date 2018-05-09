@@ -62,7 +62,6 @@ if (mysqli_num_rows($content) > 0) {
                     </div>
                     </div>
                     <div class="row">
-
             <?php
                 }
             }
@@ -112,8 +111,8 @@ if (mysqli_num_rows($content) > 0) {
                                         <a class="btn btn-view btn-large" id="view-register" href="showEvent.php?eventId=<?php echo $row['id']; ?>">View</a><br />
                                         <?php 
                                         $today = date('Y-m-d H:i:s');
-                                        $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
-                                        if ($row['registration_open'] && strtotime($today) <= $wedBefore) { ?>
+                                        // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
+                                        if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
                                             <a class="btn btn-primary btn-large pull-right" id="view-register" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
                                         <?php } ?>
 

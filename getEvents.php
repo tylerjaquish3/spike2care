@@ -12,7 +12,7 @@ if(isset($_GET)) {
 
 	$i = 0;
 
-	$query = mysqli_query($conn,"SELECT * FROM events WHERE event_date >= '".$startDate."' AND event_date < '".$endDate."'");
+	$query = mysqli_query($conn,"SELECT * FROM events WHERE is_active = 1 AND event_date >= '".$startDate."' AND event_date < '".$endDate."'");
 	while($event = mysqli_fetch_array($query)) 
 	{
 		$result[$i]['id'] = $event['id'];

@@ -42,8 +42,8 @@ if ($_GET) {
                     <div class="col-xs-12 col-md-6">
                         <?php 
                         $today = date('Y-m-d H:i:s');
-                        $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
-                        if ($row['registration_open'] && strtotime($today) <= $wedBefore) { ?>
+                        // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
+                        if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
                             <a class="btn btn-primary btn-large pull-right" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
                         <?php } ?>
                         <h3><?php echo $row['team_players'].' on '.$row['team_players']; ?></h3>
@@ -80,9 +80,11 @@ if ($_GET) {
                         <?php if ($row['additional_info']) {
                             echo '<h3>Additional Info</h3>';
                             echo '<p>'.$row['additional_info'].'</p>';
-                        } ?>
+                        } 
+                        $deadline = strtotime($row['registration_deadline']);
+                        ?>
 
-                        <h4>Registration Deadline: <?php echo date('D, M j 11:59', $wedBefore).'pm'; ?></h4>
+                        <h4>Registration Deadline: <?php echo date('D, M j 11:59', $deadline).'pm'; ?></h4>
 
                         <?php if ($row['fb_link']) {
                             echo '<p><a href="'.$row['fb_link'].'">Link to Facebook Event</a></p>';

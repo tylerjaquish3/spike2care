@@ -40,11 +40,15 @@ require_once('../../stripe/init.php');
 			if ($field == 'registration_open') {
 				$registrationOpen = true;
 			} 
+			if ($field == 'is_active') {
+				$active = true;
+			} 
 			if ($field == 'max_teams' && $value == "") {
 				$value = 0;
 			}
 
-			if ($field != 'save-event' && $field != 'is-new' && $field != 'event_id' && $field != 'special_event' && $field != 'registration_open' && $field != 'divisions') {
+			if ($field != 'save-event' && $field != 'is-new' && $field != 'event_id' && $field != 'special_event' 
+				&& $field != 'registration_open' && $field != 'divisions' && $field != 'is_active') {
 				// If new event, create insert statement
 				if ($isNew) {
 					$fields .= $field.',';
@@ -100,6 +104,18 @@ require_once('../../stripe/init.php');
 		} elseif (!$isNew && $registrationOpen) {
 			$setValues .= ", registration_open=1";
 		}
+
+		if ($isNew && $active) {
+			$fields .= ', is_active';
+			$insertItems .= ', 1';
+		} elseif ($isNew && !$active) {
+			$fields .= ', is_active';
+			$insertItems .= ', 0';
+		} elseif (!$isNew && !$active) {
+			$setValues .= ", is_active=0";
+		} elseif (!$isNew && $active) {
+			$setValues .= ", is_active=1";
+		}
  
 		if ($isNew) {
 			$sql = "INSERT INTO events (".$fields.") VALUES (".$insertItems.")";
@@ -128,6 +144,7 @@ require_once('../../stripe/init.php');
 		die();
 	}	
 
+	// User saved an event recap
 	if(isset($_POST['save-recap'])) {
 
 		$eventId = $_POST['event-id'];
@@ -671,5 +688,39 @@ require_once('../../stripe/init.php');
 
 		echo json_encode($response);
 		die;
+  	}
+
+  	// Event has been canceled
+  	if (isset($_POST['action']) && $_POST['action'] == 'cancelEvent') {
+  		$eventId = $_POST['id'];
+
+  		// First disable the tournament
+  		$sql = "UPDATE events SET registration_open = 0, is_active = 0 WHERE id = '$eventId'";
+		$result = mysqli_query($conn, $sql);
+
+  		// Get all teams for event
+  		$sql = "SELECT * FROM teams WHERE event_id = '$eventId'";
+		$getTeams = mysqli_query($conn, $sql);
+		if (mysqli_num_rows($getTeams) > 0) {
+			while($team = mysqli_fetch_array($getTeams)) 
+	        {
+	        	$teamId = $team['id'];
+	        	// Get all players and payments for team to refund
+	        	$sql = "SELECT payments.token, sum(entry_amount) FROM team_players 
+	        		JOIN people p ON p.id = team_players.people_id 
+	        		JOIN payments ON payments.paid_for = p.id
+	        		WHERE team_id = '$teamId'
+	        		GROUP BY payments.token";
+				$getPlayers = mysqli_query($conn, $sql);
+				if (mysqli_num_rows($getPlayers) > 0) {
+					while($row = mysqli_fetch_array($getPlayers)) 
+			        {
+			        	// Issue refund
+			        	// Set payment to is_refunded
+			        	// Send email to user
+			        }
+		        }
+	        }
+        }
   	}
 ?>

@@ -53,7 +53,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                             </thead>
                             <tbody>
                                 <?php 
-                                $result = mysqli_query($conn,"SELECT * FROM events WHERE is_active = 1");
+                                $result = mysqli_query($conn,"SELECT * FROM events");
                                 while($event = mysqli_fetch_array($result)) 
                                 { ?>
                                     <tr>
