@@ -18,13 +18,12 @@
     }
 
     $specialEvent = false;
-    if (isset($eventId)) {
-        $result = mysqli_query($conn,"SELECT * FROM events WHERE id = ".$eventId);
+    if (isset($_GET['specialEventId'])) {
+        $specialEvent = true;
+        $result = mysqli_query($conn,"SELECT * FROM events WHERE id = ".$_GET['specialEventId']);
         while($row = mysqli_fetch_array($result)) 
         {
-            if ($row['special_event']) {
-                $specialEvent = true;
-            }
+            $eventId = $row['id'];
         }
     }
 
@@ -54,7 +53,7 @@
                     <div class="row">
                         <?php if ($specialEvent) { ?>
                             <div class="col-xs-12 col-md-6">
-                                Registration is not complete until paid. Choose a desired quantity, add a donation, and don't forget to check the box for covering the processing fee, which will auto update based on your subtotal and donation.
+                                Registration is not complete until paid. Choose a desired quantity, add a donation (optional), and don't forget to check the box for covering the processing fee (also optional), which will auto update based on your subtotal and donation.
                             </div>
                             <div class="col-xs-12 col-md-6">
                                 Your privacy and security is 100% guaranteed. <a href="privacy.php">View privacy statement.</a>
@@ -305,6 +304,7 @@
             });
         }
 
+        // User selects people they are paying for
         $("#paying-for").on("select2:select select2:unselect", function (e) {
             updateEventAmount();
             updateProcessingFee();
@@ -340,7 +340,6 @@
         });
 
         $('#donation').focusout(function () {
-
             var donation = $('#donation').val();
 
             if (isNaN(donation)) {
@@ -355,15 +354,18 @@
 
         $('#pay').click(function () {
             eventId = $('#eventId').val();
+            specialEvent = <?php echo $specialEvent; ?>;
             eventAmount = 0;
             freeAgentDonation = false;
-            if (eventId) {
+            if (eventId && specialEvent) {
+                console.log('yes');
+                eventAmount = getEventAmount();
+            } else if (eventId) {
                 if ("<?php echo $teamId; ?>" == '') {
                     freeAgentDonation = true;
                 } else {
                     eventAmount = getEventAmount();
                 }
-                
             } else {
                 donationFieldsValid = validateDonationValues();
             }

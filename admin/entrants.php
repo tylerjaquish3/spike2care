@@ -67,7 +67,7 @@ if (isset($_GET) && !empty($_GET)) {
                                             <td><?php echo $entrant['phone']; ?></td>
                                             <td><?php echo $entrant['quantity']; ?></td>
                                             <td><?php echo ($entrant['paid'] ? 'Yes' : 'No'); ?></td>
-                                            <td><?php echo date('m.d.Y', strtotime($entrant['created_at'])); ?></td>
+                                            <td><?php echo date('Y-m-d H:i:s', strtotime($entrant['created_at'])); ?></td>
                                         </tr>
                                     <?php }
                                 } ?>
@@ -90,7 +90,8 @@ include('includes/footer.php');
 
     $(document).ready(function(){
         $('#datatable-specialEvent').DataTable({
-            "order": [[ 1, "desc" ]]
+            "order": [[ 5, "desc" ]],
+            stateSave: true
         });
     });
 

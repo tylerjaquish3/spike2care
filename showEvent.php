@@ -36,18 +36,22 @@ if ($_GET) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-md-5">
-                        <img class="show-event-img pull-right" src="images/events/<?php echo $row['image_path']; ?>">
-                    </div>
-                    <div class="col-xs-12 col-md-6">
+                    <?php if($row['image_path']) { ?>
+                        <div class="col-xs-12 col-md-5">
+                            <img class="show-event-img pull-right" src="images/events/<?php echo $row['image_path']; ?>">
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                    <?php } else { ?>
+                        <div class="col-xs-12 col-md-6 col-md-push-1">
                         <?php 
+                        }
                         $today = date('Y-m-d H:i:s');
                         // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
                         if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
                             <a class="btn btn-primary btn-large pull-right" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
                         <?php } ?>
                         <h3><?php echo $row['team_players'].' on '.$row['team_players']; ?></h3>
-                        <h4>$ <?php echo $row['price']; ?> <small>(per player)</small></h4>
+                        <h4>$ <?php echo $row['price']; ?> <?php echo ($row['price_for'] != "na") ? "<small>(".$row['price_for'].")</small>" : "-"; ?></h4>
                         <h3><?php echo date_create($row['event_date'])->format('D, M j'); ?></h3>
                         <h3><?php echo $row['location']; ?></h3>
                         <h4><small><?php echo $row['address'].', '.$row['city']; ?></small></h4>
@@ -117,14 +121,11 @@ if ($_GET) {
                         
                         <h3>Teams</h3>
                         <?php
-                        $teams = mysqli_query($conn,"SELECT *, count(*) as num_teams FROM teams WHERE is_active = 1 AND event_id = ".$eventId);
-                        if (mysqli_num_rows($teams) == 1) {
-                            while($team = mysqli_fetch_array($teams)) {
+                        $teams = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId);
                         ?>
-                            <p><?php echo $team['num_teams'].'/'.$row['max_teams']; ?> spots filled</p>
-                        <?php } 
-                        } 
-
+                        <p><?php echo mysqli_num_rows($teams).'/'.$row['max_teams']; ?> spots filled</p>
+                        
+                        <?php 
                         $sql = mysqli_query($conn,"SELECT d.id, division_label FROM event_divisions ed JOIN divisions d ON d.id = ed.division_id WHERE event_id = ".$eventId." ORDER BY d.id ASC");
                         if (mysqli_num_rows($sql) > 0) {
                             while($divisions = mysqli_fetch_array($sql)) {

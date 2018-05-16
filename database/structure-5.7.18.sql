@@ -163,6 +163,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `play_time` varchar(55) DEFAULT NULL,
   `location` varchar(255) NOT NULL,
   `price` decimal(8,2) NOT NULL,
+  `price_for` varchar(50) DEFAULT NULL,
   `max_teams` int(11) DEFAULT NULL,
   `team_players` int(11) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,

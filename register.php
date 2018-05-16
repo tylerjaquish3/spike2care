@@ -72,6 +72,7 @@ while($row = mysqli_fetch_array($result))
                         </div>
                         <div class="col-xs-8">
                             <input type="text" class="input-block-level" required name="full_name" id="full_name">
+                            <span style="display:none;" class="full" id="invalidNameError"><br />Please enter a name.</span>
                         </div>
                     </div>
                     <div class="row">
@@ -80,7 +81,7 @@ while($row = mysqli_fetch_array($result))
                         </div>
                         <div class="col-xs-8">
                             <input type="text" class="input-block-level" required name="email" id="email">
-                            <span style="display:none;" class="full" id="invalidEmailError"><br />Invalid email, please enter a valid email address.</span>
+                            <span style="display:none;" class="full" id="invalidEmailError">Invalid email, please enter a valid email address.</span>
                         </div>
                     </div>
                     <div class="row">
@@ -290,6 +291,7 @@ include('footer.php');
 
     $('#submit-registration').click(function (e) {
         // Hide error messages
+        $('#invalidNameError').hide();
         $('#duplicatePasscodeError').hide();
         $('#invalidEmailError').hide();
         $('#invalidPhoneError').hide();
@@ -309,50 +311,72 @@ include('footer.php');
         form.validate();
         validPhone = isPhone($('#phone').val());
         validEmail = isEmail($('#email').val());
+        var specialEvent = "<?php echo $specialEvent; ?>";
 
         validPasscode = true;
 
-        if (!validEmail) {
+        if ($('#full_name').val() == "") {
+            $('#invalidNameError').show();
+        } else if (!validEmail) {
             $('#invalidEmailError').show();
         } else if (!validPhone) {
             $('#invalidPhoneError').show();
         } else {
-            $.ajax({
-                url: 'includes/handleForm.php',
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    'passcode': passcode,
-                    'eventId': eventId
-                },
-                complete: function(data){
-                    response = $.parseJSON(data.responseText);
 
-                    if (response.type == 'success') {
-                        validPasscode = false;
+            if (form.valid() && specialEvent) {
+                $.ajax({
+                    url: 'includes/handleForm.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'eventId': eventId,
+                        'paidBySpecial': $('#full_name').val(),
+                        'phone': $('#phone').val(),
+                        'email': $('#email').val()
+                    }, 
+                    complete: function(data) {
+                        link = $.parseJSON(data.responseText);
+                        window.location.replace(link);
                     }
+                });
+            } else {
+                $.ajax({
+                    url: 'includes/handleForm.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        'passcode': passcode,
+                        'eventId': eventId
+                    },
+                    complete: function(data){
+                        response = $.parseJSON(data.responseText);
 
-                    if (form.valid() && (registerType == 'existing' || validPasscode)) {
-                        // if passcode not found, don't submit form
-                        $.get('includes/handleForm.php', { passcode: passcode }).done(function(data) {
-               
-                            if (registerType == 'existing' && (passcode == '' || data.trim() == 'No team found.')) {
-                                $('#team-search-result').html(data);
-                            } else {
+                        if (response.type == 'success') {
+                            validPasscode = false;
+                        }
 
-                                $('<input />').attr('type', 'hidden')
-                                  .attr('name', 'event-registration')
-                                  .attr('value', '1')
-                                  .appendTo('#registration-form');
+                        if (form.valid() && (registerType == 'existing' || validPasscode)) {
+                            // if passcode not found, don't submit form
+                            $.get('includes/handleForm.php', { passcode: passcode }).done(function(data) {
+                   
+                                if (registerType == 'existing' && (passcode == '' || data.trim() == 'No team found.')) {
+                                    $('#team-search-result').html(data);
+                                } else {
 
-                                $('#registration-form').submit();
-                            }
-                        });
-                    } else if (!validPasscode) {
-                        $('#duplicatePasscodeError').show();
+                                    $('<input />').attr('type', 'hidden')
+                                      .attr('name', 'event-registration')
+                                      .attr('value', '1')
+                                      .appendTo('#registration-form');
+
+                                    $('#registration-form').submit();
+                                }
+                            });
+                        } else if (!validPasscode) {
+                            $('#duplicatePasscodeError').show();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         
     });

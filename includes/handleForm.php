@@ -7,6 +7,8 @@ include('../admin/includes/password.php');
 
 require_once('../stripe/init.php');
 
+// var_dump($_POST);die;
+
 	// when a new recap comment is added
 	if (isset($_GET['comment'])) {
 		$recap_id = $_GET['recap_id'];
@@ -239,11 +241,17 @@ require_once('../stripe/init.php');
 	if (isset($_POST['quantity']) && $_POST['quantity'] != '') {
 		$chargeToken = '';
 		$eventId = $paidBy = $eventPrice = $donation = null;
+		$cause = (int)$_POST['cause'][0];
 
 		$eventId = $_POST['event_id'];
-		$paidBy = $_POST['paidBy'];
 		$eventPrice = $_POST['eventPrice'] * 100;
 		$quantity = $_POST['quantity'];
+
+		if (isset($_SESSION['newPersonId'])) {
+			$paidBy = $_SESSION['newPersonId'];
+		} else {
+			$paidBy = $_POST['paidBy'];
+		}
 
 		// Find the email for the user to send a receipt to
 		$sql = "SELECT * FROM people WHERE id = ".$paidBy;
@@ -287,16 +295,34 @@ require_once('../stripe/init.php');
 
 		$createdAt = date('Y-m-d H:i:s');
 
-		if ($_POST['totalDonation'] != '') {
+		$sql = "UPDATE people SET paid = 1, token = '$chargeToken' WHERE id = ".$paidBy;
+		mysqli_query($conn, $sql);
+
+		if ($_POST['totalDonation'] != '' && $_POST['totalDonation'] != 0) {
 			$donation = $_POST['totalDonation'];
-			$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ($paidBy, $donation, '$chargeToken', '$createdAt')";
+			// If the user donated to a specific cause, add the event_id to the payment
+			if ($cause != 0) {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$paidBy."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$createdAt."')";
+			} else {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$paidBy."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$createdAt."')";
+			}
 			mysqli_query($conn, $sql);
 		}
 
-		$sql = "UPDATE people SET paid = 1, token = '$chargeToken' WHERE id = ".$paidBy;
+		// update team to paid
+		$sql = "UPDATE teams SET is_active = 1, players_paid = ".$quantity." WHERE captain_id = ".$paidBy;
 		mysqli_query($conn, $sql);
-		$sql = "INSERT INTO payments (paid_by, paid_for, entry_amount, quantity, event_id, token, created_at) VALUES ($paidBy, $paidBy, '$eventPrice', $quantity, $eventId, '$chargeToken', '$createdAt')";
+
+		$eventEntry = $eventPrice * $quantity;
+		// Add to payments for event entry
+		$sql = "INSERT INTO payments (paid_by, paid_for, entry_amount, quantity, event_id, token, created_at) VALUES ($paidBy, $paidBy, '$eventEntry', $quantity, $eventId, '$chargeToken', '$createdAt')";
 		mysqli_query($conn, $sql);
+		
+		// if a cause was specified, update the event with the new total
+		if ($cause != 0) {
+			$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+			mysqli_query($conn, $sql);
+		}
 
 		header("Location: ../showSpecialEvent.php?eventId=".$eventId."&message=success");
 		die();
@@ -709,5 +735,31 @@ require_once('../stripe/init.php');
         die;
 	}
 
+	// If new registration for special event
+	if (isset($_POST) && isset($_POST['paidBySpecial'])) {
+
+		$createdAt = date('Y-m-d H:i:s');
+		$eventId = $_POST['eventId'];
+		$name = mysqli_real_escape_string($conn, trim($_POST['paidBySpecial']));
+		$phone = mysqli_real_escape_string($conn, $_POST['phone']);
+		$email = mysqli_real_escape_string($conn, trim($_POST['email']));
+
+		$sql = "INSERT INTO people (full_name, phone, email, paid, created_at) VALUES ('".$name."', '".$phone."', '".$email."', 0, '".$createdAt."')";
+		mysqli_query($conn, $sql);
+		$newCaptainId = mysqli_insert_id($conn);
+		// Save new person's id in session
+		$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+
+		$sql = "INSERT INTO teams (team_name, passcode, event_id, division_id, captain_id, is_active, created_at) VALUES ('".$name."', '', '".$eventId."', 1, '".$newCaptainId."', 0, '".$createdAt."')";
+		mysqli_query($conn, $sql);
+
+		$newTeamId = mysqli_insert_id($conn);
+
+		$sql = "INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (".$newTeamId.",".$newCaptainId.",true, true)";
+		mysqli_query($conn, $sql);
+
+		echo json_encode("../checkout.php?specialEventId=".$eventId);
+		die;
+	}
 ?>
 			

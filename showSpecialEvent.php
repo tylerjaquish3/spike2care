@@ -44,19 +44,49 @@ if ($_GET) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12 col-md-10 col-md-push-1">
+                            <div class="col-xs-12 col-md-8 col-md-push-2">
                                 <div class="format">
                                     <h4><?php echo date_create($row['event_date'])->format('D, M j'); ?></h4>
                                     <h3><?php echo $row['location']; ?> <small><?php echo $row['address'].', '.$row['city']; ?></small></h3>
-                                    <h4> $ <?php echo $row['price']; ?> <small>(per person)</small> <?php echo 'Starts at '.$row['play_time']; ?></h4>
+                                    <h4> $ <?php echo $row['price']; ?> <?php echo ($row['price_for'] != "na") ? "<small>(".$row['price_for'].")</small>" : "-"; ?> <?php echo 'Starts at '.$row['play_time']; ?></h4>
                                 </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4">
+                                <!-- <div class="pull-right"> -->
+                                    <?php
+                                    $today = date('Y-m-d H:i:s');
+                                    // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
+                                    if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
+                                        <a class="btn btn-primary btn-large" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
+                                    <?php } ?>
+                                <!-- </div> -->
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="format">
-                                    <h3>Details</h3>
-                                    <p><?php echo $row['description']; ?></p>
+                                    <?php if ($row['description']) {
+                                        echo '<h3>Details</h3>';
+                                        echo '<p>'.$row['description'].'</p>';
+                                    } ?>
+
+                                    <?php if ($row['additional_info']) {
+                                        echo '<h3>Additional Info</h3>';
+                                        echo '<p>'.$row['additional_info'].'</p>';
+                                    } 
+                                    $deadline = strtotime($row['registration_deadline']);
+                                    ?>
+
+                                    <h4>Registration Deadline: <?php echo date('D, M j 11:59', $deadline).'pm'; ?></h4>
+
+                                    <?php if ($row['fb_link']) {
+                                        $fbLink = $row['fb_link'];
+                                        if (substr(strtolower($row['fb_link']), 0, 4) != "http") {
+                                            $fbLink = 'http://'.$row['fb_link'];
+                                        } 
+                                        echo '<p><a href="'.$fbLink.'">Link to Facebook Event</a></p>';
+                                    } ?>
+                        
                                 </div>
                             </div>
                         </div>

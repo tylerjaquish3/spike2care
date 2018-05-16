@@ -28,6 +28,7 @@ if (isset($_GET) && !empty($_GET)) {
             $playTime = $row['play_time'];
             $location = $row['location'];
             $price = $row['price'];
+            $priceFor = $row['price_for'];
             $address = $row['address'];
             $city = $row['city'];
             $format = $row['format'];
@@ -132,8 +133,19 @@ if (isset($_GET) && !empty($_GET)) {
                             </div>
 
                             <div class="form-group">
-                                <label for="price">Price per person <span class="required">*</span></label>
+                                <label for="price">Price <span class="required">*</span></label>
                                 <input type="text" class="form-control" name="price" placeholder="Dollar Amount" required value="<?php echo $price; ?>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="price">Price for <span class="required">*</span></label>
+                                <select class="form-control" name="price_for">
+                                    <option value="per player" <?php echo $priceFor == 'per player' ? 'selected' : '';?>>Per Player</option>
+                                    <option value="per person" <?php echo $priceFor == 'per person' ? 'selected' : '';?>>Per Person</option>
+                                    <option value="per team" <?php echo $priceFor == 'per team' ? 'selected' : '';?>>Per Team</option>
+                                    <option value="per table" <?php echo $priceFor == 'per table' ? 'selected' : '';?>>Per Table</option>
+                                    <option value="na" <?php echo $priceFor == 'na' ? 'selected' : '';?>>Not Applicable</option>
+                                </select>
                             </div>
 
                             <div class="regularEvent">
@@ -160,12 +172,12 @@ if (isset($_GET) && !empty($_GET)) {
 
                             <div class="form-group">
                                 <label for="address">Address</label>
-                                <input type="text" class="form-control" name="address" placeholder="Address" value="<?php echo $address; ?>">
+                                <input type="text" class="form-control" name="address" required placeholder="Address" value="<?php echo $address; ?>">
                             </div>
 
                             <div class="form-group">
                                 <label for="city">City</label>
-                                <input type="text" class="form-control" name="city" placeholder="City" value="<?php echo $city; ?>">
+                                <input type="text" class="form-control" name="city" required placeholder="City" value="<?php echo $city; ?>">
                             </div>
                             
                             <div class="form-group">

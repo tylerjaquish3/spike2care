@@ -57,7 +57,7 @@ if (mysqli_num_rows($content) > 0) {
                     ?>
                     <div class="col-xs-12">
                         <a href="showSpecialEvent.php?eventId=<?php echo $row['id']; ?>">
-                            <div class="special-event" style="background-image: url('images/events/<?php echo $row['image_path']; ?>')"></div>    
+                            <div  class="special-event" style="background-image: url('images/events/<?php echo $row['image_path']; ?>')"></div>    
                         </a>
                     </div>
                     </div>
@@ -120,7 +120,7 @@ if (mysqli_num_rows($content) > 0) {
                                     
                                     <h3><?php echo date_create($row['event_date'])->format('D, M j'); ?></h3>
                                     <h3><?php echo $row['location']; ?></h3>
-                                    <h4>$ <?php echo $row['price']; ?> <small>(per player)</small></h4>
+                                    <h4>$ <?php echo $row['price']; ?> <small>(<?php echo $row['price_for']; ?>)</small></h4>
 
                                     <?php
                                     $teams = mysqli_query($conn,"SELECT *, count(*) as num_teams FROM teams WHERE is_active = 1 AND event_id = ".$row['id']." GROUP BY id");
