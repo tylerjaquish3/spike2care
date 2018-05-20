@@ -272,6 +272,7 @@ require_once('../../stripe/init.php');
 		die();
 	}
 
+	// saving a board member bio
 	if(isset($_POST['save-board'])){
 
 		$date = date('Y-m-d H:i:s');
@@ -287,7 +288,7 @@ require_once('../../stripe/init.php');
 					$v = escape($v);
 					// Create sql update statement
 					$sql = "UPDATE ".$tableName." SET ";
-					$sql .= $postedItem." = '".$v."', updated_at = '".$date."' WHERE position_id = ".$k;
+					$sql .= $postedItem." = '".$v."', updated_at = '".$date."' WHERE people_id = ".$k;
 					//var_dump($sql);
 					// Insert into db
 					if(mysqli_query($conn, $sql)) {

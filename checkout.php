@@ -354,7 +354,7 @@
 
         $('#pay').click(function () {
             eventId = $('#eventId').val();
-            specialEvent = <?php echo $specialEvent; ?>;
+            specialEvent = "<?php echo $specialEvent ?>";
             eventAmount = 0;
             freeAgentDonation = false;
             if (eventId && specialEvent) {

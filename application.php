@@ -67,13 +67,13 @@ include('header.php');
                         <div class="col-xs-12 col-sm-3">
                             <div class="form-group">
                                 <label for="nominee_address">Mailing Address</label>
-                                <input type="text" class="form-control" name="nominee_address" placeholder="Full Name">
+                                <input type="text" class="form-control" name="nominee_address">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-3">
                             <div class="form-group">
                                 <label for="nominee_city">City</label>
-                                <input type="text" class="form-control" name="nominee_city" placeholder="Full Name">
+                                <input type="text" class="form-control" name="nominee_city">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-3">
@@ -87,7 +87,7 @@ include('header.php');
                         <div class="col-xs-12 col-sm-3">
                             <div class="form-group">
                                 <label for="nominee_zip">Zip</label>
-                                <input type="text" class="form-control" name="nominee_zip" placeholder="Full Name">
+                                <input type="text" class="form-control" name="nominee_zip">
                             </div>
                         </div>
                     </div>
