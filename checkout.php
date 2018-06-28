@@ -58,7 +58,7 @@
                             <div class="col-xs-12 col-md-6">
                                 Your privacy and security is 100% guaranteed. <a href="privacy.php">View privacy statement.</a>
                                 <br /> 
-                                We issue full refunds for events, up to 5 days before the event date. <a href="refundPolicy.php">View refund policy.</a>
+                                We issue full refunds for events, up to 30 days before the event date. <a href="refundPolicy.php">View refund policy.</a>
                             </div>
                         <?php } elseif ($teamId) { ?>
                             <div class="col-xs-12 col-md-6">
@@ -354,11 +354,10 @@
 
         $('#pay').click(function () {
             eventId = $('#eventId').val();
-            specialEvent = <?php echo $specialEvent; ?>;
+            specialEvent = "<?php echo $specialEvent; ?>";
             eventAmount = 0;
             freeAgentDonation = false;
             if (eventId && specialEvent) {
-                console.log('yes');
                 eventAmount = getEventAmount();
             } else if (eventId) {
                 if ("<?php echo $teamId; ?>" == '') {
