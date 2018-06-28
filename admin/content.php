@@ -131,7 +131,7 @@ while($row = mysqli_fetch_array($content)) {
                                             <div class="col-xs-12 col-md-8">
                                                 <div class="form-group">
                                                     <label for="description">Bio Text</label>
-                                                    <textarea class="form-control ckeditor" id="ckeditor" name="bio_text[<?php echo $posId; ?>]" rows="4"><?php echo $row['bio_text']; ?></textarea>
+                                                    <textarea class="form-control ckeditor" id="ckeditor" name="bio_text[<?php echo $peepId; ?>]" rows="4"><?php echo $row['bio_text']; ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
