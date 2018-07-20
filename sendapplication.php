@@ -69,7 +69,7 @@
 
         $sql = "INSERT INTO people (".$nominatorField.") VALUES (".$insertNominator.")";
 
-        //var_dump($sql);
+        // var_dump($sql);
         mysqli_query($conn, $sql);
         $nominator_id = mysqli_insert_id($conn);
 
@@ -79,9 +79,10 @@
 
         $sql = "INSERT INTO people (".$nomineeField.") VALUES (".$insertNominee.")";
 
-        //var_dump($sql);
+        // var_dump($sql);
         mysqli_query($conn, $sql);
         $nominee_id = mysqli_insert_id($conn);
+        // die;
 
         $fields .= 'status,nominator_id,nominee_id,';
         $insertItems .= '"Submitted",'.$nominator_id.','.$nominee_id.',';
@@ -96,7 +97,7 @@
 
         $sql = "INSERT INTO applications (".$fields.") VALUES (".$insertItems.")";
 
-        //var_dump($sql);
+        // var_dump($sql);
         mysqli_query($conn, $sql);
 
     	$email_template = 'includes/emailTemplate.html';
