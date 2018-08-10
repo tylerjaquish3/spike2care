@@ -58,6 +58,11 @@ include('header.php');
                     <i class="fa fa-envelope"></i> &nbsp;<a href="mailto: itResources@spike2care.org">itResources@spike2care.org</a>
                 </p>  
 
+                <p>Mailing Address: <br />
+                    7115 N. Division St  <br />
+                    Suite B, PMB 277 <br />
+                    Spokane, WA 99208
+
                 <p class="social-icons"> 
                     <a href="http://facebook.com/Spike2Care"><i class="fa fa-facebook-square"></i></a>
                     <a href="http://instagram.com/spike2care"><i class="fa fa-instagram"></i></a>
