@@ -186,6 +186,9 @@ if (isset($_GET) && !empty($_GET)) {
                                 <small id="fileHelp" class="form-text text-muted">Only jpg, gif, and png formats are acceptable.</small>
                             </div>
 
+                            <div class="form-group">
+                                <input type="button" class="btn btn-primary" id="sendToPeople" value="Send to All Contacts">
+                            </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
 
@@ -295,6 +298,26 @@ if (isset($_GET) && !empty($_GET)) {
     </div>
 </div>
 
+<div class="modal fade" id="sendToPeople-confirm" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirm Send</h4>
+            </div>
+            <div class="modal-body">
+                This will send an "Event Announcement" email to every person that has ever registered through the S2C website. <br />
+                <strong>Before sending, verify all event details are set and accurate.</strong><br />
+                Are you sure you want to send emails to everyone?
+            </div>
+            <div class="modal-footer pull-right">
+                <button type="button" class="btn btn-warning" class="close" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-success" id="sendToPeople-btn">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 include('includes/footer.php');
 ?>
@@ -377,6 +400,31 @@ include('includes/footer.php');
             data: {
                 id: eventId,
                 action: 'cancelEvent'
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.type == 'error') {
+                    addAlertToPage('error', 'Error', response.message, 10);
+                } else {
+                    addAlertToPage('success', 'Success', response.message, 10);
+                }
+            },
+        });
+    });
+
+    $('#sendToPeople').click(function(e) {
+        $('#sendToPeople-confirm').modal('show');
+    });
+
+    $('#sendToPeople-btn').click(function(e) {
+        var eventId = "<?php echo $eventId; ?>";
+        // ajax request to handleForm for cancel and refund
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: "POST",
+            data: {
+                id: eventId,
+                action: 'sendEventToPeople'
             },
             dataType: 'json',
             success: function (response) {

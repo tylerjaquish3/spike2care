@@ -724,4 +724,55 @@ require_once('../../stripe/init.php');
 	        }
         }
   	}
+
+  	// Send event to people
+  	if (isset($_POST['action']) && $_POST['action'] == 'sendEventToPeople') {
+  		$eventId = $_POST['id'];
+
+  		// First get all the people
+  		$flag = false;
+		$result = mysqli_query($conn, "SELECT DISTINCT email FROM people WHERE email IS NOT NULL") or die('Query failed!');
+		while($row = mysqli_fetch_assoc($result)) {
+			$email = $row['email'];
+			if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			  	sendEventAnnouncement($email, $eventId);
+			} else {
+			  	var_dump("$email is not a valid email address");
+			}
+		}
+
+		die;
+  	}
+
+  	function sendEventAnnouncement($to, $eventId)
+	{
+		$result = mysqli_query($conn, "SELECT * FROM events WHERE id = ".$eventId) or die('Query failed!');
+		while($row = mysqli_fetch_assoc($result)) {
+			$subject = $row['title'];
+		}
+		$email_template = 'eventAnnouncement.html';
+
+		if (IS_DEV) {
+	        $to = 'tylerjaquish@gmail.com';
+	    }
+
+	    $headers  = "From: Spike2Care.org" . "\r\n";
+	    $headers .= "Reply-To: info@spike2care.org" . "\r\n";
+	    $headers .= "MIME-Version: 1.0\r\n";
+	    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+
+	    $templateTags =  array(
+	        '{{subject}}' => $subject,
+	        '{{message}}' => $message
+	        );
+
+	    $templateContents = file_get_contents( dirname(__FILE__) . '/'.$email_template);
+	    $contents =  strtr($templateContents, $templateTags);
+
+	    if (mail( $to, $subject, $contents, $headers)) {
+	    	return true;
+    	}
+
+    	return false;
+	}
 ?>
