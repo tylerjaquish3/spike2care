@@ -724,4 +724,53 @@ require_once('../../stripe/init.php');
 	        }
         }
   	}
+
+  	if(isset($_POST['save-item'])) {
+
+		$fields = $insertItems = $setValues = '';
+		$isNew = ($_POST['is_new'] == 'true' ? true : false);
+		$itemId = $_POST['item_id'];
+		$title = $_POST['title'];
+		$price = $_POST['price'];
+		$description = $_POST['description'];
+
+		// Upload image first
+		$targetDir = "../../images/catalog/";
+
+		var_dump($_FILES);die;
+
+		$imageFields = [];
+
+		if (isset($_FILES)) {
+			foreach($_FILES as $field => $file) {
+		
+				$temp = explode(".", $file["name"]); 
+				$newFileName = round(microtime(true)).rand(1,100).'.'.end($temp);
+				$targetFile = $targetDir.$newFileName;
+
+				$return = uploadAttachment($targetFile, $file, 'image');
+
+				if ($return == 'success') {
+					$imageFields[$field] = $targetDir.$newFileName;
+				} else {
+					// there was an error
+				}
+			}
+		}
+
+		// Add created at timestamp
+		$fields .= 'created_at';
+		$insertItems .= '"'.date('Y-m-d H:i:s').'"';
+ 
+		if ($isNew) {
+			$sql = "INSERT INTO catalog (".$fields.") VALUES (".$insertItems.")";
+		} else {
+			$sql = "UPDATE catalog SET ".$setValues." WHERE id = '$eventId'";
+		}
+var_dump($sql);
+		//mysqli_query($conn, $sql);
+		
+		header("Location: ".URL."/admin/catalog.php");
+		die();
+	}
 ?>

@@ -35,6 +35,8 @@
                     if ($roleId == 1 || $roleId == 4 || $roleId == 5)
                     echo '<li><a href="payments.php"><i class="fa fa-credit-card"></i> Payments</a></li>';
                     if ($roleId == 1 || $roleId == 2 || $roleId == 5)
+                    echo '<li><a href="merchandise.php"><i class="fa fa-shirtsinbulk"></i> Merchandise</a></li>';
+                    if ($roleId == 1 || $roleId == 2 || $roleId == 5)
                     echo '<li><a href="sales.php"><i class="fa fa-shopping-cart"></i> Sales</a></li>';
                     if ($roleId == 1 || $roleId == 3 || $roleId == 5)
                     echo '<li><a href="content.php"><i class="fa fa-sticky-note"></i> Content</a></li>';
