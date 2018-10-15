@@ -28,12 +28,19 @@ if (isset($_GET) && !empty($_GET)) {
         }
     }
 
-    // $event = mysqli_query($conn,"SELECT * FROM event_divisions WHERE event_id = ".$eventId);
-    // if (mysqli_num_rows($event) > 0) {
-    //     while($row = mysqli_fetch_array($event)) {
-    //         $existingDivisions[] = $row['division_id'];
-    //     }
-    // }
+    $colors = mysqli_query($conn,"SELECT * FROM catalog_colors WHERE catalog_id = ".$itemId);
+    if (mysqli_num_rows($colors) > 0) {
+        while($row = mysqli_fetch_array($colors)) {
+            $existingColors[] = $row['color_id'];
+        }
+    }
+
+    $sizes = mysqli_query($conn,"SELECT * FROM catalog_sizes WHERE catalog_id = ".$itemId);
+    if (mysqli_num_rows($sizes) > 0) {
+        while($row = mysqli_fetch_array($sizes)) {
+            $existingSizes[] = $row['size_id'];
+        }
+    }
 
     if ($active) {
         $active = 'checked';
@@ -87,17 +94,41 @@ if (isset($_GET) && !empty($_GET)) {
 
                             <div class="form-group">
                                 <label for="colors">Colors</label>
-                                <select></select>
+                                <select id="colors-multiple" name="colors[]" multiple="multiple">
+                                    <?php
+                                    $colors = mysqli_query($conn,"SELECT * FROM colors");
+                                    if (mysqli_num_rows($colors) > 0) {
+                                        while($div = mysqli_fetch_array($colors)) {
+                                            if (in_array($existingColors['id'], $colors)) { ?>
+                                                <option selected="selected" value="<?php echo $div['id']; ?>"><?php echo $div['color']; ?></option>
+                                            <?php } else { ?>
+                                                <option value="<?php echo $div['id']; ?>"><?php echo $div['color']; ?></option>
+                                            <?php }
+                                        }
+                                    } ?>
+                                </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="sizes">Sizes</label>
-                                <select></select>
+                                <select id="sizes-multiple" name="sizes[]" multiple="multiple">
+                                    <?php
+                                    $sizes = mysqli_query($conn,"SELECT * FROM sizes");
+                                    if (mysqli_num_rows($sizes) > 0) {
+                                        while($div = mysqli_fetch_array($sizes)) {
+                                            if (in_array($div['id'], $sizes)) { ?>
+                                                <option selected="selected" value="<?php echo $div['id']; ?>"><?php echo $div['size']; ?></option>
+                                            <?php } else { ?>
+                                                <option value="<?php echo $div['id']; ?>"><?php echo $div['size']; ?></option>
+                                            <?php }
+                                        }
+                                    } ?>
+                                </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="is_active">Active on Site?</label>
-                                <input type="checkbox" name="is_active" id="isActive" <?php echo $active; ?>>
+                                <input type="checkbox" name="is_active" <?php echo $active; ?>>
                             </div>
 
                             <div class="form-group">
@@ -134,7 +165,11 @@ include('includes/footer.php');
 
 <script>
 
-    $('#selectDivisions').select2({
+    $('#colors-multiple').select2({
+        placeholder: 'Select multiple'
+    });
+
+    $('#sizes-multiple').select2({
         placeholder: 'Select multiple'
     });
 

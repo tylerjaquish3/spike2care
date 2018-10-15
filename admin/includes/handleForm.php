@@ -724,7 +724,7 @@ require_once('../../stripe/init.php');
 	        }
         }
   	}
-
+  	// Add/update an item in the catalog
   	if(isset($_POST['save-item'])) {
 
 		$fields = $insertItems = $setValues = '';
@@ -733,11 +733,19 @@ require_once('../../stripe/init.php');
 		$title = $_POST['title'];
 		$price = $_POST['price'];
 		$description = $_POST['description'];
+		$colors = $_POST['colors'];
+		$sizes = $_POST['sizes'];
+		if (isset($_POST['is_active'])) {
+			$active = 1;
+		} else {
+			$active = 0;
+		}
+		$createdAt = date('Y-m-d H:i:s');
 
 		// Upload image first
 		$targetDir = "../../images/catalog/";
 
-		var_dump($_FILES);die;
+		var_dump($_POST);
 
 		$imageFields = [];
 
@@ -758,18 +766,43 @@ require_once('../../stripe/init.php');
 			}
 		}
 
-		// Add created at timestamp
-		$fields .= 'created_at';
-		$insertItems .= '"'.date('Y-m-d H:i:s').'"';
- 
 		if ($isNew) {
-			$sql = "INSERT INTO catalog (".$fields.") VALUES (".$insertItems.")";
+			$sql = "INSERT INTO catalog (title, description, price, active, created_at) 
+				VALUES ('{$title}', '{$description}', {$price}, {$active}, '{$createdAt}')";
+			mysqli_query($conn, $sql);
+
+			$itemId = mysqli_insert_id($conn);
 		} else {
-			$sql = "UPDATE catalog SET ".$setValues." WHERE id = '$eventId'";
+			$sql = "UPDATE catalog SET title = '{$title}', description = '{$description}', price = {$price}, active = {$active}
+				WHERE id = {$itemId}";
+			mysqli_query($conn, $sql);
 		}
-var_dump($sql);
-		//mysqli_query($conn, $sql);
-		
+
+		var_dump($sql);
+
+		// If updating an item, first remove existing colors and sizes
+		if (!$isNew) {
+			$sql = "DELETE FROM catalog_colors WHERE catalog_id = ".$itemId;
+			mysqli_query($conn, $sql);
+			$sql = "DELETE FROM catalog_sizes WHERE catalog_id = ".$itemId;
+			mysqli_query($conn, $sql);
+		}
+
+		if (isset($colors)) {
+			foreach ($colors as $color) {
+				$sql = "INSERT INTO catalog_colors (catalog_id, color_id) VALUES ({$itemId}, {$color})";
+				mysqli_query($conn, $sql);
+			}
+		}
+
+		if (isset($sizes)) {
+			foreach ($sizes as $size) {
+				$sql = "INSERT INTO catalog_sizes (catalog_id, size_id) VALUES ({$itemId}, {$size})";
+				mysqli_query($conn, $sql);
+			}
+		}
+
+		die;
 		header("Location: ".URL."/admin/catalog.php");
 		die();
 	}
