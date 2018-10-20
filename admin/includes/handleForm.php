@@ -729,27 +729,44 @@ require_once('../../stripe/init.php');
   	if (isset($_POST['action']) && $_POST['action'] == 'sendEventToPeople') {
   		$eventId = $_POST['id'];
 
-  		// First get all the people
+  		// First get all the people emails
   		$flag = false;
 		$result = mysqli_query($conn, "SELECT DISTINCT email FROM people WHERE email IS NOT NULL") or die('Query failed!');
 		while($row = mysqli_fetch_assoc($result)) {
 			$email = $row['email'];
 			if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			  	sendEventAnnouncement($email, $eventId);
+			  	sendEventAnnouncement($conn, $email, $eventId);
 			} else {
 			  	var_dump("$email is not a valid email address");
 			}
 		}
-
 		die;
   	}
 
-  	function sendEventAnnouncement($to, $eventId)
+  	function sendEventAnnouncement($conn, $to, $eventId)
 	{
 		$result = mysqli_query($conn, "SELECT * FROM events WHERE id = ".$eventId) or die('Query failed!');
 		while($row = mysqli_fetch_assoc($result)) {
 			$subject = $row['title'];
+			$title = $row['title'];
+            $eventDate = $row['event_date'];
+            $checkinTime = $row['checkin_time'];
+            $meetingTime = $row['meeting_time'];
+            $playTime = $row['play_time'];
+            $location = $row['location'];
+            $price = $row['price'];
+            $priceFor = $row['price_for'];
+            $address = $row['address'];
+            $city = $row['city'];
+            $format = $row['format'];
+            $description = $row['description'];
+            $teamPlayers = $row['team_players'];
+            $imagePath = $row['image_path'];
+            $fbLink = $row['fb_link'];
+            $additionalInfo = $row['additional_info'];
+            $registrationDeadline = $row['registration_deadline'];
 		}
+
 		$email_template = 'eventAnnouncement.html';
 
 		if (IS_DEV) {
@@ -763,8 +780,25 @@ require_once('../../stripe/init.php');
 
 	    $templateTags =  array(
 	        '{{subject}}' => $subject,
-	        '{{message}}' => $message
-	        );
+	        '{{title}}' => $title,
+        	'{{eventDate}}' => $eventDate,
+            '{{checkinTime}}' => $checkinTime,
+            '{{meetingTime}}' => $meetingTime,
+            '{{playTime}}' => $playTime,
+            '{{location}}' => $location,
+            '{{price}}' => $price,
+            '{{priceFor}}' => $priceFor,
+            '{{address}}' => $address,
+            '{{city}}' => $city,
+            '{{format}}' => $format,
+            '{{description}}' => $description,
+            '{{teamPlayers}}' => $teamPlayers,
+            '{{imagePath}}' => $imagePath,
+            '{{fbLink}}' => $fbLink,
+            '{{additionalInfo}}' => $additionalInfo,
+            '{{registrationDeadline}}' => $registrationDeadline,
+            '{{eventId}}' => $eventId
+        );
 
 	    $templateContents = file_get_contents( dirname(__FILE__) . '/'.$email_template);
 	    $contents =  strtr($templateContents, $templateTags);
