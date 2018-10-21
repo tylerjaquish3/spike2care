@@ -24,7 +24,7 @@ if (isset($_GET) && !empty($_GET)) {
             $image2_path = $row['image2_path'];
             $image3_path = $row['image3_path'];
             $category_id = $row['category_id'];
-            $active = $row['is_active'];
+            $active = $row['active'];
         }
     }
 
@@ -99,7 +99,7 @@ if (isset($_GET) && !empty($_GET)) {
                                     $colors = mysqli_query($conn,"SELECT * FROM colors");
                                     if (mysqli_num_rows($colors) > 0) {
                                         while($div = mysqli_fetch_array($colors)) {
-                                            if (in_array($existingColors['id'], $colors)) { ?>
+                                            if (in_array($div['id'], $existingColors)) { ?>
                                                 <option selected="selected" value="<?php echo $div['id']; ?>"><?php echo $div['color']; ?></option>
                                             <?php } else { ?>
                                                 <option value="<?php echo $div['id']; ?>"><?php echo $div['color']; ?></option>
@@ -116,7 +116,7 @@ if (isset($_GET) && !empty($_GET)) {
                                     $sizes = mysqli_query($conn,"SELECT * FROM sizes");
                                     if (mysqli_num_rows($sizes) > 0) {
                                         while($div = mysqli_fetch_array($sizes)) {
-                                            if (in_array($div['id'], $sizes)) { ?>
+                                            if (in_array($div['id'], $existingSizes)) { ?>
                                                 <option selected="selected" value="<?php echo $div['id']; ?>"><?php echo $div['size']; ?></option>
                                             <?php } else { ?>
                                                 <option value="<?php echo $div['id']; ?>"><?php echo $div['size']; ?></option>
@@ -141,6 +141,25 @@ if (isset($_GET) && !empty($_GET)) {
 
                         </div>
                     </div>
+                    
+                    <div class="row">
+                        <?php if ($image1_path != '') { ?>
+                            <div class="col-xs-6 col-md-4">
+                                <img src="../images/catalog/<?php echo $image1_path; ?>" width="100%">
+                            </div>
+                        <?php } ?>
+                        <?php if ($image2_path != '') { ?>
+                            <div class="col-xs-6 col-md-4">
+                                <img src="../images/catalog/<?php echo $image2_path; ?>" width="100%">
+                            </div>
+                        <?php } ?>
+                        <?php if ($image3_path != '') { ?>
+                            <div class="col-xs-6 col-md-4">
+                                <img src="../images/catalog/<?php echo $image3_path; ?>" width="100%">
+                            </div>
+                        <?php } ?>
+                    </div>
+
                     <div class="row">
                         <div class="col-xs-12 center">
                             <br /><br />

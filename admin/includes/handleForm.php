@@ -745,9 +745,7 @@ require_once('../../stripe/init.php');
 		// Upload image first
 		$targetDir = "../../images/catalog/";
 
-		var_dump($_POST);
-
-		$imageFields = [];
+		$imagePaths = [];
 
 		if (isset($_FILES)) {
 			foreach($_FILES as $field => $file) {
@@ -759,27 +757,35 @@ require_once('../../stripe/init.php');
 				$return = uploadAttachment($targetFile, $file, 'image');
 
 				if ($return == 'success') {
-					$imageFields[$field] = $targetDir.$newFileName;
+					$imagePaths[$field] = $newFileName;
 				} else {
 					// there was an error
 				}
 			}
+
+			$fields = $values = $updateQuery = '';
+
+			foreach ($imagePaths as $field => $path) {
+				$fields .= $field.',';
+				$values .= '"'.$path.'",';
+				$updateQuery .= $field.' = "'.$path.'",';
+			}
 		}
 
 		if ($isNew) {
-			$sql = "INSERT INTO catalog (title, description, price, active, created_at) 
-				VALUES ('{$title}', '{$description}', {$price}, {$active}, '{$createdAt}')";
+			$sql = "INSERT INTO catalog (title, description, price, ".$fields." active, created_at) 
+				VALUES ('{$title}', '{$description}', {$price}, ".$values." {$active}, '{$createdAt}')";
 			mysqli_query($conn, $sql);
 
 			$itemId = mysqli_insert_id($conn);
 		} else {
-			$sql = "UPDATE catalog SET title = '{$title}', description = '{$description}', price = {$price}, active = {$active}
+			$sql = "UPDATE catalog SET title = '{$title}', description = '{$description}', price = {$price}, ".$updateQuery." active = {$active}
 				WHERE id = {$itemId}";
 			mysqli_query($conn, $sql);
 		}
 
-		var_dump($sql);
-
+		// var_dump($sql);
+// die;
 		// If updating an item, first remove existing colors and sizes
 		if (!$isNew) {
 			$sql = "DELETE FROM catalog_colors WHERE catalog_id = ".$itemId;
@@ -802,7 +808,6 @@ require_once('../../stripe/init.php');
 			}
 		}
 
-		die;
 		header("Location: ".URL."/admin/catalog.php");
 		die();
 	}
