@@ -56,7 +56,7 @@ if (!isset($_SESSION["user_id"])) {
                                         <!-- <td><?php echo $item['inventory']; ?></td>
                                         <td><?php echo $item['sold'];?></td> -->
                                         <td><?php echo ($item['active']) ? 'Active' : 'Inactive' ?></td>
-                                        <td><a href="includes/handleForm.php?action=remove&itemId=<?php echo $item['id']; ?>" onclick="if(!confirm('Are you sure?')) return false">Remove</a></td>
+                                        <td><a href="includes/handleForm.php?action=removeItem&itemId=<?php echo $item['id']; ?>" onclick="if(!confirm('Are you sure?')) return false">Remove</a></td>
                                     </tr>
 
                                 <?php } ?>

@@ -47,16 +47,55 @@ if (isset($_GET)) {
     <section id="merchandise" class="container">    
         <div class="row">
             <div class="col-xs-12 col-md-6">
-                <img src="images/catalog/<?php echo $image1_path; ?>" width="100%">
-                
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                        <li data-target="#myCarousel" data-slide-to="2"></li>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" style=" width:100%; height: 500px">
+                        <div class="item active">
+                            <img src="images/catalog/<?php echo $image1_path; ?>" height="300px">
+                        </div>
+
+                        <div class="item">
+                            <img src="images/catalog/<?php echo $image2_path; ?>">
+                        </div>
+
+                        <div class="item">
+                            <img src="images/catalog/<?php echo $image3_path; ?>">
+                        </div>
+                    </div>
+
+                    <!-- Left and right controls -->
+                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
             </div>
             <div class="col-xs-12 col-md-6">
                 <h2><?php echo $title; ?></h2>
                 <h3><?php echo convertMoney($price); ?></h3>
 
-                <p><?php echo $description; ?></p>
+                <p><?php echo $description; 
+                var_dump($_SESSION);
+                ?></p>
 
-                <form action="shopCheckout.php" method="POST">
+                <form action="shopCheckout.php" id="itemForm" method="POST">
+
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label><br />
+                        <input type="number" name="quantity" id="quantity">
+                    </div>
+
                     <div class="form-group">
                         <label for="color">Color</label>
                         <select id="colors" name="color">
@@ -89,6 +128,7 @@ if (isset($_GET)) {
 
                     <input type="hidden" name="itemId" value="<?php echo $id; ?>">
 
+                    <button class="btn btn-primary" id="addToCart">Add to Cart</button>
                     <button type="submit" class="btn btn-primary">Buy Now</button>
                 </form>
             </div>
@@ -110,18 +150,39 @@ include('footer.php');
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script type="text/javascript" src="js/full_sparkle.js"></script>
 
 <script>
     $('#colors').select2({
-        placeholder: 'Select color'
+        placeholder: 'Select color',
+        minimumResultsForSearch: -1
     });
 
     $('#sizes').select2({
-        placeholder: 'Select size'
+        placeholder: 'Select size',
+        minimumResultsForSearch: -1
     });
 
-    $('#buyNow').click(function () {
-        alert('stripe modal');
+    $('#addToCart').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'addToCart': true,
+                'formData': $('#itemForm').serializeArray()
+            },
+            complete: function(data){
+                response = $.parseJSON(data.responseText);
+                if (response == 'success') {
+                    addAlertToPage('success', 'Success', 'Your cart has been updated', 10);   
+                } else {
+                    addAlertToPage('error', 'Error', 'Failed to update cart', 10);
+                }     
+            }
+        });
     });
 </script>
 

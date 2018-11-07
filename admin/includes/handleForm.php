@@ -784,8 +784,6 @@ require_once('../../stripe/init.php');
 			mysqli_query($conn, $sql);
 		}
 
-		// var_dump($sql);
-// die;
 		// If updating an item, first remove existing colors and sizes
 		if (!$isNew) {
 			$sql = "DELETE FROM catalog_colors WHERE catalog_id = ".$itemId;
@@ -808,7 +806,24 @@ require_once('../../stripe/init.php');
 			}
 		}
 
-		header("Location: ".URL."/admin/catalog.php");
+		header("Location: ".URL."/admin/merchandise.php");
+		die();
+	}
+
+	// Delete meeting minutes from database
+	if ($_GET && array_key_exists('action', $_GET) && $_GET['action'] == 'removeItem') {
+
+		$itemId = $_GET['itemId'];
+		$sql = "DELETE FROM catalog where id=".$itemId;
+		mysqli_query($conn, $sql);
+
+		$sql = "DELETE FROM catalog_colors where catalog_id=".$itemId;
+		mysqli_query($conn, $sql);
+
+		$sql = "DELETE FROM catalog_sizes where catalog_id=".$itemId;
+		mysqli_query($conn, $sql);
+
+		header("Location: ".URL."/admin/merchandise.php");
 		die();
 	}
 ?>

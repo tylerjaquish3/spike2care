@@ -117,13 +117,6 @@
                                     $ <span id="player-fee"><?php echo $itemPrice; ?></span>
                                 </div>
                             </div>
-                            
-                            <div class="row">
-                                <div class="col-xs-4">Quantity:</div>
-                                <div class="col-xs-8">
-                                    <input type="number" class="form-control" name="quantity" id="quantity">
-                                </div>
-                            </div>
 
                             <div class="row">
                                 <div class="col-xs-4">Shipping:</div>

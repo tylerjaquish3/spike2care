@@ -26,5 +26,5 @@
 <script type="text/javascript" src="js/jstz.min.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 <script type="text/javascript" src="js/calendar.js?<?php echo date('h:i:s'); ?>"></script>
-<script type="text/javascript" src="js/app.js?<?php echo date('h:i:s'); ?>"></script>
 <!-- <script type="text/javascript" src="js/full_sparkle.js"></script> -->
+<script type="text/javascript" src="js/app.js?<?php echo date('h:i:s'); ?>"></script>

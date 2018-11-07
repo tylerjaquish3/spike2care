@@ -1,3 +1,7 @@
+<?php
+// Start the session
+session_start();
+?>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -39,7 +43,12 @@
 
 <body>
 
-    <?php include('admin/includes/functions.php'); ?>
+    <?php include('admin/includes/functions.php'); 
+    //register new user
+    if(!isset($_SESSION['uniqueUser'])){
+        $_SESSION['uniqueUser'] = rand_str();
+    }
+    ?>
     <?php include('admin/includes/datalogin.php'); ?>
 
     <!--Header-->

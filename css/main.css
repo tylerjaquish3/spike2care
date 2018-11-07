@@ -1146,8 +1146,13 @@ a#forgot-password {
 
 .select2-container--default .select2-selection--single {
     background-color: #fff;
-    border: 3px solid #ededed;
+    border: 3px solid #ededed !important;
     height: 50px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    min-height: 50px;
+    padding: 7px 0px;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -1156,4 +1161,8 @@ a#forgot-password {
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 46px;
+}
+
+span.glyphicon.glyphicon-chevron-left, span.glyphicon.glyphicon-chevron-right {
+    color: #ff0099;
 }

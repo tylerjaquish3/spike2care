@@ -761,5 +761,34 @@ require_once('../stripe/init.php');
 		echo json_encode("../checkout.php?specialEventId=".$eventId);
 		die;
 	}
+
+	if (isset($_POST) && isset($_POST['addToCart'])) {
+		// session_unset();
+		if (!isset($_SESSION['items'])) {
+			$_SESSION['items'] = [];	
+		}
+		
+		$newItem = [];
+		try {
+			foreach ($_POST['formData'] as $index => $stuff) {
+				foreach ($stuff as $key => $value) {
+					if ($key == 'name') {
+						$saveKey = $value;
+					} else {
+						$saveValue = $value;
+					}
+				}
+				$newItem[$saveKey] = $saveValue;
+			}
+
+			array_push($_SESSION['items'], $newItem);
+		} catch (\Exception $ex) {
+			echo json_encode('failed');
+			die;
+		}
+
+		echo json_encode('success');
+		die;
+	}
 ?>
 			
