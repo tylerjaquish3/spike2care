@@ -790,5 +790,24 @@ require_once('../stripe/init.php');
 		echo json_encode('success');
 		die;
 	}
+
+	if (isset($_POST) && isset($_POST['removeFromCart'])) {
+		// session_unset();
+		if (!isset($_SESSION['items'])) {
+			$_SESSION['items'] = [];	
+		}
+
+		$sessionKey = $_POST['sessionItem'];
+		
+		try {
+			unset($_SESSION['items'][$sessionKey]);
+		} catch (\Exception $ex) {
+			echo json_encode('failed');
+			die;
+		}
+
+		echo json_encode('success');
+		die;
+	}
 ?>
 			

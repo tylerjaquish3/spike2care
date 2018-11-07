@@ -60,14 +60,19 @@ if (isset($_GET)) {
                         <div class="item active">
                             <img src="images/catalog/<?php echo $image1_path; ?>" height="300px">
                         </div>
-
-                        <div class="item">
-                            <img src="images/catalog/<?php echo $image2_path; ?>">
-                        </div>
-
-                        <div class="item">
-                            <img src="images/catalog/<?php echo $image3_path; ?>">
-                        </div>
+                        <?php 
+                        if (isset($image2_path)) { ?>
+                            <div class="item">
+                                <img src="images/catalog/<?php echo $image2_path; ?>">
+                            </div>
+                        <?php
+                        }
+                        if (isset($image3_path)) { ?>
+                            <div class="item">
+                                <img src="images/catalog/<?php echo $image3_path; ?>">
+                            </div>
+                        <?php 
+                        } ?>
                     </div>
 
                     <!-- Left and right controls -->
@@ -86,7 +91,7 @@ if (isset($_GET)) {
                 <h3><?php echo convertMoney($price); ?></h3>
 
                 <p><?php echo $description; 
-                var_dump($_SESSION);
+                var_dump($_SESSION['items']);
                 ?></p>
 
                 <form action="shopCheckout.php" id="itemForm" method="POST">
@@ -132,16 +137,7 @@ if (isset($_GET)) {
                     <button type="submit" class="btn btn-primary">Buy Now</button>
                 </form>
             </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12">
-
-
-            </div>
-        </div>
-        
+        </div> 
     </section>
 
 <?php
@@ -165,6 +161,8 @@ include('footer.php');
 
     $('#addToCart').click(function (e) {
         e.preventDefault();
+
+        //TODO: Do some validation on the form
 
         $.ajax({
             url: 'includes/handleForm.php',

@@ -1,16 +1,10 @@
 <?php
-    session_start();
 	$currentPage = 'Checkout';
 	include('header.php');
 
-    $itemId = $color = $size = '';
-
-    if (isset($_POST)) {
-    	$itemId = $_POST['itemId'];
-        $color = $_POST['color'];
-        $size = $_POST['size'];
+    if (isset($_SESSION['total'])) {
+        $total = $_SESSION['total'];
     }
-
 ?>
 
 	<section class="title">
@@ -26,13 +20,13 @@
     <section class="services">
         <div class="container">
 
-            <form action="includes/handleForm.php" method="POST" id="checkout-form">
+            <form action="includes/handleForm.php" method="POST" id="shop-checkout-form">
                 <input type="hidden" id="stripeToken" name="stripeToken">
                 <input type="hidden" id="paidBy" name="paidBy" value="<?php echo $paidBy; ?>">
                 <input type="hidden" id="totalDonation" name="totalDonation">
                 <input type="hidden" id="totalAmount" name="totalAmount">
 
-                <?php if (isset($itemId)) { ?>
+                <?php if (isset($_SESSION['total'])) { ?>
                     <input type="hidden" id="eventId" name="event_id" value="<?php echo $eventId; ?>">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
@@ -47,14 +41,8 @@
                             Purchase Merchandise
                         </div>
                     </div>
-                    <?php 
-                    $result = mysqli_query($conn,"SELECT * FROM catalog WHERE id = $itemId");
-                    while($item = mysqli_fetch_array($result)) 
-                    {
-                        $itemPrice = $item['price'];
-                    } ?>
-                    <input type="hidden" id="itemPrice" name="itemPrice" value="<?php echo $itemPrice; ?>">
-                    <div class="row checkout" id="event-form">
+                    
+                    <div class="row checkout">
                         <div class="col-xs-12 col-md-6"> 
                             
                             <div class="row">
@@ -112,24 +100,24 @@
                         </div>
                         <div class="col-xs-12 col-md-6"> 
                             <div class="row">
-                                <div class="col-xs-4">Price:</div>
+                                <div class="col-xs-4">Cart Price:</div>
                                 <div class="col-xs-8">
-                                    $ <span id="player-fee"><?php echo $itemPrice; ?></span>
+                                    $ <span id="player-fee"><?php echo number_format($total, 2); ?></span>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-xs-4">Shipping:</div>
                                 <div class="col-xs-8">
-                                    <input type="radio" name="shipping" value="shipIt">Ship it ($5.00)
-                                    <input type="radio" name="shipping" value="pickUp">Pick up (Free)
+                                    <input type="radio" name="shipping" value="shipIt"> Ship it ($10.00)
+                                    <input type="radio" name="shipping" value="pickUp"> Pick up (Free)
                                 </div>
                             </div>   
                         
                             <div class="row">
                                 <div class="col-xs-4">Subtotal:</div>
                                 <div class="col-xs-8">
-                                    <span id="amount"></span>
+                                    <span id="subtotal"></span>
                                 </div>
                             </div>
                         </div>
@@ -150,21 +138,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-12 col-md-6">
                             <div class="row checkout">
-                                <div class="col-xs-3 col-md-6 col-md-push-2">
+                                <div class="col-xs-4">
                                     Donation:
                                 </div>
-                                <div class="col-xs-9 col-md-6">
+                                <div class="col-xs-8">
                                     <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Amount">
                                     <span class="full" id="msg_donation"></span>
                                 </div>
                             </div>
                             <div class="row checkout">
-                                <div class="col-xs-3 col-md-6 col-md-push-2">
+                                <div class="col-xs-4">
                                     Choose a specific cause (optional):
                                 </div>
-                                <div class="col-xs-9 col-md-6">
+                                <div class="col-xs-8">
                                     <select id="causes" name="cause[]" class="form-control">
                                         <option selected value="0">S2C General Fund</option>
                                     </select>
@@ -231,17 +219,12 @@
     <script src="https://checkout.stripe.com/checkout.js"></script>
 
     <script type="text/javascript">
+        subtotal = parseFloat("<?php echo $total; ?>");    
         
-        var itemId = "<?php echo $itemId; ?>";
         $(document).ready(function() {
-            
-            if (itemId) {
-                updateItemAmount();
-                updateProcessingFee();
-                updateTotal();
-            } else {
-                $('#donation-form-div').show();
-            }
+            updateProcessingFee();
+            updateSubtotal(0);
+            updateTotal();
         });
 
         $.ajax({
@@ -262,6 +245,16 @@
             }
         });
 
+        $('input[type=radio][name=shipping]').change(function() {
+            if (this.value == 'shipIt') {
+                $('#addressFields').show();
+                updateSubtotal(10);
+            } else {
+                $('#addressFields').hide();
+                updateSubtotal(0);
+            }
+        });
+
 
         $('#add-donation').click(function() {
             $('#donation-form-div').fadeToggle();
@@ -276,12 +269,6 @@
                 e.preventDefault();
                 $(this).blur();    
             }
-        });
-
-        $('#quantity').focusout(function () {
-            updateItemAmount();
-            updateProcessingFee();
-            updateTotal();
         });
 
         $('#donation').focusout(function () {
@@ -355,13 +342,12 @@
             }
         });
 
-        function updateItemAmount()
+        function updateSubtotal(shippingCost)
         {
-            itemPrice = $('#player-fee').html();
-            quantity = $('#quantity').val();
-            itemAmount = itemPrice * quantity; 
+            cartPrice = "<?php echo $total; ?>";
+            subtotal = parseFloat(cartPrice) + shippingCost;
 
-            $('#amount').html('$ '+itemAmount.toFixed(2));
+            $('#subtotal').html('$ '+subtotal.toFixed(2));
         }
 
         function updateProcessingFee()
