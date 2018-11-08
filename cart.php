@@ -2,13 +2,7 @@
 	$currentPage = 'Cart';
 	include('header.php');
 
-    // $itemId = $color = $size = '';
-
-    // if (isset($_SESSION)) {
-    // 	$itemId = $_POST['itemId'];
-    //     $color = $_POST['color'];
-    //     $size = $_POST['size'];
-    // }
+    var_dump($_SESSION);
 
 ?>
 
@@ -41,6 +35,7 @@
                         </div>
                     </div>
                     <?php 
+                    var_dump($_SESSION['items']);
                     $total = 0;
                     foreach ($_SESSION['items'] as $key => $sessionItem) {
                         $result = mysqli_query($conn,"SELECT * FROM catalog WHERE id = ".$sessionItem['itemId']);

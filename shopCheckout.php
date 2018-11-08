@@ -2,6 +2,30 @@
 	$currentPage = 'Checkout';
 	include('header.php');
 
+    // If post is set, the user clicked Buy Now, add the items to session
+    if (isset($_POST['itemId'])) {
+
+        if (isset($_SESSION['items'])) {
+            array_push($_SESSION['items'], $_POST);
+        } else {
+            $_SESSION['items'][] = $_POST;
+        }
+
+        // Calculate total
+        $result = mysqli_query($conn,"SELECT * FROM catalog WHERE id = ".$_POST['itemId']);
+        while($item = mysqli_fetch_array($result)) 
+        {
+            $itemPrice = $item['price'];
+        } 
+        if (isset($_SESSION['total']) && $_SESSION['total'] != 0) {
+            $total = $_SESSION['total'] + ($_POST['quantity'] * $itemPrice);
+        } else {
+            $total = $_POST['quantity'] * $itemPrice;
+        }
+        
+        $_SESSION['total'] = $total;
+    }
+
     if (isset($_SESSION['total'])) {
         $total = $_SESSION['total'];
     }
@@ -26,7 +50,8 @@
                 <input type="hidden" id="totalDonation" name="totalDonation">
                 <input type="hidden" id="totalAmount" name="totalAmount">
 
-                <?php if (isset($_SESSION['total'])) { ?>
+                <?php 
+                if (isset($_SESSION['total'])) { ?>
                     <input type="hidden" id="eventId" name="event_id" value="<?php echo $eventId; ?>">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
@@ -120,10 +145,17 @@
                                     <span id="subtotal"></span>
                                 </div>
                             </div>
+
+                            <div class="row" style="display: none;" id="pickup-info">
+                                <div class="col-xs-12">
+                                    <br />Pick up your merchandise from a future Spike2Care event. <br /><a target="_blank" href="events.php">View our calendar</a> to find an event.
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                <?php } ?>
+                <?php 
+                } ?>
 
                 <div class="row checkout-item" id="add-donation">
                     <div class="col-xs-12">
@@ -248,9 +280,11 @@
         $('input[type=radio][name=shipping]').change(function() {
             if (this.value == 'shipIt') {
                 $('#addressFields').show();
+                $('#pickup-info').hide();
                 updateSubtotal(10);
             } else {
                 $('#addressFields').hide();
+                $('#pickup-info').show();
                 updateSubtotal(0);
             }
         });

@@ -762,8 +762,9 @@ require_once('../stripe/init.php');
 		die;
 	}
 
+	// User is adding an item to the cart, so add it to the session
 	if (isset($_POST) && isset($_POST['addToCart'])) {
-		// session_unset();
+		
 		if (!isset($_SESSION['items'])) {
 			$_SESSION['items'] = [];	
 		}
@@ -791,6 +792,7 @@ require_once('../stripe/init.php');
 		die;
 	}
 
+	// User is removing an item from their cart, so unset it from the session
 	if (isset($_POST) && isset($_POST['removeFromCart'])) {
 		// session_unset();
 		if (!isset($_SESSION['items'])) {
@@ -800,6 +802,14 @@ require_once('../stripe/init.php');
 		$sessionKey = $_POST['sessionItem'];
 		
 		try {
+			// Need to remove the cost from the cart total
+			$result = mysqli_query($conn,"SELECT * FROM catalog WHERE id = ".$_SESSION['items'][$sessionKey]['itemId']);
+	        while($item = mysqli_fetch_array($result)) 
+	        {
+	            $itemPrice = $item['price'];
+	        } 
+	        $_SESSION['total'] -= $itemPrice * $_SESSION['items'][$sessionKey]['quantity'];
+
 			unset($_SESSION['items'][$sessionKey]);
 		} catch (\Exception $ex) {
 			echo json_encode('failed');
