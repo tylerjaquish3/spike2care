@@ -7,7 +7,7 @@ include('../admin/includes/password.php');
 
 require_once('../stripe/init.php');
 
-// var_dump($_POST);die;
+var_dump($_POST);die;
 
 	// when a new recap comment is added
 	if (isset($_GET['comment'])) {
@@ -818,6 +818,73 @@ require_once('../stripe/init.php');
 
 		echo json_encode('success');
 		die;
+	}
+
+	// Checkout for new donation
+	if (isset($_POST['merchandise'])) {
+
+		$created_at = date('Y-m-d H:i:s');
+		$cause = (int)$_POST['cause'][0];
+
+		// user needs to get added into people
+		$sql = "INSERT INTO people (full_name, phone, email, address, city, state, zip, created_at) VALUES (
+			'".trim($_POST['full_name'])."',
+			'".$_POST['phone']."',
+			'".trim($_POST['email'])."',
+			'".trim($_POST['address'])."',
+			'".trim($_POST['city'])."',
+			'".trim($_POST['state'])."',
+			'".trim($_POST['zip'])."',
+			'".$created_at."')";
+		mysqli_query($conn, $sql);
+		$newPersonId = mysqli_insert_id($conn);
+		// Store in session to use later
+		$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+		
+		try {
+
+			if (IS_DEV) {
+		        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
+		    } else {
+				\Stripe\Stripe::setApiKey(LIVE_KEY);
+			}
+
+			// Token is created using Stripe.js or Checkout!
+			// Get the payment token ID submitted by the form:
+			$token = $_POST['stripeToken'];
+			$amount = $_POST['totalAmount'];
+
+			// Charge the user's card:
+			$charge = \Stripe\Charge::create(array(
+			  "amount" => $amount,
+			  "currency" => "usd",
+			  "receipt_email" => $_POST['email'],
+			  "description" => "Spike2Care.org donation (Tax ID: 47-4545145)",
+			  "source" => $token,
+			));
+
+			$chargeToken = $charge->id;
+
+			// If the user donated to a specific cause, add the event_id to the payment
+			if ($cause != 0) {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+			} else {
+				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$created_at."')";
+			}
+			
+			mysqli_query($conn, $sql);
+
+		} catch (Exception $e) {
+			// TODO: error handling
+		}
+
+		if ($cause != 0) {
+			$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+			mysqli_query($conn, $sql);
+		}
+
+		header("Location: ../index.php?message=thankyou");
+		die();
 	}
 ?>
 			

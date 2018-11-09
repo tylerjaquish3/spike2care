@@ -44,15 +44,14 @@
     <section class="services">
         <div class="container">
 
-            <form action="includes/handleForm.php" method="POST" id="shop-checkout-form">
+            <form action="includes/handleForm.php" method="POST" id="shopCheckout-form">
                 <input type="hidden" id="stripeToken" name="stripeToken">
-                <input type="hidden" id="paidBy" name="paidBy" value="<?php echo $paidBy; ?>">
                 <input type="hidden" id="totalDonation" name="totalDonation">
                 <input type="hidden" id="totalAmount" name="totalAmount">
+                <input type="hidden" name="merchandise" value="true">
 
                 <?php 
                 if (isset($_SESSION['total'])) { ?>
-                    <input type="hidden" id="eventId" name="event_id" value="<?php echo $eventId; ?>">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
                             Finish your purchase, choose your preferred shipping method, add a donation, and don't forget to check the box for covering the processing fee, which will auto update based on your subtotal and donation.
@@ -73,51 +72,52 @@
                             <div class="row">
                                 <div class="col-xs-4">Name:</div>
                                 <div class="col-xs-8">
-                                    <input type="text" class="form-control" name="name" id="name">
+                                    <input type="text" class="form-control" name="full_name" id="full_name">
+                                    <span id="error_msg1" class="full" style="display:none;">Required</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-4">Phone:</div>
                                 <div class="col-xs-8">
                                     <input type="text" class="form-control" name="phone" id="phone">
+                                    <span id="error_msg2" class="full" style="display:none;">Required</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-4">Email:</div>
                                 <div class="col-xs-8">
                                     <input type="text" class="form-control" name="email" id="email">
+                                    <span id="error_msg3" class="full" style="display:none;">Required</span>
                                 </div>
                             </div>
 
                             <div id="addressFields" style="display: none;">
                                 <div class="row">
-                                    <div class="col-xs-4">Address 1:</div>
+                                    <div class="col-xs-4">Address:</div>
                                     <div class="col-xs-8">
-                                        <input type="text" class="form-control" name="address_1" id="address_1">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-4">Address 2:</div>
-                                    <div class="col-xs-8">
-                                        <input type="text" class="form-control" name="address_2" id="address_2">
+                                        <input type="text" class="form-control" name="address" id="address">
+                                        <span id="error_msg5" class="full" style="display:none;">Required</span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-4">City:</div>
                                     <div class="col-xs-8">
                                         <input type="text" class="form-control" name="city" id="city">
+                                        <span id="error_msg6" class="full" style="display:none;">Required</span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-4">State:</div>
                                     <div class="col-xs-8">
                                         <input type="text" class="form-control" name="state" id="state">
+                                        <span id="error_msg7" class="full" style="display:none;">Required</span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-4">Postal Code:</div>
                                     <div class="col-xs-8">
                                         <input type="text" class="form-control" name="zip" id="zip">
+                                        <span id="error_msg8" class="full" style="display:none;">Required</span>
                                     </div>
                                 </div>
                             </div>
@@ -136,6 +136,7 @@
                                 <div class="col-xs-8">
                                     <input type="radio" name="shipping" value="shipIt"> Ship it ($10.00)
                                     <input type="radio" name="shipping" value="pickUp"> Pick up (Free)
+                                    <span id="error_msg4" class="full" style="display:none;"><br />Required</span>
                                 </div>
                             </div>   
                         
@@ -251,11 +252,12 @@
     <script src="https://checkout.stripe.com/checkout.js"></script>
 
     <script type="text/javascript">
-        subtotal = parseFloat("<?php echo $total; ?>");    
+        var cartPrice = parseFloat("<?php echo $total; ?>");
+        var shippingCost = 0;    
         
         $(document).ready(function() {
             updateProcessingFee();
-            updateSubtotal(0);
+            subtotal = updateSubtotal();
             updateTotal();
         });
 
@@ -281,12 +283,16 @@
             if (this.value == 'shipIt') {
                 $('#addressFields').show();
                 $('#pickup-info').hide();
-                updateSubtotal(10);
+                shippingCost = 10;
+                updateSubtotal();
             } else {
                 $('#addressFields').hide();
                 $('#pickup-info').show();
-                updateSubtotal(0);
+                shippingCost = 0;
+                updateSubtotal();
             }
+            updateProcessingFee();
+            updateTotal();
         });
 
 
@@ -306,48 +312,31 @@
         });
 
         $('#donation').focusout(function () {
-            var donation = $('#donation').val();
-
             if (isNaN(donation)) {
                 $('#msg_donation').html('Please enter a valid amount');
                 $('#processing-fee').html('');
             } else {
                 $('#msg_donation').html('');
-                updateProcessingFee();
                 updateTotal();
             }
         });
 
         $('#pay').click(function () {
-            itemAmount = 0;
-            freeAgentDonation = false;
-            itemAmount = getItemAmount();
+            total = updateTotal();
             customerFieldsValid = validateCustomerValues();
             
-            if (itemId && customerFieldsValid) {
-                subtotal = parseFloat(eventAmount);
-                donation = 0;
-
-                if ($('#donation').val().length > 0) {
-                    donation = $('#donation').val();
-                    subtotal = subtotal + parseFloat(donation);
-                }
-
-                if ((subtotal == 0 || isNaN(subtotal))) {
-                    addAlertToPage('danger', 'Error', 'Please select quantity before paying.', 5);
-                } else if ((subtotal == 0 || isNaN(subtotal))) {
-                    addAlertToPage('danger', 'Error', 'Please add a donation before paying.', 5);
+            if (total && customerFieldsValid) {
+                
+                if ((total == 0 || isNaN(total))) {
+                    addAlertToPage('danger', 'Error', 'Your total is zero.');
                 } else {
-                    processingFee = updateProcessingFee();
-                    total = subtotal;
                     if ($('#process-fee').is(':checked')) {
-                        total = subtotal + processingFee;
                         $('input#totalDonation').val(((parseFloat(donation) + parseFloat(processingFee)) * 100).toFixed(0));
                     } else {
                         $('input#totalDonation').val((parseFloat(donation) * 100).toFixed(0));
                     }
                     
-                    chargeAmount = parseFloat(total.toFixed(2));
+                    chargeAmount = parseFloat(total).toFixed(2);
                     chargeAmount = (chargeAmount * 100).toFixed(0); // Needs to be an integer!
                     $('input#totalAmount').val(chargeAmount);
                     
@@ -365,7 +354,7 @@
                         description: 'One-time payment',
                         token: function(token) {
                             $('input#stripeToken').val(token.id);
-                            $('#checkout-form').submit();
+                            $('#shopCheckout-form').submit();
                         }
                     });
 
@@ -376,30 +365,31 @@
             }
         });
 
-        function updateSubtotal(shippingCost)
+        function updateSubtotal()
         {
             cartPrice = "<?php echo $total; ?>";
-            subtotal = parseFloat(cartPrice) + shippingCost;
+            subtotal = parseFloat(cartPrice) + parseFloat(shippingCost);
 
             $('#subtotal').html('$ '+subtotal.toFixed(2));
+
+            return subtotal.toFixed(2);
+        }
+
+        function getDonationAmount()
+        {
+            donation = 0;
+            if ($('#donation').val().length > 0) {
+                donation = $('#donation').val();
+            }
+
+            return parseFloat(donation);
         }
 
         function updateProcessingFee()
         {
-            eventAmount = getItemAmount();
-            subtotal = parseFloat(eventAmount);
-            donation = 0;
-
-            if (isNaN(subtotal)) {
-                subtotal = 0;
-            }
-
-            if ($('#donation').val().length > 0) {
-                donation = $('#donation').val();
-                subtotal = subtotal + parseFloat(donation);
-            }
-
-            processingFee = (subtotal * .029) + .30;
+            subtotal = parseFloat(updateSubtotal());
+            donation = parseFloat(getDonationAmount());
+            processingFee = ((subtotal + donation) * .029) + .30;
             if (isNaN(processingFee)) {
                 processingFee = 0;
             }
@@ -408,38 +398,19 @@
             return processingFee;
         }
 
-        function getItemAmount()
-        {
-            itemPrice = $('#player-fee').html();
-            quantity = $('#quantity').val();
-            itemAmount = itemPrice * quantity;   
-
-            return parseFloat(itemAmount);
-        }
-
         function updateTotal()
         {
-            itemAmount = getItemAmount();
-            subtotal = parseFloat(itemAmount);
-            donation = 0;
-
-            if ($('#donation').val().length > 0) {
-                donation = $('#donation').val();
-                subtotal = subtotal + parseFloat(donation);
-            }
-            
             processingFee = updateProcessingFee();
-
-            total = subtotal;
+            total = parseFloat(updateSubtotal()) + parseFloat(getDonationAmount());
             if ($('#process-fee').is(':checked')) {
-                total = subtotal + processingFee;
+                total = parseFloat(total) + parseFloat(processingFee);
             }
-
             if (isNaN(total)) {
                 total = 0;
             }
-            
-            $('#total').html(total.toFixed(2));
+            $('#total').html(parseFloat(total).toFixed(2));
+
+            return parseFloat(total).toFixed(2);
         }
 
         function validateCustomerValues()
@@ -448,6 +419,11 @@
             $('#error_msg1').hide();
             $('#error_msg2').hide();
             $('#error_msg3').hide();
+            $('#error_msg4').hide();
+            $('#error_msg5').hide();
+            $('#error_msg6').hide();
+            $('#error_msg7').hide();
+            $('#error_msg8').hide();
 
             if ($("#full_name").val() == '') {
                 $('#error_msg1').show();
@@ -460,6 +436,28 @@
             if ($("#email").val() == '')  {
                 $('#error_msg3').show();
                 response = false;
+            }
+            if ($('input[name=shipping]:checked').val() == undefined)  {
+                $('#error_msg4').show();
+                response = false;
+            }
+            if ($('input[name=shipping]:checked').val() == 'shipIt') {
+                if ($("#address").val() == '') {
+                    $('#error_msg5').show();
+                    response = false;
+                }
+                if ($("#city").val() == '')  {
+                    $('#error_msg6').show();
+                    response = false;
+                }
+                if ($("#state").val() == '')  {
+                    $('#error_msg7').show();
+                    response = false;
+                }
+                if ($("#zip").val() == '')  {
+                    $('#error_msg8').show();
+                    response = false;
+                }
             }
 
             return response;
