@@ -9,6 +9,10 @@ if (isset($_GET['message']) && $_GET['message'] == 'thankyou') {
     $message = "Thank you for your donation to Spike2Care!";
 }
 
+if (isset($_GET['message']) && $_GET['message'] == 'shopthankyou') {
+    $message = "Your order has been placed. Thank you for your support of Spike2Care!";
+}
+
 $content = mysqli_query($conn,"SELECT * FROM content");
 if (mysqli_num_rows($content) > 0) {
     while($row = mysqli_fetch_array($content)) {

@@ -893,10 +893,10 @@ span[data-cal-date] {
   color: #262524;
 }
 
-.element-item > * {
+/*.element-item > * {
   margin: 0;
   padding: 0;
-}
+}*/
 
 .desc {
     margin: 20px 0px;

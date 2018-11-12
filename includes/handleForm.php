@@ -7,7 +7,7 @@ include('../admin/includes/password.php');
 
 require_once('../stripe/init.php');
 
-var_dump($_POST);die;
+// var_dump($_POST);die;
 
 	// when a new recap comment is added
 	if (isset($_GET['comment'])) {
@@ -820,27 +820,32 @@ var_dump($_POST);die;
 		die;
 	}
 
-	// Checkout for new donation
-	if (isset($_POST['merchandise'])) {
+var_dump($_SESSION['items']);
+var_dump($_POST);
+	// Checkout for new merchandise purchase
+	if (isset($_POST['merchandise']) && isset($_SESSION['items'])) {
 
 		$created_at = date('Y-m-d H:i:s');
 		$cause = (int)$_POST['cause'][0];
+		$donation = $_POST['totalDonation'];
+		$merchandiseAmount = $_POST['totalAmount'] - $donation;
 
 		// user needs to get added into people
-		$sql = "INSERT INTO people (full_name, phone, email, address, city, state, zip, created_at) VALUES (
+		$sql = "INSERT INTO people (full_name, phone, email, address, city, state, zip, paid, created_at) VALUES (
 			'".trim($_POST['full_name'])."',
 			'".$_POST['phone']."',
 			'".trim($_POST['email'])."',
 			'".trim($_POST['address'])."',
 			'".trim($_POST['city'])."',
 			'".trim($_POST['state'])."',
-			'".trim($_POST['zip'])."',
+			'".trim($_POST['zip'])."', 0,
 			'".$created_at."')";
+
 		mysqli_query($conn, $sql);
 		$newPersonId = mysqli_insert_id($conn);
 		// Store in session to use later
 		$_SESSION['newPersonId'] = mysqli_insert_id($conn);
-		
+	
 		try {
 
 			if (IS_DEV) {
@@ -855,35 +860,60 @@ var_dump($_POST);die;
 			$amount = $_POST['totalAmount'];
 
 			// Charge the user's card:
-			$charge = \Stripe\Charge::create(array(
-			  "amount" => $amount,
-			  "currency" => "usd",
-			  "receipt_email" => $_POST['email'],
-			  "description" => "Spike2Care.org donation (Tax ID: 47-4545145)",
-			  "source" => $token,
-			));
+			// $charge = \Stripe\Charge::create(array(
+			//   "amount" => $amount,
+			//   "currency" => "usd",
+			//   "receipt_email" => $_POST['email'],
+			//   "description" => "Spike2Care.org donation (Tax ID: 47-4545145)",
+			//   "source" => $token,
+			// ));
 
-			$chargeToken = $charge->id;
+			// $chargeToken = $charge->id;
 
-			// If the user donated to a specific cause, add the event_id to the payment
-			if ($cause != 0) {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$created_at."')";
-			} else {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$created_at."')";
+$chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
+
+			if ($donation > 0) {
+				// If the user donated to a specific cause, add the event_id to the payment
+				if ($cause != 0) {
+					$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+					mysqli_query($conn, $sql);
+
+					$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+				} else {
+					$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$chargeToken."', '".$created_at."')";
+				}
+				mysqli_query($conn, $sql);
+			}
+				
+			// Add sales payment
+			$sql = "INSERT INTO payments (paid_by, merchandise_amount, token, created_at) VALUES ('".$newPersonId."', '".$merchandiseAmount."', '".$chargeToken."', '".$created_at."')";
+			var_dump($sql);
+			mysqli_query($conn, $sql);
+			$newPaymentId = mysqli_insert_id($conn);
+
+			// Add items to sales
+			foreach ($_SESSION['items'] as $item) {
+				$sql = "INSERT INTO sales (person_id, catalog_id, quantity, size_id, color_id, status, created_at) VALUES ('".$newPersonId."', '".$item['itemId']."', '".$item['quantity']."', '".$item['size']."', '".$item['color']."', 'Created', '".$created_at."')";
+				mysqli_query($conn, $sql);
+				var_dump($sql);
+				$newSalesId = mysqli_insert_id($conn);
+
+				// Add to sales_payments pivot table
+				$sql = "INSERT INTO sales_payments (payment_id, sales_id) VALUES ('".$newPaymentId."', '".$newSalesId."')";
+				var_dump($sql);
+				mysqli_query($conn, $sql);
 			}
 			
-			mysqli_query($conn, $sql);
+			// Remove items from session
+			// unset($_SESSION['items']);
+			// unset($_SESSION['total']);
 
 		} catch (Exception $e) {
 			// TODO: error handling
+			var_dump($e);
 		}
-
-		if ($cause != 0) {
-			$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-			mysqli_query($conn, $sql);
-		}
-
-		header("Location: ../index.php?message=thankyou");
+die;
+		header("Location: ../index.php?message=shopthankyou");
 		die();
 	}
 ?>

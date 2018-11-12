@@ -71,13 +71,15 @@ session_start();
                 <ul class="nav navbar-nav navbar-right">
                 <?PHP 
                     $active = ' class="active"';
+                
+                    if (isset($_SESSION['items'])) {
+                        echo '<li><a class="btn btn-primary" href="cart.php"><i class="fa fa-shopping-cart"></i>&nbsp;Cart</a></li>';
+                    }
                 ?>
-                    
                     <li <?PHP if($currentPage == 'Home'){echo $active;} ?>><a href="index.php">Home</a></li>
                     <li <?PHP if($currentPage == 'Events'){echo $active;} ?>><a href="events.php">Events</a></li>
                     <li <?PHP if($currentPage == 'About'){echo $active;} ?>><a href="about.php">About</a></li>
                     <li <?PHP if($currentPage == 'Shop'){echo $active;} ?>><a href="shop.php">Shop</a></li>
-                    <li <?PHP if($currentPage == 'Cart'){echo $active;} ?>><a href="cart.php">Cart</a></li>
                     <li <?PHP if($currentPage == 'Assistance'){echo $active;} ?>><a href="application.php">Assistance</a></li>
                     <li <?PHP if($currentPage == 'Photos'){echo $active;} ?>><a href="photos.php">Photos</a></li>
                     <li <?PHP if($currentPage == 'Contact'){echo $active;} ?>><a href="contact.php">Contact</a></li>
