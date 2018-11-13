@@ -1,9 +1,6 @@
 <?php
 	$currentPage = 'Cart';
 	include('header.php');
-
-    var_dump($_SESSION);
-
 ?>
 
 	<section class="title">
@@ -35,7 +32,6 @@
                         </div>
                     </div>
                     <?php 
-                    var_dump($_SESSION['items']);
                     $total = 0;
                     foreach ($_SESSION['items'] as $key => $sessionItem) {
                         $result = mysqli_query($conn,"SELECT * FROM catalog WHERE id = ".$sessionItem['itemId']);

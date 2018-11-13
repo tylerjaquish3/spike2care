@@ -1,5 +1,4 @@
 <?php
-    session_start();
 	$currentPage = 'Checkout';
 	include('header.php');
 

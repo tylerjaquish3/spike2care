@@ -6,7 +6,7 @@ include 'functions.php';
 include 'password.php';
 
 require_once('../../stripe/init.php');
-	
+
 	if(isset($_POST['save-event'])) {
 
 		$specialEvent = $registrationOpen = false;
@@ -826,4 +826,41 @@ require_once('../../stripe/init.php');
 		header("Location: ".URL."/admin/merchandise.php");
 		die();
 	}
+
+	// Save the updated order status
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'updateOrderStatus') {
+
+		$personId = $_POST['personId'];
+		$status = $_POST['status'];
+
+		$sql = "UPDATE sales SET status = '".$status."' where person_id=".$personId;
+
+		//var_dump($sql);
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$response = ['type' => 'success', 'message' => 'Order has been updated.'];	
+		} else {
+			$response = ['type' => 'error', 'message' => 'Status update failed. Please contact an admin.'];
+		}
+
+		echo json_encode($response);
+	}
+
+	// Save a new color
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'addColor') {
+
+		$color = $_POST['color'];
+		$sql = "INSERT INTO colors (color) VALUES ('{$color}')";
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$response = ['type' => 'success', 'message' => 'Color has been added.'];	
+		} else {
+			$response = ['type' => 'error', 'message' => 'Add color failed. Please contact an admin.'];
+		}
+
+		echo json_encode($response);
+	}
+
 ?>

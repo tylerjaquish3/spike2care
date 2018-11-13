@@ -385,6 +385,8 @@ require_once('../stripe/init.php');
 
 		} catch (Exception $e) {
 			// TODO: error handling
+			echo $e;
+			$chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
 		}
 
 		$createdAt = date('Y-m-d H:i:s');
@@ -820,8 +822,8 @@ require_once('../stripe/init.php');
 		die;
 	}
 
-var_dump($_SESSION['items']);
-var_dump($_POST);
+// var_dump($_SESSION['items']);
+// var_dump($_POST);
 	// Checkout for new merchandise purchase
 	if (isset($_POST['merchandise']) && isset($_SESSION['items'])) {
 

@@ -7,7 +7,7 @@ if (!isset($_SESSION["user_id"])) {
     header('location:'.URL);
 }
 
-$title = $checked = $registrationChecked = $eventDate = $checkinTime = $meetingTime = $playTime = $location = $price = $address = $city = $format = $fbLink = $additionalInfo = $description = $maxTeams = $eventId = $imagePath = $active = $registrationDeadline = '';
+$title = $checked = $registrationChecked = $eventDate = $checkinTime = $meetingTime = $playTime = $location = $price = $priceFor = $address = $city = $format = $fbLink = $additionalInfo = $description = $maxTeams = $eventId = $imagePath = $active = $registrationDeadline = '';
 $isNew = true;
 $specialEvent = false;
 

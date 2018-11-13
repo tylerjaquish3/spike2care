@@ -54,7 +54,7 @@ if (!isset($_SESSION["user_id"])) {
                                         <tr>
                                             <td><?php echo $row['name']; ?></td>
                                             <td><?php echo $row['status']; ?></td>
-                                            <td><?php echo $row['order_date']; ?></td>
+                                            <td><?php echo date('Y.m.d H:i:s', strtotime($row['order_date'])); ?></td>
                                             <td><a class="btn btn-warning" href="viewOrder.php?id=<?php echo $row['id'];?>">View</a></td>
                                         </tr>
                                     <?php }
@@ -79,7 +79,7 @@ include('includes/footer.php');
     $(document).ready(function(){
 
         $('#datatable-sales').DataTable({
-            "order": [[ 1, "desc" ]]
+            "order": [[ 2, "desc" ]]
         });
     });
 

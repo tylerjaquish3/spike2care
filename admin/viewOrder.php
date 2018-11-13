@@ -46,6 +46,7 @@ if (isset($_GET)) {
                             <select name="status" class="form-control" id="statusSelect">
                                 <option value="Created" <?php echo ($status == 'Created' ? 'selected' : ''); ?>>Created</option>
                                 <option value="Fulfilled" <?php echo ($status == 'Fulfilled' ? 'selected' : ''); ?>>Fulfilled</option>
+                                <option value="Cancelled" <?php echo ($status == 'Cancelled' ? 'selected' : ''); ?>>Cancelled</option>
                             </select>
                         </div>
                         <h2>Order for: <?php echo $name; ?></h2>
@@ -70,7 +71,7 @@ if (isset($_GET)) {
 
                                 <label class="control-label">Date</label>
                                 <div class="no-input">
-                                    <p><?php echo $created_at; ?></p>
+                                    <p><?php echo date('Y.m.d H:i:s', strtotime($created_at)); ?></p>
                                 </div>
 
                             </div>
@@ -168,6 +169,7 @@ include('includes/footer.php');
     $('#statusSelect').change(function () {
 
         var status = $('#statusSelect option:selected').val();
+        var personId = "<?php echo $personId; ?>";
 
         $.ajax({
             url: 'includes/handleForm.php',
@@ -175,7 +177,7 @@ include('includes/footer.php');
             cache: false,
             data: {
                 action: 'updateOrderStatus',
-                messageId: messageId, 
+                personId: personId, 
                 status: status
             },
             success: function () {

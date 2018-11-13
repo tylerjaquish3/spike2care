@@ -61,7 +61,7 @@ if (mysqli_num_rows($content) > 0) {
                     ?>
                     <div class="col-xs-12">
                         <a href="showSpecialEvent.php?eventId=<?php echo $row['id']; ?>">
-                            <div  class="special-event" style="background-image: url('images/events/<?php echo $row['image_path']; ?>')"></div>    
+                            <div class="special-event" style="background-image: url('images/events/<?php echo $row['image_path']; ?>')"></div>    
                         </a>
                     </div>
                     </div>
@@ -105,9 +105,14 @@ if (mysqli_num_rows($content) > 0) {
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-8 col-md-6">
-                                    <div class="center-cropped" style="background-image: url('images/events/<?php echo $row['image_path']; ?>')">
-                                        </div>
-                                    
+                                    <?php 
+                                    if ($row['image_path'] != "") { ?>
+                                        <div class="center-cropped" style="background-image: url('images/events/<?php echo $row['image_path']; ?>')"></div>
+                                    <?php
+                                    } else { ?>
+                                        <div class="center-cropped" style="background-image: url('images/noImage.png')"></div>
+                                    <?php
+                                    } ?>
                                 </div>
                                 <div class="col-xs-12 col-sm-4 col-md-6 format">
 

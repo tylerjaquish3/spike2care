@@ -70,10 +70,9 @@ if (isset($_GET) && !empty($_GET)) {
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <div class="col-sm-12">
+                    <form action="includes/handleForm.php" method="POST" enctype="multipart/form-data">
+                        <div class="col-sm-12">
 
-                        <form action="includes/handleForm.php" method="POST" enctype="multipart/form-data">
-                            
                             <input type="hidden" name="item_id" value="<?php echo $itemId; ?>">
                             <input type="hidden" name="is_new" value="<?php echo ($title == '' ? 'true' : 'false'); ?>">
 
@@ -107,6 +106,8 @@ if (isset($_GET) && !empty($_GET)) {
                                         }
                                     } ?>
                                 </select>
+                                <a class="btn btn-primary" id="addColorModal">Add New Color</a>
+                                <br /><small id="fileHelp" class="form-text text-muted">Note: If you add new colors, you must refresh the page to be able to choose them. It is recomended to save your changes, and then come back to edit the item.</small>
                             </div>
 
                             <div class="form-group">
@@ -138,37 +139,56 @@ if (isset($_GET) && !empty($_GET)) {
                                 <input type="file" class="form-control-file" name="image3_path" aria-describedby="fileHelp">
                                 <small id="fileHelp" class="form-text text-muted">Only jpg, gif, and png formats are acceptable.</small>
                             </div>
-
                         </div>
-                    </div>
                     
-                    <div class="row">
-                        <?php if ($image1_path != '') { ?>
-                            <div class="col-xs-6 col-md-4">
-                                <img src="../images/catalog/<?php echo $image1_path; ?>" width="100%">
-                            </div>
-                        <?php } ?>
-                        <?php if ($image2_path != '') { ?>
-                            <div class="col-xs-6 col-md-4">
-                                <img src="../images/catalog/<?php echo $image2_path; ?>" width="100%">
-                            </div>
-                        <?php } ?>
-                        <?php if ($image3_path != '') { ?>
-                            <div class="col-xs-6 col-md-4">
-                                <img src="../images/catalog/<?php echo $image3_path; ?>" width="100%">
-                            </div>
-                        <?php } ?>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-12 center">
-                            <br /><br />
-                            <button type="submit" name="save-item" class="btn btn-info">Save</button>
+                        <div class="row">
+                            <?php if ($image1_path != '') { ?>
+                                <div class="col-xs-6 col-md-4">
+                                    <img src="../images/catalog/<?php echo $image1_path; ?>" width="100%">
+                                </div>
+                            <?php } ?>
+                            <?php if ($image2_path != '') { ?>
+                                <div class="col-xs-6 col-md-4">
+                                    <img src="../images/catalog/<?php echo $image2_path; ?>" width="100%">
+                                </div>
+                            <?php } ?>
+                            <?php if ($image3_path != '') { ?>
+                                <div class="col-xs-6 col-md-4">
+                                    <img src="../images/catalog/<?php echo $image3_path; ?>" width="100%">
+                                </div>
+                            <?php } ?>
                         </div>
 
-                        </form>
+                        <div class="row">
+                            <div class="col-xs-12 center">
+                                <br /><br />
+                                <button type="submit" name="save-item" class="btn btn-info">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    </div>
+<div class="modal fade" id="add-color-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add New Color</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="color">Color <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="newColor" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-buttons pull-right">
+                    <button type="button" class="btn btn-warning" class="close" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="save-color-btn">Save</button>
                 </div>
             </div>
         </div>
@@ -190,6 +210,29 @@ include('includes/footer.php');
 
     $('#sizes-multiple').select2({
         placeholder: 'Select multiple'
+    });
+
+    $('#addColorModal').click(function () {
+        $('#add-color-modal').modal('show');
+    });
+
+    $('#save-color-btn').click(function () {
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: 'post',
+            cache: false,
+            data: {
+                action: 'addColor',
+                color: $('#newColor').val(), 
+            },
+            success: function () {
+                addAlertToPage('success', 'Success', 'Color was successfully added.', 10);
+                $('#add-color-modal').modal('hide');
+            },
+            error: function () {
+                addAlertToPage('error', 'Error', 'Error adding color.', 10);
+            }
+        });
     });
 
 </script>

@@ -33,8 +33,16 @@ include('header.php');
                             $price = $row['price'];
                         ?> 
                             <div class="element-item <?php echo $category; ?>">
-
-                                <img class="img-responsive center-cropped" src="images/catalog/<?php echo $image; ?>">
+                                <a href="item.php?id=<?php echo $id; ?>">
+                                    <?php 
+                                    if ($image) { ?>
+                                        <img class="img-responsive center-cropped" src="images/catalog/<?php echo $image; ?>">
+                                    <?php
+                                    } else { ?>
+                                        <img class="img-responsive center-cropped" src="images/noImage.png">
+                                    <?php
+                                    } ?>
+                                </a>
                                 <h3><?php echo $title; ?></h3>
                                     
                                 <?php echo convertMoney($price); ?> 
