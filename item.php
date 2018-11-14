@@ -5,6 +5,9 @@ include('header.php');
 
 if (isset($_GET)) {
     $id = $_GET['id'];
+    $existingColors = [];
+    $existingSizes = [];
+    $message = false;
 
     $items = mysqli_query($conn,"SELECT * FROM catalog WHERE id = ".$id);
     while($row = mysqli_fetch_array($items)) 
@@ -30,6 +33,10 @@ if (isset($_GET)) {
         while($row = mysqli_fetch_array($sizes)) {
             $existingSizes[] = $row['size_id'];
         }
+    }
+
+    if (isset($_GET['cartAddSuccess'])) {
+        $message = true;
     }
 }
 ?>
@@ -58,7 +65,14 @@ if (isset($_GET)) {
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" style=" width:100%; height: 500px">
                         <div class="item active">
-                            <img src="images/catalog/<?php echo $image1_path; ?>" height="300px">
+                            <?php 
+                            if ($image1_path) { ?>
+                                <img src="images/catalog/<?php echo $image1_path; ?>">
+                            <?php
+                            } else { ?>
+                                <img src="images/noImage.png">
+                            <?php
+                            } ?>
                         </div>
                         <?php 
                         if (isset($image2_path)) { ?>
@@ -90,55 +104,68 @@ if (isset($_GET)) {
                 <h2><?php echo $title; ?></h2>
                 <h3><?php echo convertMoney($price); ?></h3>
 
-                <p><?php echo $description; 
-                var_dump($_SESSION['items']);
-                ?></p>
+                <p><?php echo $description; ?></p>
 
                 <form action="shopCheckout.php" id="itemForm" method="POST">
 
                     <div class="form-group">
                         <label for="quantity">Quantity</label><br />
                         <input type="number" name="quantity" id="quantity">
+                        <span id="error_msg1" class="full" style="display:none;"><br />Required</span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="color">Color</label>
-                        <select id="colors" name="color">
-                            <?php
-                            $colors = mysqli_query($conn,"SELECT * FROM colors");
-                            if (mysqli_num_rows($colors) > 0) {
-                                while($div = mysqli_fetch_array($colors)) {
-                                    if (in_array($div['id'], $existingColors)) { ?>
-                                        <option value="<?php echo $div['id']; ?>"><?php echo $div['color']; ?></option>
-                                    <?php }
-                                }
-                            } ?>
-                        </select>
-                    </div>
+                    <?php
+                    if (count($existingColors) > 0) { ?>
+                        <div class="form-group">
+                            <label for="color">Color</label>
+                            <select id="colors" name="color">
+                                <option></option>
+                                <?php
+                                $colors = mysqli_query($conn,"SELECT * FROM colors");
+                                if (mysqli_num_rows($colors) > 0) {
+                                    while($div = mysqli_fetch_array($colors)) {
+                                        if (in_array($div['id'], $existingColors)) { ?>
+                                            <option value="<?php echo $div['id']; ?>"><?php echo $div['color']; ?></option>
+                                        <?php }
+                                    }
+                                } ?>
+                            </select>
+                            <span id="error_msg2" class="full" style="display:none;"><br />Required</span>
+                        </div>
+                    <?php
+                    } ?>    
 
-                    <div class="form-group">
-                        <label for="size">Size</label>
-                        <select id="sizes" name="size">
-                            <?php
-                            $sizes = mysqli_query($conn,"SELECT * FROM sizes");
-                            if (mysqli_num_rows($sizes) > 0) {
-                                while($div = mysqli_fetch_array($sizes)) {
-                                    if (in_array($div['id'], $existingSizes)) { ?>
-                                        <option value="<?php echo $div['id']; ?>"><?php echo $div['size']; ?></option>
-                                    <?php }
-                                }
-                            } ?>
-                        </select>
-                    </div>
+                    <?php
+                    if (count($existingSizes) > 0) { ?>
+                        <div class="form-group">
+                            <label for="size">Size</label>
+                            <select id="sizes" name="size">
+                                <option></option>
+                                <?php
+                                $sizes = mysqli_query($conn,"SELECT * FROM sizes");
+                                if (mysqli_num_rows($sizes) > 0) {
+                                    while($div = mysqli_fetch_array($sizes)) {
+                                        if (in_array($div['id'], $existingSizes)) { ?>
+                                            <option value="<?php echo $div['id']; ?>"><?php echo $div['size']; ?></option>
+                                        <?php }
+                                    }
+                                } ?>
+                            </select>
+                            <span id="error_msg3" class="full" style="display:none;"><br />Required</span>
+                        </div>
+                    <?php 
+                    } ?>
 
                     <input type="hidden" name="itemId" value="<?php echo $id; ?>">
 
                     <button class="btn btn-primary" id="addToCart">Add to Cart</button>
-                    <button type="submit" class="btn btn-primary">Buy Now</button>
+                    <button class="btn btn-primary" id="buyNow">Buy Now</button>
                 </form>
             </div>
         </div> 
     </section>
+
+    <div class="down20"><br /><br /><br /></div>
 
 <?php
 include('footer.php');
@@ -149,6 +176,12 @@ include('footer.php');
 <script type="text/javascript" src="js/full_sparkle.js"></script>
 
 <script>
+
+    var showMessage = "<?php echo $message; ?>";
+    if (showMessage == 1) {
+        addAlertToPage('success', 'Success', 'Your cart has been updated', 5); 
+    }
+
     $('#colors').select2({
         placeholder: 'Select color',
         minimumResultsForSearch: -1
@@ -159,29 +192,67 @@ include('footer.php');
         minimumResultsForSearch: -1
     });
 
+    $('#buyNow').click(function (e) {
+        e.preventDefault();
+
+        // Do some validation on the form
+        isValid = validateValues();
+
+        if (isValid) {
+            $('#itemForm').submit();
+        }
+    });
+
     $('#addToCart').click(function (e) {
         e.preventDefault();
 
-        //TODO: Do some validation on the form
+        // Do some validation on the form
+        isValid = validateValues();
 
-        $.ajax({
-            url: 'includes/handleForm.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                'addToCart': true,
-                'formData': $('#itemForm').serializeArray()
-            },
-            complete: function(data){
-                response = $.parseJSON(data.responseText);
-                if (response == 'success') {
-                    addAlertToPage('success', 'Success', 'Your cart has been updated', 10);   
-                } else {
-                    addAlertToPage('error', 'Error', 'Failed to update cart', 10);
-                }     
-            }
-        });
+        if (isValid) {
+            $.ajax({
+                url: 'includes/handleForm.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'addToCart': true,
+                    'formData': $('#itemForm').serializeArray()
+                },
+                complete: function(data){
+                    console.log(data.responseText);
+                    response = $.parseJSON(data.responseText);
+                    if (response[0] == 'success') {
+                        window.location = 'item.php?id='+response[1].itemId+'&cartAddSuccess=true';
+                    } else {
+                        addAlertToPage('error', 'Error', 'Failed to update cart', 10);
+                    }     
+                }
+            });
+        }
     });
+
+    function validateValues()
+    {
+        response = true;
+        $('#error_msg1').hide();
+        $('#error_msg2').hide();
+        $('#error_msg3').hide();
+
+        if ($("#quantity").val() == '') {
+            $('#error_msg1').show();
+            response = false;
+        }
+        if ($("#colors").val() == "")  {
+            $('#error_msg2').show();
+            response = false;
+        }
+        if ($("#sizes").val() == "")  {
+            $('#error_msg3').show();
+            response = false;
+        }
+
+        return response;
+    }
 </script>
 
 </body>

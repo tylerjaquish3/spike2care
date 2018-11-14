@@ -1,6 +1,11 @@
 <?php
 	$currentPage = 'Cart';
 	include('header.php');
+
+    $message = '';
+    if (isset($_GET['message']) && $_GET['message'] == 'error') {
+        $message = "An error occurred placing your order. Please contact a Spike2Care admin.";
+    }
 ?>
 
 	<section class="title">
@@ -40,16 +45,20 @@
                             $itemTitle = $item['title'];
                             $itemPrice = $item['price'];
                         } 
-                        $result = mysqli_query($conn,"SELECT * FROM colors WHERE id = ".$sessionItem['color']);
-                        while($item = mysqli_fetch_array($result)) 
-                        {
-                            $color = $item['color'];
-                        } 
-                        $result = mysqli_query($conn,"SELECT * FROM sizes WHERE id = ".$sessionItem['size']);
-                        while($item = mysqli_fetch_array($result)) 
-                        {
-                            $size = $item['size'];
-                        } 
+                        if (isset($sessionItem['color'])) {
+                            $result = mysqli_query($conn,"SELECT * FROM colors WHERE id = ".$sessionItem['color']);
+                            while($item = mysqli_fetch_array($result)) 
+                            {
+                                $color = $item['color'];
+                            } 
+                        }
+                        if (isset($sessionItem['size'])) {
+                            $result = mysqli_query($conn,"SELECT * FROM sizes WHERE id = ".$sessionItem['size']);
+                            while($item = mysqli_fetch_array($result)) 
+                            {
+                                $size = $item['size'];
+                            } 
+                        }
                         $total += $itemPrice * $sessionItem['quantity'];
                         $subtotal = $itemPrice * $sessionItem['quantity'];
                         ?>
@@ -57,7 +66,16 @@
                         <div class="row checkout">
                             <div class="col-xs-4">
                                 <h3><?php echo $itemTitle; ?></h3>
-                                <p>Quantity: <?php echo $sessionItem['quantity']; ?>, Color: <?php echo $color; ?>, Size: <?php echo $size; ?></p>
+                                <p>
+                                    Quantity: <?php echo $sessionItem['quantity']; ?>
+                                    <?php
+                                    if (isset($color)) {
+                                        echo ', Color: '.$color;
+                                    }
+                                    if (isset($size)) {
+                                        echo ', Size: '.$size;
+                                    } ?>   
+                                </p>
                             </div>
                             <div class="col-xs-4"><a href="#" onclick="remove(<?php echo $key; ?>)">Remove</a></div>
                             <div class="col-xs-4">
@@ -104,6 +122,11 @@
     <script type="text/javascript" src="js/full_sparkle.js"></script>
 
     <script type="text/javascript">
+
+        var message = "<?php echo $message;?>";
+        if (message != "") {
+            addAlertToPage('error', 'Error', message, 0);
+        }
         
         function remove(sessionKey) {
             $.ajax({
@@ -118,7 +141,6 @@
                     response = $.parseJSON(data.responseText);
                     if (response == 'success') {
                         location.reload();
-                        // addAlertToPage('success', 'Success', 'Your cart has been updated', 10);   
                     } else {
                         addAlertToPage('error', 'Error', 'Failed to update cart, please contact Spike2Care', 10);
                     }     

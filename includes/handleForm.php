@@ -790,7 +790,7 @@ require_once('../stripe/init.php');
 			die;
 		}
 
-		echo json_encode('success');
+		echo json_encode(['success', $newItem]);
 		die;
 	}
 
@@ -822,8 +822,6 @@ require_once('../stripe/init.php');
 		die;
 	}
 
-// var_dump($_SESSION['items']);
-// var_dump($_POST);
 	// Checkout for new merchandise purchase
 	if (isset($_POST['merchandise']) && isset($_SESSION['items'])) {
 
@@ -862,18 +860,22 @@ require_once('../stripe/init.php');
 			$amount = $_POST['totalAmount'];
 
 			// Charge the user's card:
-			// $charge = \Stripe\Charge::create(array(
-			//   "amount" => $amount,
-			//   "currency" => "usd",
-			//   "receipt_email" => $_POST['email'],
-			//   "description" => "Spike2Care.org donation (Tax ID: 47-4545145)",
-			//   "source" => $token,
-			// ));
+			$charge = \Stripe\Charge::create(array(
+			  "amount" => $amount,
+			  "currency" => "usd",
+			  "receipt_email" => $_POST['email'],
+			  "description" => "Spike2Care.org donation (Tax ID: 47-4545145)",
+			  "source" => $token,
+			));
 
-			// $chargeToken = $charge->id;
+			$chargeToken = $charge->id;
+		} catch (Exception $e) {
+			// TODO: error handling
+			$chargeToken = 'charge failed';
+			//var_dump($e);
+		}
 
-$chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
-
+		try {
 			if ($donation > 0) {
 				// If the user donated to a specific cause, add the event_id to the payment
 				if ($cause != 0) {
@@ -889,7 +891,7 @@ $chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
 				
 			// Add sales payment
 			$sql = "INSERT INTO payments (paid_by, merchandise_amount, token, created_at) VALUES ('".$newPersonId."', '".$merchandiseAmount."', '".$chargeToken."', '".$created_at."')";
-			var_dump($sql);
+			// var_dump($sql);
 			mysqli_query($conn, $sql);
 			$newPaymentId = mysqli_insert_id($conn);
 
@@ -897,24 +899,26 @@ $chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
 			foreach ($_SESSION['items'] as $item) {
 				$sql = "INSERT INTO sales (person_id, catalog_id, quantity, size_id, color_id, status, created_at) VALUES ('".$newPersonId."', '".$item['itemId']."', '".$item['quantity']."', '".$item['size']."', '".$item['color']."', 'Created', '".$created_at."')";
 				mysqli_query($conn, $sql);
-				var_dump($sql);
+				// var_dump($sql);
 				$newSalesId = mysqli_insert_id($conn);
 
 				// Add to sales_payments pivot table
 				$sql = "INSERT INTO sales_payments (payment_id, sales_id) VALUES ('".$newPaymentId."', '".$newSalesId."')";
-				var_dump($sql);
+				// var_dump($sql);
 				mysqli_query($conn, $sql);
 			}
 			
 			// Remove items from session
-			// unset($_SESSION['items']);
-			// unset($_SESSION['total']);
+			unset($_SESSION['items']);
+			unset($_SESSION['total']);
 
 		} catch (Exception $e) {
 			// TODO: error handling
-			var_dump($e);
+			//var_dump($e);
+			header("Location: ../cart.php?message=error");
+			die();
 		}
-die;
+
 		header("Location: ../index.php?message=shopthankyou");
 		die();
 	}

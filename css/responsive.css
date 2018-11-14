@@ -40,6 +40,20 @@
 	#s2cVideo {
 	    height: 260px;
 	}
+
+	.grid {
+		margin-left: auto;
+	    margin-right: auto;
+	    width: 50%;
+	}
+
+	div#myCarousel {
+	    height: 250px;
+	}
+
+	#myCarousel img {
+	    height: 250px !important;
+	}
 }
 
 @media only screen and (max-width: 768px) {

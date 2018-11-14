@@ -32,7 +32,7 @@ include('header.php');
                             $category = $row['category_id'];
                             $price = $row['price'];
                         ?> 
-                            <div class="element-item <?php echo $category; ?>">
+                            <div class="element-item">
                                 <a href="item.php?id=<?php echo $id; ?>">
                                     <?php 
                                     if ($image) { ?>

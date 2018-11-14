@@ -71,8 +71,7 @@ session_start();
                 <ul class="nav navbar-nav navbar-right">
                 <?PHP 
                     $active = ' class="active"';
-                
-                    if (isset($_SESSION['items'])) {
+                    if (isset($_SESSION['items']) && count($_SESSION['items']) > 0) {
                         echo '<li><a class="btn btn-primary" href="cart.php"><i class="fa fa-shopping-cart"></i>&nbsp;Cart</a></li>';
                     }
                 ?>
