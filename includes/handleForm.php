@@ -864,7 +864,7 @@ require_once('../stripe/init.php');
 			  "amount" => $amount,
 			  "currency" => "usd",
 			  "receipt_email" => $_POST['email'],
-			  "description" => "Spike2Care.org donation (Tax ID: 47-4545145)",
+			  "description" => "Spike2Care.org merchandise purchase",
 			  "source" => $token,
 			));
 
