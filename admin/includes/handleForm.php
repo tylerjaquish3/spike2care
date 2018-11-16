@@ -6,7 +6,7 @@ include 'functions.php';
 include 'password.php';
 
 require_once('../../stripe/init.php');
-	
+
 	if(isset($_POST['save-event'])) {
 
 		$specialEvent = $registrationOpen = false;
@@ -724,4 +724,143 @@ require_once('../../stripe/init.php');
 	        }
         }
   	}
+  	// Add/update an item in the catalog
+  	if(isset($_POST['save-item'])) {
+
+		$fields = $insertItems = $setValues = '';
+		$isNew = ($_POST['is_new'] == 'true' ? true : false);
+		$itemId = $_POST['item_id'];
+		$title = $_POST['title'];
+		$price = $_POST['price'];
+		$description = $_POST['description'];
+		$colors = $_POST['colors'];
+		$sizes = $_POST['sizes'];
+		if (isset($_POST['is_active'])) {
+			$active = 1;
+		} else {
+			$active = 0;
+		}
+		$createdAt = date('Y-m-d H:i:s');
+
+		// Upload image first
+		$targetDir = "../../images/catalog/";
+
+		$imagePaths = [];
+
+		if (isset($_FILES)) {
+			foreach($_FILES as $field => $file) {
+		
+				$temp = explode(".", $file["name"]); 
+				$newFileName = round(microtime(true)).rand(1,100).'.'.end($temp);
+				$targetFile = $targetDir.$newFileName;
+
+				$return = uploadAttachment($targetFile, $file, 'image');
+
+				if ($return == 'success') {
+					$imagePaths[$field] = $newFileName;
+				} else {
+					// there was an error
+				}
+			}
+
+			$fields = $values = $updateQuery = '';
+
+			foreach ($imagePaths as $field => $path) {
+				$fields .= $field.',';
+				$values .= '"'.$path.'",';
+				$updateQuery .= $field.' = "'.$path.'",';
+			}
+		}
+
+		if ($isNew) {
+			$sql = "INSERT INTO catalog (title, description, price, ".$fields." active, created_at) 
+				VALUES ('{$title}', '{$description}', {$price}, ".$values." {$active}, '{$createdAt}')";
+			mysqli_query($conn, $sql);
+
+			$itemId = mysqli_insert_id($conn);
+		} else {
+			$sql = "UPDATE catalog SET title = '{$title}', description = '{$description}', price = {$price}, ".$updateQuery." active = {$active}
+				WHERE id = {$itemId}";
+			mysqli_query($conn, $sql);
+		}
+
+		// If updating an item, first remove existing colors and sizes
+		if (!$isNew) {
+			$sql = "DELETE FROM catalog_colors WHERE catalog_id = ".$itemId;
+			mysqli_query($conn, $sql);
+			$sql = "DELETE FROM catalog_sizes WHERE catalog_id = ".$itemId;
+			mysqli_query($conn, $sql);
+		}
+
+		if (isset($colors)) {
+			foreach ($colors as $color) {
+				$sql = "INSERT INTO catalog_colors (catalog_id, color_id) VALUES ({$itemId}, {$color})";
+				mysqli_query($conn, $sql);
+			}
+		}
+
+		if (isset($sizes)) {
+			foreach ($sizes as $size) {
+				$sql = "INSERT INTO catalog_sizes (catalog_id, size_id) VALUES ({$itemId}, {$size})";
+				mysqli_query($conn, $sql);
+			}
+		}
+
+		header("Location: ".URL."/admin/merchandise.php");
+		die();
+	}
+
+	// Delete meeting minutes from database
+	if ($_GET && array_key_exists('action', $_GET) && $_GET['action'] == 'removeItem') {
+
+		$itemId = $_GET['itemId'];
+		$sql = "DELETE FROM catalog where id=".$itemId;
+		mysqli_query($conn, $sql);
+
+		$sql = "DELETE FROM catalog_colors where catalog_id=".$itemId;
+		mysqli_query($conn, $sql);
+
+		$sql = "DELETE FROM catalog_sizes where catalog_id=".$itemId;
+		mysqli_query($conn, $sql);
+
+		header("Location: ".URL."/admin/merchandise.php");
+		die();
+	}
+
+	// Save the updated order status
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'updateOrderStatus') {
+
+		$personId = $_POST['personId'];
+		$status = $_POST['status'];
+
+		$sql = "UPDATE sales SET status = '".$status."' where person_id=".$personId;
+
+		//var_dump($sql);
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$response = ['type' => 'success', 'message' => 'Order has been updated.'];	
+		} else {
+			$response = ['type' => 'error', 'message' => 'Status update failed. Please contact an admin.'];
+		}
+
+		echo json_encode($response);
+	}
+
+	// Save a new color
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'addColor') {
+
+		$color = $_POST['color'];
+		$sql = "INSERT INTO colors (color) VALUES ('{$color}')";
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$response = ['type' => 'success', 'message' => 'Color has been added.'];	
+		} else {
+			$response = ['type' => 'error', 'message' => 'Add color failed. Please contact an admin.'];
+		}
+
+		echo json_encode($response);
+	}
+
 ?>

@@ -1,3 +1,7 @@
+<?php
+// Start the session
+session_start();
+?>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -39,7 +43,12 @@
 
 <body>
 
-    <?php include('admin/includes/functions.php'); ?>
+    <?php include('admin/includes/functions.php'); 
+    //register new user
+    if(!isset($_SESSION['uniqueUser'])){
+        $_SESSION['uniqueUser'] = rand_str();
+    }
+    ?>
     <?php include('admin/includes/datalogin.php'); ?>
 
     <!--Header-->
@@ -62,14 +71,16 @@
                 <ul class="nav navbar-nav navbar-right">
                 <?PHP 
                     $active = ' class="active"';
+                    if (isset($_SESSION['items']) && count($_SESSION['items']) > 0) {
+                        echo '<li><a class="btn btn-primary" href="cart.php"><i class="fa fa-shopping-cart"></i>&nbsp;Cart</a></li>';
+                    }
                 ?>
-                    
                     <li <?PHP if($currentPage == 'Home'){echo $active;} ?>><a href="index.php">Home</a></li>
                     <li <?PHP if($currentPage == 'Events'){echo $active;} ?>><a href="events.php">Events</a></li>
                     <li <?PHP if($currentPage == 'About'){echo $active;} ?>><a href="about.php">About</a></li>
+                    <li <?PHP if($currentPage == 'Shop'){echo $active;} ?>><a href="shop.php">Shop</a></li>
                     <li <?PHP if($currentPage == 'Assistance'){echo $active;} ?>><a href="application.php">Assistance</a></li>
                     <li <?PHP if($currentPage == 'Photos'){echo $active;} ?>><a href="photos.php">Photos</a></li>
-                    <!-- <li <?PHP if($currentPage == 'Shop'){echo $active;} ?>><a href="shop.php">Shop</a></li> -->
                     <li <?PHP if($currentPage == 'Contact'){echo $active;} ?>><a href="contact.php">Contact</a></li>
                     <li class="login">
                         <a data-toggle="modal" href="#loginForm"><i class="fa fa-lock"></i></a>

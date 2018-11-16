@@ -38,28 +38,39 @@ if (!isset($_SESSION["user_id"])) {
                             </thead>
                             <tbody>
                                 <?php 
-                                $sql = "SELECT max(PB.full_name) as paid_by, max(PB.email) as email, max(PF.full_name) as paid_for, 
-                                    sum(donation_amount) as donation, sum(entry_amount) as entry, max(e.title) as event, max(is_refunded) as refund, max(p.created_at) as created_at
+                                $sql = "SELECT PB.full_name as paid_by, PB.email as email, PF.full_name as paid_for, 
+                                    donation_amount as donation, entry_amount as entry, merchandise_amount as merch, e.title as event, 
+                                    is_refunded as refund, p.created_at as created_at
                                     FROM payments p 
                                     JOIN people as PB on PB.id = p.paid_by 
                                     LEFT JOIN people as PF on PF.id = p.paid_for 
-                                    LEFT JOIN events e ON e.id = p.event_id 
-                                    GROUP BY p.token, paid_for";
+                                    LEFT JOIN events e ON e.id = p.event_id";
 
                                 $result = mysqli_query($conn, $sql);
                                 if (mysqli_num_rows($result) > 0) {
 
                                     while($payment = mysqli_fetch_array($result)) 
-                                    { ?>
+                                    { 
+                                        if ($payment['donation']) {
+                                            $type = 'Donation';
+                                            $amount = number_format($payment['donation']/100, 2);
+                                        } elseif ($payment['entry']) {
+                                            $type = 'Event';
+                                            $amount = number_format($payment['entry']/100, 2);
+                                        } else {
+                                            $type = 'Merchandise';
+                                            $amount = number_format($payment['merch']/100, 2);
+                                        }
+                                        ?>
                                         <tr>
                                             <td><?php echo $payment['paid_by']; ?></td>
                                             <td><?php echo $payment['email']; ?></td>
                                             <td><?php echo $payment['paid_for']; ?></td>
-                                            <td>$ <?php echo ($payment['donation']) ? $payment['donation']/100 : $payment['entry']/100; ?></td>
-                                            <td><?php echo ($payment['donation']) ? 'Donation' : 'Event' ?></td>
+                                            <td align="right" style="padding-right: 50px;">$ <?php echo $amount; ?></td>
+                                            <td><?php echo $type; ?></td>
                                             <td><?php echo $payment['event']; ?></td>
                                             <td><?php echo ($payment['refund'] == 1) ? '<span class="badge badge-secondary">Yes</span>' : ''; ?></td>
-                                            <td><?php echo $payment['created_at']; ?></td>
+                                            <td><?php echo date('Y.m.d H:i:s', strtotime($payment['created_at'])); ?></td>
                                         </tr>
 
                                     <?php }

@@ -385,6 +385,8 @@ require_once('../stripe/init.php');
 
 		} catch (Exception $e) {
 			// TODO: error handling
+			echo $e;
+			$chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
 		}
 
 		$createdAt = date('Y-m-d H:i:s');
@@ -760,6 +762,230 @@ require_once('../stripe/init.php');
 
 		echo json_encode("../checkout.php?specialEventId=".$eventId);
 		die;
+	}
+
+	// User is adding an item to the cart, so add it to the session
+	if (isset($_POST) && isset($_POST['addToCart'])) {
+		
+		if (!isset($_SESSION['items'])) {
+			$_SESSION['items'] = [];	
+		}
+		
+		$newItem = [];
+		try {
+			foreach ($_POST['formData'] as $index => $stuff) {
+				foreach ($stuff as $key => $value) {
+					if ($key == 'name') {
+						$saveKey = $value;
+					} else {
+						$saveValue = $value;
+					}
+				}
+				$newItem[$saveKey] = $saveValue;
+			}
+
+			array_push($_SESSION['items'], $newItem);
+		} catch (\Exception $ex) {
+			echo json_encode('failed');
+			die;
+		}
+
+		echo json_encode(['success', $newItem]);
+		die;
+	}
+
+	// User is removing an item from their cart, so unset it from the session
+	if (isset($_POST) && isset($_POST['removeFromCart'])) {
+		// session_unset();
+		if (!isset($_SESSION['items'])) {
+			$_SESSION['items'] = [];	
+		}
+
+		$sessionKey = $_POST['sessionItem'];
+		
+		try {
+			// Need to remove the cost from the cart total
+			$result = mysqli_query($conn,"SELECT * FROM catalog WHERE id = ".$_SESSION['items'][$sessionKey]['itemId']);
+	        while($item = mysqli_fetch_array($result)) 
+	        {
+	            $itemPrice = $item['price'];
+	        } 
+	        $_SESSION['total'] -= $itemPrice * $_SESSION['items'][$sessionKey]['quantity'];
+
+			unset($_SESSION['items'][$sessionKey]);
+		} catch (\Exception $ex) {
+			echo json_encode('failed');
+			die;
+		}
+
+		echo json_encode('success');
+		die;
+	}
+
+	// Checkout for new merchandise purchase
+	if (isset($_POST['merchandise']) && isset($_SESSION['items'])) {
+
+		$created_at = date('Y-m-d H:i:s');
+		$cause = (int)$_POST['cause'][0];
+		$donation = $_POST['totalDonation'];
+		$merchandiseAmount = $_POST['totalAmount'] - $donation;
+
+		// user needs to get added into people
+		$sql = "INSERT INTO people (full_name, phone, email, address, city, state, zip, paid, created_at) VALUES (
+			'".trim($_POST['full_name'])."',
+			'".$_POST['phone']."',
+			'".trim($_POST['email'])."',
+			'".trim($_POST['address'])."',
+			'".trim($_POST['city'])."',
+			'".trim($_POST['state'])."',
+			'".trim($_POST['zip'])."', 0,
+			'".$created_at."')";
+
+		mysqli_query($conn, $sql);
+		$newPersonId = mysqli_insert_id($conn);
+		// Store in session to use later
+		$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+	
+		try {
+
+			if (IS_DEV) {
+		        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
+		    } else {
+				\Stripe\Stripe::setApiKey(LIVE_KEY);
+			}
+
+			// Token is created using Stripe.js or Checkout!
+			// Get the payment token ID submitted by the form:
+			$token = $_POST['stripeToken'];
+			$amount = $_POST['totalAmount'];
+
+			// Charge the user's card:
+			$charge = \Stripe\Charge::create(array(
+			  "amount" => $amount,
+			  "currency" => "usd",
+			  "receipt_email" => $_POST['email'],
+			  "description" => "Spike2Care.org merchandise purchase",
+			  "source" => $token,
+			));
+
+			$chargeToken = $charge->id;
+		} catch (Exception $e) {
+			// TODO: error handling
+			$chargeToken = 'charge failed';
+			//var_dump($e);
+		}
+
+		try {
+			if ($donation > 0) {
+				// If the user donated to a specific cause, add the event_id to the payment
+				if ($cause != 0) {
+					$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+					mysqli_query($conn, $sql);
+
+					$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+				} else {
+					$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$chargeToken."', '".$created_at."')";
+				}
+				mysqli_query($conn, $sql);
+			}
+				
+			// Add sales payment
+			$sql = "INSERT INTO payments (paid_by, merchandise_amount, token, created_at) VALUES ('".$newPersonId."', '".$merchandiseAmount."', '".$chargeToken."', '".$created_at."')";
+			// var_dump($sql);
+			mysqli_query($conn, $sql);
+			$newPaymentId = mysqli_insert_id($conn);
+
+			// Add items to sales
+			foreach ($_SESSION['items'] as $item) {
+				$sql = "INSERT INTO sales (person_id, catalog_id, quantity, size_id, color_id, status, created_at) VALUES ('".$newPersonId."', '".$item['itemId']."', '".$item['quantity']."', '".$item['size']."', '".$item['color']."', 'Created', '".$created_at."')";
+				mysqli_query($conn, $sql);
+				// var_dump($sql);
+				$newSalesId = mysqli_insert_id($conn);
+
+				// Add to sales_payments pivot table
+				$sql = "INSERT INTO sales_payments (payment_id, sales_id) VALUES ('".$newPaymentId."', '".$newSalesId."')";
+				// var_dump($sql);
+				mysqli_query($conn, $sql);
+			}
+			
+			// Send email to admin team
+			if (IS_DEV) {
+	            $to = 'tylerjaquish@gmail.com';
+	            $result = array('type' => 'success', 'message'=>"Unable to send email in dev.");
+	        } else {
+	            $to = 'info@spike2care.org';
+	        
+	            $subject = 'New merchandise order from spike2care.org';
+	            $itemsTable = 'To view all details of the order/payment, login to <a href="spike2care.org/admin">spike2care admin</a>.<br /><br />';
+	            $itemsTable .= '<table><tr><th>Item</th><th>Quantity</th><th>Color</th><th>Size</th></tr>';
+	            // Add order items into table
+	            $sql = "SELECT title, price, quantity, color, size FROM sales s 
+                    JOIN catalog c on s.catalog_id = c.id
+                    JOIN colors on s.color_id = colors.id
+                    JOIN sizes on s.size_id = sizes.id
+                    WHERE person_id = $newPersonId";
+                $sales = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($sales) > 0) {
+                    while($row = mysqli_fetch_array($sales)) 
+                    {
+                        $itemsTable .= '<tr>
+                            <td>'.$row['title'].'</td>
+                            <td>'.$row['quantity'].'</td>
+                            <td>'.$row['color'].'</td>
+                            <td>'.$row['size'].'</td>
+                        </tr>';
+                  	}
+                } 
+                $itemsTable .= '</table>';
+
+	            $headers  = "From: spike2care.org" . "\r\n";
+	            // $headers .= "Reply-To: ". $_POST['nominator_email'] . "\r\n";
+	            $headers .= "MIME-Version: 1.0\r\n";
+	            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+
+	            if (isset($_POST['address']) && $_POST['address'] != "") {
+	            	$address = $_POST['address'].', '.$_POST['city'].', '.$_POST['state'].' '.$_POST['zip'];
+	            } else {
+	            	$address = 'Customer chose to pick up their order at a future event.';
+	            }
+
+	            $templateTags =  [
+	                '{{subject}}' => $subject,
+	                '{{name}}'=>$_POST['full_name'],
+	                '{{email}}'=>$_POST['email'],
+	                '{{phone}}'=>$_POST['phone'],
+	                '{{address}}'=>$address,
+	                '{{items}}'=>$itemsTable
+	            ];
+
+	            $email_template = 'orderEmailTemplate.html';
+	            $templateContents = file_get_contents( dirname(__FILE__) . '/'.$email_template);
+	            $contents =  strtr($templateContents, $templateTags);
+
+	            try {
+	                if (mail( $to, $subject, $contents, $headers)) {
+	                    $result = array('type' => 'success', 'message'=>'Your email has been delivered.');
+	                } else {
+	                    $result = array('type' => 'error', 'message'=>"Unable to send email.");
+	                }
+	            } catch (Exception $e) {
+	                // TODO: handle exception
+	            }
+	        }
+
+	        // Remove items from session
+			unset($_SESSION['items']);
+			unset($_SESSION['total']);
+
+		} catch (Exception $e) {
+			// TODO: error handling
+			//var_dump($e);
+			header("Location: ../cart.php?message=error");
+			die();
+		}
+
+		header("Location: ../index.php?message=shopthankyou");
+		die();
 	}
 ?>
 			
