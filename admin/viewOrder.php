@@ -69,7 +69,12 @@ if (isset($_GET)) {
                                     <p><?php echo $email; ?></p>
                                 </div>
 
-                                <label class="control-label">Date</label>
+                                <label class="control-label">Phone</label>
+                                <div class="no-input">
+                                    <p><?php echo $phone; ?></p>
+                                </div>
+
+                                <label class="control-label">Order Date</label>
                                 <div class="no-input">
                                     <p><?php echo date('Y.m.d H:i:s', strtotime($created_at)); ?></p>
                                 </div>

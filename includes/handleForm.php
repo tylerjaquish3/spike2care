@@ -908,7 +908,72 @@ require_once('../stripe/init.php');
 				mysqli_query($conn, $sql);
 			}
 			
-			// Remove items from session
+			// Send email to admin team
+			if (IS_DEV) {
+	            $to = 'tylerjaquish@gmail.com';
+	            $result = array('type' => 'success', 'message'=>"Unable to send email in dev.");
+	        } else {
+	            $to = 'info@spike2care.org';
+	        
+	            $subject = 'New merchandise order from spike2care.org';
+	            $itemsTable = 'To view all details of the order/payment, login to <a href="spike2care.org/admin">spike2care admin</a>.<br /><br />';
+	            $itemsTable .= '<table><tr><th>Item</th><th>Quantity</th><th>Color</th><th>Size</th></tr>';
+	            // Add order items into table
+	            $sql = "SELECT title, price, quantity, color, size FROM sales s 
+                    JOIN catalog c on s.catalog_id = c.id
+                    JOIN colors on s.color_id = colors.id
+                    JOIN sizes on s.size_id = sizes.id
+                    WHERE person_id = $newPersonId";
+                $sales = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($sales) > 0) {
+                    while($row = mysqli_fetch_array($sales)) 
+                    {
+                        $itemsTable .= '<tr>
+                            <td>'.$row['title'].'</td>
+                            <td>'.$row['quantity'].'</td>
+                            <td>'.$row['color'].'</td>
+                            <td>'.$row['size'].'</td>
+                        </tr>';
+                  	}
+                } 
+                $itemsTable .= '</table>';
+
+	            $headers  = "From: spike2care.org" . "\r\n";
+	            // $headers .= "Reply-To: ". $_POST['nominator_email'] . "\r\n";
+	            $headers .= "MIME-Version: 1.0\r\n";
+	            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+
+	            if (isset($_POST['address']) && $_POST['address'] != "") {
+	            	$address = $_POST['address'].', '.$_POST['city'].', '.$_POST['state'].' '.$_POST['zip'];
+	            } else {
+	            	$address = 'Customer chose to pick up their order at a future event.';
+	            }
+
+	            $templateTags =  [
+	                '{{subject}}' => $subject,
+	                '{{name}}'=>$_POST['full_name'],
+	                '{{email}}'=>$_POST['email'],
+	                '{{phone}}'=>$_POST['phone'],
+	                '{{address}}'=>$address,
+	                '{{items}}'=>$itemsTable
+	            ];
+
+	            $email_template = 'orderEmailTemplate.html';
+	            $templateContents = file_get_contents( dirname(__FILE__) . '/'.$email_template);
+	            $contents =  strtr($templateContents, $templateTags);
+
+	            try {
+	                if (mail( $to, $subject, $contents, $headers)) {
+	                    $result = array('type' => 'success', 'message'=>'Your email has been delivered.');
+	                } else {
+	                    $result = array('type' => 'error', 'message'=>"Unable to send email.");
+	                }
+	            } catch (Exception $e) {
+	                // TODO: handle exception
+	            }
+	        }
+
+	        // Remove items from session
 			unset($_SESSION['items']);
 			unset($_SESSION['total']);
 
