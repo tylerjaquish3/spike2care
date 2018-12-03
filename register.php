@@ -296,6 +296,7 @@ include('footer.php');
         $('#invalidEmailError').hide();
         $('#invalidPhoneError').hide();
         e.preventDefault();
+        var validPasscode = true;
 
         if ($('#team_name').val() == '') {
             $('#team_name').val($('#full_name').val());
@@ -304,6 +305,23 @@ include('footer.php');
         var passcode = $('#passcode').val();
         if (!passcode) {
             passcode = $('#passcode-check').val();
+        } else {
+            // Check if passcode is already used
+            $.ajax({
+                url: 'includes/handleForm.php',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    'passcode': passcode
+                },
+                complete: function(data){
+                    response = $.parseJSON(data.responseText);
+                    if (response.type == 'failure') {
+                        $('#duplicatePasscodeError').show(); 
+                        validPasscode = false;   
+                    }
+                }
+            });
         }
         var registerType = $('input[name="type"]:checked').val();
 
@@ -312,8 +330,6 @@ include('footer.php');
         validPhone = isPhone($('#phone').val());
         validEmail = isEmail($('#email').val());
         var specialEvent = "<?php echo $specialEvent; ?>";
-
-        validPasscode = true;
 
         if ($('#full_name').val() == "") {
             $('#invalidNameError').show();

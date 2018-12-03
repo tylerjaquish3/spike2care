@@ -151,22 +151,28 @@ require_once('../stripe/init.php');
 		// Validate passcode
 		$passcode = trim($_GET['passcode']);
 		$now = date('Y-m-d H:i:s');
-		$eventId = $_GET['eventId'];
 
 		if ($passcode != '') {
 
-			$sql = "SELECT t.*, team_players, full_name FROM teams as t JOIN spike2care.`events` as e ON t.event_id = e.id JOIN people on people.id = t.captain_id WHERE t.is_active = 1 AND e.is_active = 1 AND BINARY t.passcode = '".$passcode."' AND event_id = ".$eventId;
+			if (isset($_GET['eventId'])) {
+				$eventId = $_GET['eventId'];
+				$sql = "SELECT t.*, team_players, full_name FROM teams as t JOIN spike2care.`events` as e ON t.event_id = e.id JOIN people on people.id = t.captain_id WHERE t.is_active = 1 AND e.is_active = 1 AND BINARY t.passcode = '".$passcode."' AND event_id = ".$eventId;
+			} else {
+				$eventId = null;
+				// If eventId isn't set, we're checking for duplicate passcodes
+				$sql = "SELECT * FROM teams WHERE passcode = '".$passcode."'";
+			}
 
 			$result = mysqli_query($conn, $sql);
-
-	        if (mysqli_num_rows($result) > 0) {
+	        if (mysqli_num_rows($result) > 0 && $eventId) {
 		        while($team = mysqli_fetch_array($result)) 
 		        {
 		        	$message = '<h4>Team found!</h4> Joining team: '.$team['team_name'].', Captain: '.$team['full_name']
 		        	.'<input type="hidden" name="teamId" value="'.$team['id'].'">';
 		        	$return = ['type' => 'success', 'message' => $message];
 		        }
-
+	        } elseif (mysqli_num_rows($result)) {
+	        	$return = ['type' => 'failure', 'message' => 'Passcode is duplicated.'];
 	        } else {
 	        	$return = ['type' => 'error', 'message' => 'No team found.'];
 	        }
