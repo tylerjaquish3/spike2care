@@ -187,7 +187,7 @@
                                 </div>
                                 <div class="col-xs-8">
                                     <select id="causes" name="cause[]" class="form-control">
-                                        <option selected value="0">S2C General Fund</option>
+                                        <!-- <option selected value="0">S2C General Fund</option> -->
                                     </select>
                                     <br />
                                     <span id="msg_cause"></span>

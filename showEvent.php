@@ -204,12 +204,9 @@ if ($_GET) {
                 </div>
             </div>
                         
-                   
-
             <?php } 
             } ?>
             
-
         </div>
     </section>
 

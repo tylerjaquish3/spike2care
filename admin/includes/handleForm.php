@@ -863,4 +863,34 @@ require_once('../../stripe/init.php');
 		echo json_encode($response);
 	}
 
+	// Save a new cause
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'addCause') {
+		$name = $_POST['name'];
+		$active = $_POST['active'] == "true" ? 1 : 0;
+		$sql = "INSERT INTO causes (name, active) VALUES ('{$name}', '{$active}')";
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$response = ['type' => 'success', 'message' => 'Cause has been added.'];	
+		} else {
+			$response = ['type' => 'error', 'message' => 'Add cause failed. Please contact an admin.'];
+		}
+
+		echo json_encode($response);
+	}
+
+	// Update the cause active field
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'toggleCauseActive') {
+		$id = $_POST['id'];
+		$sql = "UPDATE causes SET active = !active WHERE id = {$id}";
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$response = ['type' => 'success', 'message' => 'Cause has been updated.'];	
+		} else {
+			$response = ['type' => 'error', 'message' => 'Update cause failed. Please contact an admin.'];
+		}
+
+		echo json_encode($response);
+	}
 ?>

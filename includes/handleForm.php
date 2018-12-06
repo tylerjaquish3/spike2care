@@ -223,7 +223,7 @@ require_once('../stripe/init.php');
 
 			// If the user donated to a specific cause, add the event_id to the payment
 			if ($cause != 0) {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+				$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$created_at."')";
 			} else {
 				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$created_at."')";
 			}
@@ -234,10 +234,10 @@ require_once('../stripe/init.php');
 			// TODO: error handling
 		}
 
-		if ($cause != 0) {
-			$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-			mysqli_query($conn, $sql);
-		}
+		// if ($cause != 0) {
+		// 	$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+		// 	mysqli_query($conn, $sql);
+		// }
 
 		header("Location: ../index.php?message=thankyou");
 		die();
@@ -308,7 +308,7 @@ require_once('../stripe/init.php');
 			$donation = $_POST['totalDonation'];
 			// If the user donated to a specific cause, add the event_id to the payment
 			if ($cause != 0) {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$paidBy."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$createdAt."')";
+				$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ('".$paidBy."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$createdAt."')";
 			} else {
 				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$paidBy."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$createdAt."')";
 			}
@@ -325,10 +325,10 @@ require_once('../stripe/init.php');
 		mysqli_query($conn, $sql);
 		
 		// if a cause was specified, update the event with the new total
-		if ($cause != 0) {
-			$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-			mysqli_query($conn, $sql);
-		}
+		// if ($cause != 0) {
+		// 	$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+		// 	mysqli_query($conn, $sql);
+		// }
 
 		header("Location: ../showSpecialEvent.php?eventId=".$eventId."&message=success");
 		die();
@@ -402,19 +402,19 @@ require_once('../stripe/init.php');
 
 			// If the user donated to a specific cause, add the event_id to the payment
 			if ($cause != 0) {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ($paidBy, $donation, $cause, '$chargeToken', '$createdAt')";
+				$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ($paidBy, $donation, $cause, '$chargeToken', '$createdAt')";
 			} else {
 				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ($paidBy, $donation, '$chargeToken', '$createdAt')";
 			}
 
 			mysqli_query($conn, $sql);
 
-			$cause = (int)$_POST['cause'][0];
+			// $cause = (int)$_POST['cause'][0];
 
-			if ($cause != 0) {
-				$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-				mysqli_query($conn, $sql);
-			}
+			// if ($cause != 0) {
+			// 	$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+			// 	mysqli_query($conn, $sql);
+			// }
 		}
 
 		// Get any existing players paid and update it
@@ -719,7 +719,7 @@ require_once('../stripe/init.php');
 	if (isset($_GET) && isset($_GET['getCauses'])) {
 		// Get future events and any event less than 30 days ago
 		$thirtyDaysAgo = date("Y-m-d", strtotime('-30 days'));
-		$sql = "SELECT * FROM events WHERE is_active = 1 AND event_date >= '".$thirtyDaysAgo."'";
+		$sql = "SELECT * FROM causes WHERE active = 1";
 		$result = mysqli_query($conn, $sql);
 
 		$data = [];
@@ -730,7 +730,7 @@ require_once('../stripe/init.php');
 	        {
 	        	array_push($data, $playerArray[$count] = [
 	        		'id' => $row['id'],
-	        		'text' => $row['title']
+	        		'text' => $row['name']
 	        	]);
 	        	$count++;
 	        }
@@ -885,10 +885,10 @@ require_once('../stripe/init.php');
 			if ($donation > 0) {
 				// If the user donated to a specific cause, add the event_id to the payment
 				if ($cause != 0) {
-					$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-					mysqli_query($conn, $sql);
+					// $sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
+					// mysqli_query($conn, $sql);
 
-					$sql = "INSERT INTO payments (paid_by, donation_amount, event_id, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+					$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$cause."', '".$chargeToken."', '".$created_at."')";
 				} else {
 					$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$chargeToken."', '".$created_at."')";
 				}

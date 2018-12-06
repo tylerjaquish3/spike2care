@@ -16,6 +16,8 @@ if (!isset($_SESSION["user_id"])) {
         <div class="title_left">
             <h1>Payments</h1>
         </div>
+        <a class="btn btn-primary" href="causes.php">Manage Causes</a>
+        <a class="btn btn-primary" href="exportPayments.php">Export Payments</a>
     </div>
 
     <div class="clearfix"></div>
@@ -32,18 +34,18 @@ if (!isset($_SESSION["user_id"])) {
                                 <th>Paid For</th>
                                 <th>Amount</th>
                                 <th>Type</th>
-                                <th>Event</th>
+                                <th>Event/Cause</th>
                                 <th>Refunded?</th>
                                 <th>Received</th>
                             </thead>
                             <tbody>
                                 <?php 
                                 $sql = "SELECT PB.full_name as paid_by, PB.email as email, PF.full_name as paid_for, 
-                                    donation_amount as donation, entry_amount as entry, merchandise_amount as merch, e.title as event, 
-                                    is_refunded as refund, p.created_at as created_at
+                                    donation_amount as donation, entry_amount as entry, merchandise_amount as merch, c.name as cause, e.title as title, is_refunded as refund, p.created_at as created_at
                                     FROM payments p 
                                     JOIN people as PB on PB.id = p.paid_by 
                                     LEFT JOIN people as PF on PF.id = p.paid_for 
+                                    LEFT JOIN causes c ON c.id = p.cause_id
                                     LEFT JOIN events e ON e.id = p.event_id";
 
                                 $result = mysqli_query($conn, $sql);
@@ -54,12 +56,15 @@ if (!isset($_SESSION["user_id"])) {
                                         if ($payment['donation']) {
                                             $type = 'Donation';
                                             $amount = number_format($payment['donation']/100, 2);
+                                            $eventCause = $payment['cause'];
                                         } elseif ($payment['entry']) {
                                             $type = 'Event';
                                             $amount = number_format($payment['entry']/100, 2);
+                                            $eventCause = $payment['title'];
                                         } else {
                                             $type = 'Merchandise';
                                             $amount = number_format($payment['merch']/100, 2);
+                                            $eventCause = '';
                                         }
                                         ?>
                                         <tr>
@@ -68,7 +73,7 @@ if (!isset($_SESSION["user_id"])) {
                                             <td><?php echo $payment['paid_for']; ?></td>
                                             <td align="right" style="padding-right: 50px;">$ <?php echo $amount; ?></td>
                                             <td><?php echo $type; ?></td>
-                                            <td><?php echo $payment['event']; ?></td>
+                                            <td><?php echo $eventCause; ?></td>
                                             <td><?php echo ($payment['refund'] == 1) ? '<span class="badge badge-secondary">Yes</span>' : ''; ?></td>
                                             <td><?php echo date('Y.m.d H:i:s', strtotime($payment['created_at'])); ?></td>
                                         </tr>
