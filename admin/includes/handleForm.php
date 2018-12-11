@@ -525,17 +525,26 @@ require_once('../../stripe/init.php');
 
 		try {
 
+			$sql = "SELECT * FROM teams t
+				JOIN events e on e.id = t.event_id
+				WHERE t.id = ".$teamId;
+			$result = mysqli_query($conn, $sql);
+			if (mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_array($result)) {
+		        	$perPersonAmount = $row['price']*100;
+	        	}
+        	}
+
 			$sql = "SELECT * FROM people WHERE id = ".$playerId;
 			$result = mysqli_query($conn, $sql);
 			if (mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_array($result)) 
-		        {
+				while($row = mysqli_fetch_array($result)) {
 					// If player has paid
 					if ($row['paid']) {
 
 						// Issue refund through Stripe API
 						if ($row['token']) {
-							$response = issueRefund($row['token']);
+							$response = issueRefund($row['token'], $perPersonAmount);
 						}
 
 						if ($response['type'] == 'success') {
@@ -587,7 +596,7 @@ require_once('../../stripe/init.php');
 		echo json_encode($response);
 	}
 
-	function issueRefund($token) 
+	function issueRefund($token, $amount) 
 	{
 		$response = ['type' => 'success', 'message' => 'Refund has been issued and may take 5-10 business days to credit the original payment method.'];
 
@@ -599,7 +608,8 @@ require_once('../../stripe/init.php');
 			}
 
 			$re = \Stripe\Refund::create(array(
-			  "charge" => $token
+			  "charge" => $token,
+			  "amount" => $amount
 			));
 		} catch (Exception $e) {
 			//var_dump($e);
