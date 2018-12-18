@@ -22,7 +22,7 @@
 	}
 
 	#footer {
-    	height: 85px;
+    	height: 125px;
 	}
 
 	.desktop {
@@ -47,12 +47,27 @@
 	    width: 50%;
 	}
 
-	div#myCarousel {
-	    height: 250px;
+	#banner {
+	    height: 235px;
+	    background-color: #0098D1;
+	    padding-top: 35px;
 	}
 
-	#myCarousel img {
-	    height: 250px !important;
+	.copy:after {
+		content:"\a";
+    	white-space: pre;
+	}
+
+	section#testimonials {
+	    padding-bottom: 85px;
+	}
+
+	.social-icons {
+		display: none;
+	}
+
+	.cal-cell1 {
+	    font-size: 9px;
 	}
 }
 

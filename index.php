@@ -36,7 +36,7 @@ if (mysqli_num_rows($content) > 0) {
         <div class="row-fluid">
             <div class="col-xs-12 col-sm-10">
                 <h3>Doing what we love, helping those we love</h3><br />
-                <h4><?php echo $mission; ?></h4>
+                <span class="mission"><?php echo $mission; ?></span>
             </div>
             <div class="col-xs-12 col-sm-2 center">
                 <a class="btn btn-primary btn-large" href="checkout.php">Donate Now!</a>
@@ -101,10 +101,16 @@ if (mysqli_num_rows($content) > 0) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <h2><?php echo $row['title']; ?></h2>
+                                    <a class="btn btn-view btn-large" id="view-register" href="showEvent.php?eventId=<?php echo $row['id']; ?>">View</a>
+                                    <?php 
+                                    $today = date('Y-m-d H:i:s');
+                                    if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
+                                        <a class="btn btn-primary btn-large" id="view-register" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12 col-sm-8 col-md-6">
+                                <div class="col-xs-12 col-md-6">
                                     <?php 
                                     if ($row['image_path'] != "") { ?>
                                         <div class="center-cropped" style="background-image: url('images/events/<?php echo $row['image_path']; ?>')"></div>
@@ -114,18 +120,7 @@ if (mysqli_num_rows($content) > 0) {
                                     <?php
                                     } ?>
                                 </div>
-                                <div class="col-xs-12 col-sm-4 col-md-6 format">
-
-                                    <div class="pull-right">
-                                        <a class="btn btn-view btn-large" id="view-register" href="showEvent.php?eventId=<?php echo $row['id']; ?>">View</a><br />
-                                        <?php 
-                                        $today = date('Y-m-d H:i:s');
-                                        // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
-                                        if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
-                                            <a class="btn btn-primary btn-large pull-right" id="view-register" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
-                                        <?php } ?>
-
-                                    </div>
+                                <div class="col-xs-12 col-md-6 format">
                                     
                                     <h3><?php echo date_create($row['event_date'])->format('D, M j'); ?></h3>
                                     <h3><?php echo $row['location']; ?></h3>
@@ -145,9 +140,12 @@ if (mysqli_num_rows($content) > 0) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="format">
+                                        <?php if ($row['format'] != "") { ?>
                                         <h4>Format</h4>
                                         <p><?php echo $row['format']; ?></p>
-                                    
+                                        <?php } ?>
+
+                                        <?php if ($row['description'] != "") { ?>
                                         <h4>Details</h4>
                                         <p>
                                             <?php 
@@ -159,6 +157,7 @@ if (mysqli_num_rows($content) > 0) {
                                             }
                                             ?>
                                         </p>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +192,7 @@ if (mysqli_num_rows($content) > 0) {
             <div class="col-xs-12 col-sm-6 col-md-3">
                 <div class="media">
                     <div class="pull-left">
-                        <i class="fa fa-clock-o icon-medium"></i>
+                        <i class="fa fa-clock-o icon-medium squeeze"></i>
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">Events</h4>
@@ -206,7 +205,7 @@ if (mysqli_num_rows($content) > 0) {
 
                 <div class="media">
                     <div class="pull-left">
-                        <i class="fa fa-child icon-medium"></i>
+                        <i class="fa fa-shopping-bag icon-medium squeeze"></i>
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">Merchandise</h4>
@@ -231,7 +230,7 @@ if (mysqli_num_rows($content) > 0) {
 
                 <div class="media">
                     <div class="pull-left">
-                        <i class="fa fa-shopping-bag icon-medium squeeze"></i>
+                        <i class="fa fa-child icon-medium"></i>
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">Volunteer</h4>
@@ -307,7 +306,7 @@ if (mysqli_num_rows($content) > 0) {
                     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="20000">
 
                         <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
+                        <div class="carousel-inner" style=" width:100%; height: 170px">
                             <?php
                             $activeClass = 'active';
                             while($row = mysqli_fetch_array($result)) 

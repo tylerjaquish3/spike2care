@@ -55,15 +55,9 @@ if (isset($_GET)) {
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarousel" data-slide-to="1"></li>
-                        <li data-target="#myCarousel" data-slide-to="2"></li>
-                    </ol>
 
                     <!-- Wrapper for slides -->
-                    <div class="carousel-inner" style=" width:100%; height: 500px">
+                    <div class="carousel-inner" style=" width:100%;">
                         <div class="item active">
                             <?php 
                             if ($image1_path) { ?>
