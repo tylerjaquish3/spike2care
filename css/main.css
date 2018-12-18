@@ -1070,7 +1070,7 @@ body > .ui-pnotify-modal-overlay {
 
 div.checkout {
     font-size: 16px;
-    padding: 12px;
+    /*padding: 12px;*/
 }
 
 #event-form .row {
@@ -1159,9 +1159,9 @@ a#forgot-password {
     padding: 7px 0px;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered {
+/*.select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 45px;
-}
+}*/
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 46px;
@@ -1179,6 +1179,6 @@ div#myCarousel img {
     height: 300px;
 }
 
-section#contact-page, section#about-us, section#merchandise, section#contact-page {
+section#contact-page, section#about-us, section#merchandise, section#contact-page, section.services {
     padding-bottom: 85px;
 }
