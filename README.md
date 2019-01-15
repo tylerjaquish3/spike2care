@@ -1,2 +1,3 @@
 # spike2care
-initial push of web files
+
+Website created for Spike2care, a non-profit in Spokane, WA
