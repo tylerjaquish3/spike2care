@@ -35,6 +35,17 @@
         while($row = mysqli_fetch_array($result)) {
             $eventId = $row['id'];
         }
+
+        // Check if event is per person or per table, etc.
+        $sql = "SELECT * FROM events WHERE id = ".$eventId;
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_array($result)) {
+                if ($row['price_for'] == 'per player' || $row['price_for'] == 'per person' || $row['price_for'] == 'na') {
+                    $perPerson = "true";
+                }
+            }
+        }
     }
 ?>
 
