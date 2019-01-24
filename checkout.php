@@ -2,9 +2,10 @@
 	$currentPage = 'Checkout';
 	include('header.php');
 
+    $perPerson = "false";
+
     if (isset($_GET['eventId'])) {
     	$eventId = $_GET['eventId'];
-        $perPerson = "false";
 
         // Check if event is per person or per team, etc.
         $sql = "SELECT * FROM events WHERE id = ".$eventId;
@@ -169,28 +170,21 @@
                 <div id="donation-form-div" style="display:none;">
                     <div class="row">
                         <div class="col-xs-12 text-center checkout">
-                            <p>Spike2Care thanks you for your donation. All donations are tax deductible and the Spike2Care tax ID # is 47-4545145.</p>
+                            <h4>Spike2Care thanks you for your donation. All donations are tax deductible and the Spike2Care tax ID # is 47-4545145.</h4><br />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="row checkout">
-                                <div class="col-xs-3 col-md-6 col-md-push-2">
-                                    Donation:
-                                </div>
-                                <div class="col-xs-9 col-md-6">
-                                    <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Amount">
+                                <div class="col-xs-12 col-md-6">
+                                    <br />
+                                    <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Donation Amount">
                                     <span class="full" id="msg_donation"></span>
                                 </div>
-                            </div>
-                            <div class="row checkout">
-                                <div class="col-xs-3 col-md-6 col-md-push-2">
-                                    Choose a specific cause (optional):
-                                </div>
-                                <div class="col-xs-9 col-md-6">
-                                    <select id="causes" name="cause[]" class="form-control">
-                                        <option selected value="0">S2C General Fund</option>
-                                    </select>
+                            
+                                <div class="col-xs-12 col-md-6">
+                                    Choose a specific cause (optional): <br />
+                                    <select id="causes" name="cause[]" ></select>
                                     <br />
                                     <span id="msg_cause"></span>
                                 </div>
