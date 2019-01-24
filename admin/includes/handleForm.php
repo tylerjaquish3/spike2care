@@ -9,6 +9,8 @@ require_once('../../stripe/init.php');
 
 	if(isset($_POST['save-event'])) {
 
+		// var_dump($_POST);die;
+
 		$specialEvent = $registrationOpen = false;
 		$fields = $insertItems = $setValues = '';
 		$isNew = ($_POST['is-new'] == 'true' ? true : false);
@@ -43,12 +45,10 @@ require_once('../../stripe/init.php');
 			if ($field == 'is_active') {
 				$active = true;
 			} 
-			if ($field == 'max_teams' && $value == "") {
-				$value = 0;
-			}
+			
+			$ignore = ['save-event', 'is-new', 'event_id', 'special_event', 'registration_open', 'division1', 'div1MaxTeams', 'division2', 'div2MaxTeams', 'division3', 'div3MaxTeams', 'is_active'];
 
-			if ($field != 'save-event' && $field != 'is-new' && $field != 'event_id' && $field != 'special_event' 
-				&& $field != 'registration_open' && $field != 'divisions' && $field != 'is_active') {
+			if (!in_array($field, $ignore)) {
 				// If new event, create insert statement
 				if ($isNew) {
 					$fields .= $field.',';
@@ -123,6 +123,7 @@ require_once('../../stripe/init.php');
 			$sql = "UPDATE events SET ".$setValues." WHERE id = '$eventId'";
 		}
 
+		// var_dump($sql);
 		mysqli_query($conn, $sql);
 
 		if(!$eventId) {
@@ -130,14 +131,35 @@ require_once('../../stripe/init.php');
 		}
 
 		// Delete the existing divisions and save new event divisions in pivot table
-		if (isset($_POST['divisions'])) {
-			$sql = 'DELETE FROM event_divisions WHERE event_id ='.$eventId;
-			mysqli_query($conn, $sql);
+		$sql = 'DELETE FROM event_divisions WHERE event_id ='.$eventId;
+		mysqli_query($conn, $sql);
 
-			foreach ($_POST['divisions'] as $divId) {
-				$sql = 'INSERT INTO event_divisions (event_id, division_id) VALUES ('.$eventId.','.$divId.')';
-				mysqli_query($conn, $sql);
+		if (isset($_POST['division1'])) {
+			$divId = $_POST['division1'];
+			$maxTeams = 1000;
+			if (isset($_POST['div1MaxTeams']) && $_POST['div1MaxTeams'] != "") {
+				$maxTeams = $_POST['div1MaxTeams'];
 			}
+			$sql = 'INSERT INTO event_divisions (event_id, division_id, max_teams) VALUES ('.$eventId.','.$divId.','.$maxTeams.')';
+			mysqli_query($conn, $sql);
+		}
+		if (isset($_POST['division2'])) {
+			$divId = $_POST['division2'];
+			$maxTeams = 1000;
+			if (isset($_POST['div2MaxTeams']) && $_POST['div2MaxTeams'] != "") {
+				$maxTeams = $_POST['div2MaxTeams'];
+			}
+			$sql = 'INSERT INTO event_divisions (event_id, division_id, max_teams) VALUES ('.$eventId.','.$divId.','.$maxTeams.')';
+			mysqli_query($conn, $sql);
+		}
+		if (isset($_POST['division3'])) {
+			$divId = $_POST['division3'];
+			$maxTeams = 1000;
+			if (isset($_POST['div3MaxTeams']) && $_POST['div3MaxTeams'] != "") {
+				$maxTeams = $_POST['div3MaxTeams'];
+			}
+			$sql = 'INSERT INTO event_divisions (event_id, division_id, max_teams) VALUES ('.$eventId.','.$divId.','.$maxTeams.')';
+			mysqli_query($conn, $sql);
 		}
 		
 		header("Location: ".URL."/admin/events.php");

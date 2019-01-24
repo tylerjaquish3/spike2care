@@ -7,13 +7,13 @@ if (!isset($_SESSION["user_id"])) {
     header('location:'.URL);
 }
 
-$title = $checked = $registrationChecked = $eventDate = $checkinTime = $meetingTime = $playTime = $location = $price = $priceFor = $address = $city = $format = $fbLink = $additionalInfo = $description = $maxTeams = $eventId = $imagePath = $active = $registrationDeadline = '';
+$title = $checked = $registrationChecked = $eventDate = $checkinTime = $meetingTime = $playTime = $location = $price = $priceFor = $address = $city = $format = $fbLink = $additionalInfo = $description = $eventId = $imagePath = $active = $registrationDeadline = '';
 $isNew = true;
 $specialEvent = false;
 
 if (isset($_GET) && !empty($_GET)) {
     $isNew = false;
-    $maxTeams = $teamPlayers = 0;
+    $teamPlayers = 0;
     $eventId = $_GET['eventId'];    
 
     $event = mysqli_query($conn,"SELECT * FROM events WHERE id = ".$eventId);
@@ -33,7 +33,6 @@ if (isset($_GET) && !empty($_GET)) {
             $city = $row['city'];
             $format = $row['format'];
             $description = $row['description'];
-            $maxTeams = $row['max_teams'];
             $teamPlayers = $row['team_players'];
             $imagePath = $row['image_path'];
             $fbLink = $row['fb_link'];
@@ -43,10 +42,14 @@ if (isset($_GET) && !empty($_GET)) {
         }
     }
 
+    $divisions = $maxTeams = [];
     $event = mysqli_query($conn,"SELECT * FROM event_divisions WHERE event_id = ".$eventId);
     if (mysqli_num_rows($event) > 0) {
+        $count = 1;
         while($row = mysqli_fetch_array($event)) {
-            $existingDivisions[] = $row['division_id'];
+            $divisions[$count] = $row['division_id'];
+            $maxTeams[$count] = $row['max_teams'];
+            $count++;
         }
     }
 
@@ -172,12 +175,12 @@ if (isset($_GET) && !empty($_GET)) {
 
                             <div class="form-group">
                                 <label for="address">Address</label>
-                                <input type="text" class="form-control" name="address" required placeholder="Address" value="<?php echo $address; ?>">
+                                <input type="text" class="form-control" name="address" placeholder="Address" value="<?php echo $address; ?>">
                             </div>
 
                             <div class="form-group">
                                 <label for="city">City</label>
-                                <input type="text" class="form-control" name="city" required placeholder="City" value="<?php echo $city; ?>">
+                                <input type="text" class="form-control" name="city" placeholder="City" value="<?php echo $city; ?>">
                             </div>
                             
                             <div class="form-group">
@@ -192,21 +195,81 @@ if (isset($_GET) && !empty($_GET)) {
                             <div class="regularEvent">
 
                                 <div class="form-group">
-                                    <label for="divisions[]">Divisions</label><br />
-                                    <select id="selectDivisions" name="divisions[]" class="form-control" multiple="multiple">
-                                    <?php
-                                    $divisions = mysqli_query($conn,"SELECT * FROM divisions");
-                                    if (mysqli_num_rows($divisions) > 0) {
-                                        while($div = mysqli_fetch_array($divisions)) {
-                                            if (in_array($div['id'], $existingDivisions)) { ?>
-                                                <option selected="selected" value="<?php echo $div['id']; ?>"><?php echo $div['division_label']; ?></option>
-                                            <?php } else { ?>
-                                                <option value="<?php echo $div['id']; ?>"><?php echo $div['division_label']; ?></option>
-                                            <?php }
-                                        }
-                                    } ?>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="division1">Division 1</label><br />
+                                            <select id="selectDivision1" name="division1" class="form-control">
+                                                <option>Select</option>
+                                                <?php
+                                                $result = mysqli_query($conn,"SELECT * FROM divisions");
+                                                if (mysqli_num_rows($result) > 0) {
+                                                    while($row = mysqli_fetch_array($result)) { 
+                                                        if (isset($divisions[1]) && $row['id'] == $divisions[1]) {
+                                                            echo '<option selected="selected" value="'.$row['id'].'">'.$row['division_label'].'</option>';
+                                                        } else {
+                                                            echo '<option value="'.$row['id'].'">'.$row['division_label'].'</option>';
+                                                        }
+                                                    }
+                                                } ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="division1">Max Teams</label><br />
+                                            <input type="number" id="div1MaxTeams" name="div1MaxTeams" class="form-control" value="<?php echo $maxTeams[1]; ?>">
+                                        </div>
+                                    </div>
+                                </div>
 
-                                    </select>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="division1">Division 2</label><br />
+                                            <select id="selectDivision2" name="division2" class="form-control">
+                                                <option>Select</option>
+                                                <?php
+                                                $result = mysqli_query($conn,"SELECT * FROM divisions");
+                                                if (mysqli_num_rows($result) > 0) {
+                                                    while($row = mysqli_fetch_array($result)) { 
+                                                        if (isset($divisions[2]) && $row['id'] == $divisions[2]) {
+                                                            echo '<option selected="selected" value="'.$row['id'].'">'.$row['division_label'].'</option>';
+                                                        } else {
+                                                            echo '<option value="'.$row['id'].'">'.$row['division_label'].'</option>';
+                                                        }
+                                                    }
+                                                } ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="division1">Max Teams</label><br />
+                                            <input type="number" id="div2MaxTeams" name="div2MaxTeams" class="form-control" value="<?php echo $maxTeams[2]; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="division1">Division 3</label><br />
+                                            <select id="selectDivision3" name="division3" class="form-control">
+                                                <option>Select</option>
+                                                <?php
+                                                $result = mysqli_query($conn,"SELECT * FROM divisions");
+                                                if (mysqli_num_rows($result) > 0) {
+                                                    while($row = mysqli_fetch_array($result)) { 
+                                                        if (isset($divisions[3]) && $row['id'] == $divisions[3]) {
+                                                            echo '<option selected="selected" value="'.$row['id'].'">'.$row['division_label'].'</option>';
+                                                        } else {
+                                                            echo '<option value="'.$row['id'].'">'.$row['division_label'].'</option>';
+                                                        }
+                                                    }
+                                                } ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6">
+                                            <label for="division1">Max Teams</label><br />
+                                            <input type="number" id="div3MaxTeams" name="div3MaxTeams" class="form-control" value="<?php echo $maxTeams[3]; ?>">
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -221,11 +284,6 @@ if (isset($_GET) && !empty($_GET)) {
                                             }
                                         } ?>
                                     </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="price">Max. number of teams</label>
-                                    <input type="text" class="form-control" name="max_teams" required placeholder="16, 20, etc" value="<?php echo $maxTeams; ?>">
                                 </div>
 
                                 <div class="form-group">
@@ -260,9 +318,9 @@ if (isset($_GET) && !empty($_GET)) {
                     <div class="row">
                         <div class="col-xs-12 center">
                             <br /><br />
-                            <?php if (!$isNew) { ?>
+                            <!-- <?php if (!$isNew) { ?>
                                 <button id="cancel-event" name="cancel-event" class="btn btn-warning">Cancel Event</button>
-                            <?php } ?>
+                            <?php } ?> -->
                             <button type="submit" name="save-event" class="btn btn-info">Save</button>
                         </div>
 

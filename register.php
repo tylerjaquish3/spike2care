@@ -116,14 +116,19 @@ while($row = mysqli_fetch_array($result))
                                 <select class="input-block-level" required name="division">
                                     <option selected disabled value="0">Select</option>
                                     <?php 
-                                    $divisions = mysqli_query($conn,"SELECT divisions.id, divisions.division_label FROM divisions JOIN event_divisions ON event_divisions.division_id = divisions.id JOIN events ON events.id = event_divisions.event_id WHERE events.id = ".$eventId);
+                                    $divisions = mysqli_query($conn,"SELECT divisions.id, divisions.division_label, event_divisions.max_teams FROM divisions JOIN event_divisions ON event_divisions.division_id = divisions.id JOIN events ON events.id = event_divisions.event_id WHERE events.id = ".$eventId);
                                     while($division = mysqli_fetch_array($divisions)) 
                                     {
-                                    ?>
-                                        <option value="<?php echo $division['id']; ?>">
-                                            <?php echo $division['division_label']; ?>
-                                        </option>
-                                    <?php } ?>
+                                        $sql2 = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId." AND division_id = ".$division['id']);
+                                        $teamCount = mysqli_num_rows($sql2);
+
+                                        if ($teamCount == $division['max_teams']) {
+                                            echo '<option disabled value="'.$division['id'].'">'.$division['division_label'].' is FULL</option>';
+                                        } else {
+                                            echo '<option value="'.$division['id'].'">'.$division['division_label'].'</option>';
+                                        }
+                            
+                                    } ?>
                                 </select>
                             </div>
                         </div>

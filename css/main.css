@@ -1182,3 +1182,8 @@ div#myCarousel img {
 section#contact-page, section#about-us, section#merchandise, section#contact-page, section.services {
     padding-bottom: 85px;
 }
+
+span.subtitle {
+    font-size: 11px;
+    font-style: italic;
+}
