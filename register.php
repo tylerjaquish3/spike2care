@@ -122,7 +122,7 @@ while($row = mysqli_fetch_array($result))
                                         $sql2 = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId." AND division_id = ".$division['id']);
                                         $teamCount = mysqli_num_rows($sql2);
 
-                                        if ($teamCount == $division['max_teams']) {
+                                        if ($teamCount >= $division['max_teams']) {
                                             echo '<option disabled value="'.$division['id'].'">'.$division['division_label'].' is FULL</option>';
                                         } else {
                                             echo '<option value="'.$division['id'].'">'.$division['division_label'].'</option>';
