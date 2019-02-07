@@ -123,18 +123,20 @@ if ($_GET) {
                         <?php
                         $teams = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId);
                         ?>
-                        <p><?php echo mysqli_num_rows($teams).'/'.$row['max_teams']; ?> spots filled</p>
                         
                         <?php 
-                        $sql = mysqli_query($conn,"SELECT d.id, division_label FROM event_divisions ed JOIN divisions d ON d.id = ed.division_id WHERE event_id = ".$eventId." ORDER BY d.id ASC");
+                        $sql = mysqli_query($conn,"SELECT d.id, division_label, max_teams FROM event_divisions ed JOIN divisions d ON d.id = ed.division_id WHERE event_id = ".$eventId." ORDER BY d.id ASC");
                         if (mysqli_num_rows($sql) > 0) {
                             while($divisions = mysqli_fetch_array($sql)) {
                         
-                                echo '<br /><h4>'.$divisions['division_label'].' Division</h4><hr>';
-                                
                                 $sql2 = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId." AND division_id = ".$divisions['id']." ORDER BY id ASC");
-                                if (mysqli_num_rows($sql2) > 0) {
-                                    while($team = mysqli_fetch_array($sql2)) { ?>
+                                $teamCount = mysqli_num_rows($sql2);
+
+                                echo '<br /><h4>'.$divisions['division_label'].' Division <span class="subtitle">'.$teamCount.'/'.$divisions['max_teams']. ' spots filled</span></h4><hr>';
+                                
+                                $sql3 = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId." AND division_id = ".$divisions['id']." ORDER BY id ASC");
+                                if (mysqli_num_rows($sql3) > 0) {
+                                    while($team = mysqli_fetch_array($sql3)) { ?>
 
                                         <div class="row">
                                             <div class="col-xs-12 col-md-10 col-md-push-1">
@@ -143,13 +145,13 @@ if ($_GET) {
                                                 <?php
                                                 $teamMembers = '';
 
-                                                $sql3 = mysqli_query($conn,"SELECT * FROM teams AS t 
+                                                $sql4 = mysqli_query($conn,"SELECT * FROM teams AS t 
                                                     JOIN team_players AS tp ON tp.team_id = t.id
                                                     JOIN people AS p ON tp.people_id = p.id 
                                                     WHERE tp.is_active = 1 AND t.id = ".$team['id']);
 
-                                                if (mysqli_num_rows($sql3) > 0) {
-                                                    while($player = mysqli_fetch_array($sql3)) {
+                                                if (mysqli_num_rows($sql4) > 0) {
+                                                    while($player = mysqli_fetch_array($sql4)) {
                                                         $teamMembers .= $player['full_name'].', ';
                                                     }
                                                 }

@@ -173,11 +173,9 @@
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
                             <div class="row checkout">
-                                <div class="col-xs-4">
-                                    Donation:
-                                </div>
-                                <div class="col-xs-8">
-                                    <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Amount">
+                                <div class="col-xs-12 col-md-6">
+                                    <br />
+                                    <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Donation Amount">
                                     <span class="full" id="msg_donation"></span>
                                 </div>
                             </div>

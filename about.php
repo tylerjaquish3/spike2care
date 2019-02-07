@@ -32,7 +32,7 @@ include('header.php');
             <div class="col-xs-12">
                 <h2>What is Spike2Care?</h2>
             </div>
-            <div class="col-xs-10 col-xs-push-1">
+            <div class="col-xs-12 col-md-10 col-md-push-1">
                 <?php echo $definition; ?>
             </div>
         </div>
@@ -48,7 +48,7 @@ include('header.php');
                 <h2>Frequently Asked Questions</h2>
             </div>
 
-            <div class="col-xs-10 col-xs-push-1">
+            <div class="col-xs-12 col-md-10 col-md-push-1">
                 <?php echo $faq; ?>
             </div>
         </div>

@@ -2,8 +2,21 @@
 	$currentPage = 'Checkout';
 	include('header.php');
 
+    $perPerson = "false";
+
     if (isset($_GET['eventId'])) {
     	$eventId = $_GET['eventId'];
+
+        // Check if event is per person or per team, etc.
+        $sql = "SELECT * FROM events WHERE id = ".$eventId;
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_array($result)) {
+                if ($row['price_for'] == 'per player' || $row['price_for'] == 'per person' || $row['price_for'] == 'na') {
+                    $perPerson = "true";
+                }
+            }
+        }
     }
    
     $teamId = '';
@@ -20,12 +33,21 @@
     if (isset($_GET['specialEventId'])) {
         $specialEvent = true;
         $result = mysqli_query($conn,"SELECT * FROM events WHERE id = ".$_GET['specialEventId']);
-        while($row = mysqli_fetch_array($result)) 
-        {
+        while($row = mysqli_fetch_array($result)) {
             $eventId = $row['id'];
         }
-    }
 
+        // Check if event is per person or per table, etc.
+        $sql = "SELECT * FROM events WHERE id = ".$eventId;
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_array($result)) {
+                if ($row['price_for'] == 'per player' || $row['price_for'] == 'per person' || $row['price_for'] == 'na') {
+                    $perPerson = "true";
+                }
+            }
+        }
+    }
 ?>
 
 	<section class="title">
@@ -49,6 +71,7 @@
 
                 <?php if (isset($eventId)) { ?>
                     <input type="hidden" id="eventId" name="event_id" value="<?php echo $eventId; ?>">
+
                     <div class="row">
                         <?php if ($specialEvent) { ?>
                             <div class="col-xs-12 col-md-6">
@@ -111,7 +134,7 @@
                                                 <input type="number" class="form-control" name="quantity" id="quantity">
                                             </div>
                                         </div>
-                                    <?php } else { ?>
+                                    <?php } elseif ($perPerson == "true") { ?>
                                         <div class="row">
                                             <div class="col-xs-4 col-md-6 col-md-push-2">
                                                 Paying for: 
@@ -147,17 +170,15 @@
                 <div id="donation-form-div" style="display:none;">
                     <div class="row">
                         <div class="col-xs-12 text-center checkout">
-                            <p>Spike2Care thanks you for your donation. All donations are tax deductible and the Spike2Care tax ID # is 47-4545145.</p>
+                            <h4>Spike2Care thanks you for your donation. All donations are tax deductible and the Spike2Care tax ID # is 47-4545145.</h4><br />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="row checkout">
-                                <div class="col-xs-3 col-md-6 col-md-push-2">
-                                    Donation:
-                                </div>
-                                <div class="col-xs-9 col-md-6">
-                                    <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Amount">
+                                <div class="col-xs-12 col-md-6">
+                                    <br />
+                                    <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Donation Amount">
                                     <span class="full" id="msg_donation"></span>
                                 </div>
                             </div>
@@ -251,6 +272,8 @@
     <script src="https://checkout.stripe.com/checkout.js"></script>
 
     <script type="text/javascript">
+
+        var perPerson = "<?php echo $perPerson; ?>";
 
         $(document).ready(function() {
             var eventId = $('#eventId').val();
@@ -434,7 +457,11 @@
                 playersPaid = 0;
             }
 
-            eventAmount = playerFee * playersPaid;
+            if (perPerson == "false") {
+                eventAmount = playerFee*1;
+            } else {
+                eventAmount = playerFee * playersPaid;
+            }
 
             $('#amount').html('$ '+eventAmount.toFixed(2));
         }
@@ -477,7 +504,11 @@
                     playersPaid = $('#quantity').val();
                 }
 
-                eventAmount = playerFee * playersPaid;
+                if (perPerson == "false") {
+                    eventAmount = playerFee*1;
+                } else {
+                    eventAmount = playerFee * playersPaid;
+                }
             }
 
             return parseFloat(eventAmount);

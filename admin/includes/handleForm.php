@@ -9,6 +9,8 @@ require_once('../../stripe/init.php');
 
 	if(isset($_POST['save-event'])) {
 
+		// var_dump($_POST);die;
+
 		$specialEvent = $registrationOpen = false;
 		$fields = $insertItems = $setValues = '';
 		$isNew = ($_POST['is-new'] == 'true' ? true : false);
@@ -43,12 +45,10 @@ require_once('../../stripe/init.php');
 			if ($field == 'is_active') {
 				$active = true;
 			} 
-			if ($field == 'max_teams' && $value == "") {
-				$value = 0;
-			}
+			
+			$ignore = ['save-event', 'is-new', 'event_id', 'special_event', 'registration_open', 'division1', 'div1MaxTeams', 'division2', 'div2MaxTeams', 'division3', 'div3MaxTeams', 'is_active'];
 
-			if ($field != 'save-event' && $field != 'is-new' && $field != 'event_id' && $field != 'special_event' 
-				&& $field != 'registration_open' && $field != 'divisions' && $field != 'is_active') {
+			if (!in_array($field, $ignore)) {
 				// If new event, create insert statement
 				if ($isNew) {
 					$fields .= $field.',';
@@ -123,6 +123,7 @@ require_once('../../stripe/init.php');
 			$sql = "UPDATE events SET ".$setValues." WHERE id = '$eventId'";
 		}
 
+		// var_dump($sql);
 		mysqli_query($conn, $sql);
 
 		if(!$eventId) {
@@ -130,14 +131,35 @@ require_once('../../stripe/init.php');
 		}
 
 		// Delete the existing divisions and save new event divisions in pivot table
-		if (isset($_POST['divisions'])) {
-			$sql = 'DELETE FROM event_divisions WHERE event_id ='.$eventId;
-			mysqli_query($conn, $sql);
+		$sql = 'DELETE FROM event_divisions WHERE event_id ='.$eventId;
+		mysqli_query($conn, $sql);
 
-			foreach ($_POST['divisions'] as $divId) {
-				$sql = 'INSERT INTO event_divisions (event_id, division_id) VALUES ('.$eventId.','.$divId.')';
-				mysqli_query($conn, $sql);
+		if (isset($_POST['division1'])) {
+			$divId = $_POST['division1'];
+			$maxTeams = 1000;
+			if (isset($_POST['div1MaxTeams']) && $_POST['div1MaxTeams'] != "") {
+				$maxTeams = $_POST['div1MaxTeams'];
 			}
+			$sql = 'INSERT INTO event_divisions (event_id, division_id, max_teams) VALUES ('.$eventId.','.$divId.','.$maxTeams.')';
+			mysqli_query($conn, $sql);
+		}
+		if (isset($_POST['division2'])) {
+			$divId = $_POST['division2'];
+			$maxTeams = 1000;
+			if (isset($_POST['div2MaxTeams']) && $_POST['div2MaxTeams'] != "") {
+				$maxTeams = $_POST['div2MaxTeams'];
+			}
+			$sql = 'INSERT INTO event_divisions (event_id, division_id, max_teams) VALUES ('.$eventId.','.$divId.','.$maxTeams.')';
+			mysqli_query($conn, $sql);
+		}
+		if (isset($_POST['division3'])) {
+			$divId = $_POST['division3'];
+			$maxTeams = 1000;
+			if (isset($_POST['div3MaxTeams']) && $_POST['div3MaxTeams'] != "") {
+				$maxTeams = $_POST['div3MaxTeams'];
+			}
+			$sql = 'INSERT INTO event_divisions (event_id, division_id, max_teams) VALUES ('.$eventId.','.$divId.','.$maxTeams.')';
+			mysqli_query($conn, $sql);
 		}
 		
 		header("Location: ".URL."/admin/events.php");
@@ -525,17 +547,26 @@ require_once('../../stripe/init.php');
 
 		try {
 
+			$sql = "SELECT * FROM teams t
+				JOIN events e on e.id = t.event_id
+				WHERE t.id = ".$teamId;
+			$result = mysqli_query($conn, $sql);
+			if (mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_array($result)) {
+		        	$perPersonAmount = $row['price']*100;
+	        	}
+        	}
+
 			$sql = "SELECT * FROM people WHERE id = ".$playerId;
 			$result = mysqli_query($conn, $sql);
 			if (mysqli_num_rows($result) > 0) {
-				while($row = mysqli_fetch_array($result)) 
-		        {
+				while($row = mysqli_fetch_array($result)) {
 					// If player has paid
 					if ($row['paid']) {
 
 						// Issue refund through Stripe API
 						if ($row['token']) {
-							$response = issueRefund($row['token']);
+							$response = issueRefund($row['token'], $perPersonAmount);
 						}
 
 						if ($response['type'] == 'success') {
@@ -587,7 +618,7 @@ require_once('../../stripe/init.php');
 		echo json_encode($response);
 	}
 
-	function issueRefund($token) 
+	function issueRefund($token, $amount) 
 	{
 		$response = ['type' => 'success', 'message' => 'Refund has been issued and may take 5-10 business days to credit the original payment method.'];
 
@@ -599,7 +630,8 @@ require_once('../../stripe/init.php');
 			}
 
 			$re = \Stripe\Refund::create(array(
-			  "charge" => $token
+			  "charge" => $token,
+			  "amount" => $amount
 			));
 		} catch (Exception $e) {
 			//var_dump($e);
