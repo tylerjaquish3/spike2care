@@ -1091,7 +1091,7 @@ div.checkout {
 }
 
 #pay {
-    margin-top: 40px;
+    margin: 40px 0px;
 }
 
 span.full {
@@ -1156,7 +1156,7 @@ a#forgot-password {
     -moz-box-shadow: none;
     box-shadow: none;
     min-height: 50px;
-    padding: 7px 0px;
+    /*padding: 7px 0px;*/
 }
 
 /*.select2-container--default .select2-selection--single .select2-selection__rendered {

@@ -178,10 +178,15 @@
                                     <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Donation Amount">
                                     <span class="full" id="msg_donation"></span>
                                 </div>
-                            
-                                <div class="col-xs-12 col-md-6">
-                                    Choose a specific cause (optional): <br />
-                                    <select id="causes" name="cause[]" ></select>
+                            </div>
+                            <div class="row checkout">
+                                <div class="col-xs-4">
+                                    Choose a specific cause (optional):
+                                </div>
+                                <div class="col-xs-8">
+                                    <select id="causes" name="cause[]" class="form-control">
+                                        <!-- <option selected value="0">S2C General Fund</option> -->
+                                    </select>
                                     <br />
                                     <span id="msg_cause"></span>
                                 </div>
