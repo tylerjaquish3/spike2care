@@ -98,8 +98,6 @@ while($row = mysqli_fetch_array($content)) {
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-
-
                     <div class="row">
                         <div class="col-xs-12">
 
@@ -110,6 +108,7 @@ while($row = mysqli_fetch_array($content)) {
                                     while($row = mysqli_fetch_array($bios)) {
                                         $posId = $row['position_id'];
                                         $peepId = $row['people_id'];
+                                        
                                     ?>
 
                                         <div class="row">

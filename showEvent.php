@@ -36,45 +36,64 @@ if ($_GET) {
                     </div>
                 </div>
                 <div class="row">
-                    <?php if($row['image_path']) { ?>
+                    <?php 
+                    if($row['image_path']) { ?>
                         <div class="col-xs-12 col-md-5">
                             <img class="show-event-img pull-right" src="images/events/<?php echo $row['image_path']; ?>">
                         </div>
                         <div class="col-xs-12 col-md-6">
-                    <?php } else { ?>
+                    <?php 
+                    } else { ?>
                         <div class="col-xs-12 col-md-6 col-md-push-1">
-                        <?php 
-                        }
-                        $today = date('Y-m-d H:i:s');
-                        // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
-                        if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
-                            <a class="btn btn-primary btn-large pull-right" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
-                        <?php } ?>
+                    <?php 
+                    } ?>
+                        <div class="pull-right">
+                            <?php
+                            $today = date('Y-m-d H:i:s');
+                            // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
+                            if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
+                                <a class="btn btn-primary btn-large" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
+                                <h4 class="padding5">$ <?php echo $row['price']; ?> <?php echo ($row['price_for'] != "na") ? "<small>(".$row['price_for'].")</small>" : "-"; ?></h4>
+                                <a class="btn btn-view btn-large" href="#teams">View Teams</a>
+                            <?php 
+                            } ?>
+                        </div>
                         <h3><?php echo $row['team_players'].' on '.$row['team_players']; ?></h3>
-                        <h4>$ <?php echo $row['price']; ?> <?php echo ($row['price_for'] != "na") ? "<small>(".$row['price_for'].")</small>" : "-"; ?></h4>
+                        
                         <h3><?php echo date_create($row['event_date'])->format('D, M j'); ?></h3>
                         <h3><?php echo $row['location']; ?></h3>
-                        <h4><small><?php echo $row['address'].', '.$row['city']; ?></small></h4>
-
-                        <h4>Check In: <?php echo $row['checkin_time']; ?></h4>
-                        <h4>Captain's Meeting: <?php echo $row['meeting_time']; ?></h4>
-                        <h4><?php echo 'Start Play: '.$row['play_time']; ?></h4>
+                        <?php
+                        if ($row['address'] && $row['city']) {
+                            echo '<h4><small>'.$row['address'].', '.$row['city'].'</small></h4>';
+                        } ?>
+                        
                     </div>
                 </div>
+                <hr />
+                <div class="row board-name">
+                    <div class="col-xs-3 text-center">
+                        <h4>Check In</h4><h3><?php echo $row['checkin_time']; ?></h3>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                        <h4>Captain's Meeting</h4><h3><?php echo $row['meeting_time']; ?></h3>
+                    </div>
+                    <div class="col-xs-3 text-center">
+                        <h4>Start Play</h4><h3><?php echo $row['play_time']; ?></h3>
+                    </div>
                 
         </div>
     </section>
 
     <section id="services">
         <div class="container">
-
             <div class="row">
                 <div class="col-xs-12 col-md-10 col-md-push-1">
-                    
                     <div class="format">
                         
-                        <h3>Format</h3>
-                        <p><?php echo $row['format']; ?></p>
+                        <?php if ($row['format']) {
+                            echo '<h3>Format</h3>';
+                            echo '<p>'.$row['format'].'</p>';
+                        } ?>
                     
                         <?php if ($row['description']) {
                             echo '<h3>Details</h3>';
@@ -98,26 +117,13 @@ if ($_GET) {
                 </div>
             </div>
         </div>
-
     </section>
 
-    <section id="testimonials">
+    <section id="teams">
         <div class="container">
-
             <div class="row">
                 <div class="col-xs-12 col-md-10 col-md-push-1">
-                    
                     <div class="format">
-                        <?php 
-
-                        // Until this gets fully developed, this button should be hidden
-                        $today = date('Y-m-d H:i:s');
-                        $eventDateMinusFive = strtotime($row['event_date'].' -5 days');
-                        if ($eventDateMinusFive >= strtotime($today)) { ?>
-                            <div class="pull-right" style="display:none;">
-                                <a class="btn btn-primary" id="request-refund" >Request Refund</a>
-                            </div>
-                        <?php } ?>
                         
                         <h3>Teams</h3>
                         <?php
@@ -199,12 +205,11 @@ if ($_GET) {
                                 </div>
                             </div>
                         <?php
-                        }
-
-                        ?>
+                        } ?>
                     </div>
                 </div>
             </div>
+            <br /><br /><br />
                         
             <?php } 
             } ?>
@@ -212,194 +217,9 @@ if ($_GET) {
         </div>
     </section>
 
-    <!--  Refund form -->
-    <div class="modal fade" id="refundModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Request Refund</h4>
-                </div>
-                <div class="modal-body">
-                    <form class="form-inline" method="post" id="refund-precheck">
-                        <input type="hidden" name="refund-precheck" value="1">
-                        <input type="hidden" name="eventId" value="<?php echo $eventId; ?>">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6 col-md-4">
-                                <input type="text" name="email" placeholder="Email">
-                            </div>
-                            <div class="col-xs-12 col-sm-6 col-md-4">
-                                <input type="text" name="passcode" placeholder="Team Passcode">
-                            </div>
-                            <div class="col-xs-12 col-sm-6 col-md-4 text-center">
-                                <a id="searchRefund" class="btn btn-primary">Search</a>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="row">
-                        <div class="col-xs-12 format">
-                            <span style="display:none;" id="precheck-results"></span>
-                            <form class="form-inline" method="post" id="refund-form" style="display:none;">
-                                <div id="captain-options" style="display:none;">
-                                    You are the captain! Would you like to: <br />
-                                    <input type="radio" name="captainChoice" value="refund-entire-team"> <label>Refund the entire team</label><br />
-                                    <input type="radio" name="captainChoice" value="refund-specific-players"> <label>Refund specific players</label><br />
-                                </div>
-
-                                <div id="refund-specific-players" style="display:none;">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            Choose player(s) to refund:
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <select name="refund-players[]" id="refund-players" multiple="multiple" style="width: 100%"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="choose-new-captain" style="display:none;">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            Choose player to be new captain:
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <select name="new-captain" id="new-captain" style="width: 100%"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="refund-form" value="1">
-                                <input type="hidden" name="eventId" id="eventId" value="">
-                                <input type="hidden" name="userId" id="userId" value="">
-                                <input type="hidden" name="token" id="token" value="">
-                                <input type="hidden" name="teamId" id="teamId" value="">
-                                <a id="submitRefund" class="btn btn-primary format">Submit Refund</a>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 <?php
 include('footer.php');
 ?> 
 
 <script type="text/javascript" src="js/full_sparkle.js"></script>
 <script src="js/select2.min.js"></script>
-<script type="text/javascript">
-
-    $('#request-refund').click(function () {
-        $('#refundModal').modal('show');
-    });
-
-    var teamId = null;
-    var userId = null;
-
-    $('#searchRefund').click(function (e) {
-         e.preventDefault();
-
-        var formData = $('#refund-precheck').serialize();
-        $.ajax({
-            url: 'includes/handleForm.php',
-            type: "POST",
-            data: formData,
-            dataType: 'json',
-            complete: function (response) {
-                data = $.parseJSON(response.responseText);
-
-                if (data.type == 'error') {
-                    $('#precheck-results').html(data.message);
-                } else if (data.type == 'success') {
-                    $('#precheck-results').html('<h4>Payment found for '+data.playerName+'</h4>');
-                    $('#eventId').val(data.eventId);
-                    $('#userId').val(data.userId);
-                    $('#token').val(data.token);
-                    $('#teamId').val(data.teamId);
-                    teamId = data.teamId;
-                    userId = data.userId;
-
-                    $('#refund-form').show();
-
-                    if (data.captain == true) {
-                        $('#captain-options').show();
-                    }
-
-                    loadPlayerOptions();
-                }
-                $('#precheck-results').show();
-            }
-        })
-    });
-
-    function loadPlayerOptions()
-    {
-        $.ajax({
-            url: 'includes/handleForm.php',
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                'teamId': teamId,
-                'paid': 1
-            },
-            complete: function(data){
-                players = $.parseJSON(data.responseText);
-                $('#refund-players').select2({
-                    placeholder: 'Select players',
-                    data: players
-                });
-
-                $('#new-captain').select2({
-                    placeholder: 'Select player',
-                    data: players,
-                    minimumResultsForSearch: -1
-                });
-            }
-        });
-    }
-
-    $('input[type=radio][name=captainChoice]').change(function() {
-        if (this.value == 'refund-specific-players') {
-            $('#refund-specific-players').show();
-        } else if (this.value == 'refund-entire-team') {
-            $('#refund-specific-players').hide();
-        }
-    });
-
-    $("#refund-players").on("select2:select select2:unselect", function (e) {
-        refunding = $("#refund-players").val();
-        // If refunding the captain, make user choose new captain
-        if ($.inArray(userId, refunding) > -1) {
-            loadPlayerOptions();
-            $('#choose-new-captain').show();
-        }
-    });
-
-    $('#submitRefund').click(function (e) {
-        e.preventDefault();
-
-        var formData = $('#refund-form').serialize();
-        $.ajax({
-            url: 'includes/handleForm.php',
-            type: "POST",
-            data: formData,
-            dataType: 'json',
-            complete: function (response) {
-                $('#refundModal').modal('hide');
-                data = $.parseJSON(response.responseText);
-                if (data.type == 'error') {
-                    addAlertToPage('error', 'Error', data.message, 0);
-                } else if (data.type == 'success') {
-                    addAlertToPage('success', 'Success', data.message, 0);
-                }
-            }
-        })
-    });
-
-
-
-</script>

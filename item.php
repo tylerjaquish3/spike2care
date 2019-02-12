@@ -104,15 +104,15 @@ if (isset($_GET)) {
 
                     <div class="form-group">
                         <label for="quantity">Quantity</label><br />
-                        <input type="number" name="quantity" id="quantity">
+                        <input type="number" name="quantity" id="quantity" class="form-control">
                         <span id="error_msg1" class="full" style="display:none;"><br />Required</span>
                     </div>
 
                     <?php
                     if (count($existingColors) > 0) { ?>
                         <div class="form-group">
-                            <label for="color">Color</label>
-                            <select id="colors" name="color">
+                            <label for="color">Color</label><br />
+                            <select id="colors" name="color" class="form-control">
                                 <option></option>
                                 <?php
                                 $colors = mysqli_query($conn,"SELECT * FROM colors");
@@ -132,8 +132,8 @@ if (isset($_GET)) {
                     <?php
                     if (count($existingSizes) > 0) { ?>
                         <div class="form-group">
-                            <label for="size">Size</label>
-                            <select id="sizes" name="size">
+                            <label for="size">Size</label><br />
+                            <select id="sizes" name="size" class="form-control">
                                 <option></option>
                                 <?php
                                 $sizes = mysqli_query($conn,"SELECT * FROM sizes");
@@ -159,14 +159,15 @@ if (isset($_GET)) {
         </div> 
     </section>
 
-    <div class="down20"><br /><br /><br /></div>
+    <div class="down20"><br /><br /><br /><br /><br /></div>
 
 <?php
 include('footer.php');
 ?>
-
+<!-- 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> -->
+<script src="js/select2.min.js"></script>
 <script type="text/javascript" src="js/full_sparkle.js"></script>
 
 <script>
@@ -213,7 +214,7 @@ include('footer.php');
                     'formData': $('#itemForm').serializeArray()
                 },
                 complete: function(data){
-                    console.log(data.responseText);
+                    // console.log(data.responseText);
                     response = $.parseJSON(data.responseText);
                     if (response[0] == 'success') {
                         window.location = 'item.php?id='+response[1].itemId+'&cartAddSuccess=true';

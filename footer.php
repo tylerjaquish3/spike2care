@@ -18,7 +18,7 @@
 <!--/Footer-->
 
 
-<script src="js/jquery.js"></script>
+<!-- <script src="js/jquery-2.1.1.js"></script> -->
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/underscore-min.js"></script>
 <script type="text/javascript" src="js/jquery.isotope.js"></script>

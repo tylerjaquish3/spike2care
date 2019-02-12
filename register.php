@@ -37,7 +37,7 @@ while($row = mysqli_fetch_array($result))
     </section>
 
     <section id="contact-page" class="container">
-        <div class="row-fluid">
+        <div class="row">
 
             <div class="col-xs-12">
                 <h2><?php echo $row['title']; ?></h2>
@@ -245,6 +245,7 @@ while($row = mysqli_fetch_array($result))
                 </div>
             </div>
         </form>
+        <br /><br /><br />
 
     </section>
 

@@ -60,13 +60,11 @@ include('header.php');
         
     </section>
 
+    <br /><br /><br />
+
 <?php
 include('footer.php');
 ?>
-
-<script type="text/javascript">
-    
-</script>
 
 </body>
 </html>

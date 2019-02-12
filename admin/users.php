@@ -10,10 +10,15 @@ if (!isset($_SESSION["user_id"])) {
 
 <!-- page content -->
 <div class="right_col" role="main">
-                    
-    <div class="page-title">
-        <div class="title_left">
-            <h1>Users</h1>
+        
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="title_left">
+                <h1>Users</h1>
+            </div>
+        </div>
+        <div class="col-xs-6 text-right down15">   
+            <a href="createUser.php" class="btn btn-info">Add User</a>
         </div>
     </div>
 
@@ -31,10 +36,6 @@ if (!isset($_SESSION["user_id"])) {
                 </div>
                 <div class="x_content">
                     <div class="col-md-12 col-sm-12">
-
-                        <div class="pull-right">
-                            <a href="createUser.php" class="btn btn-info">Add User</a>
-                        </div>
                         <table class="table table-bordered table-striped table-responsive">
                             <thead>
                                 <th>Username</th>

@@ -16,10 +16,15 @@ if (isset($_GET) && !empty($_GET)) {
 
 <!-- page content -->
 <div class="right_col" role="main">
-                    
-    <div class="page-title">
-        <div class="title_left">
-            <h1>Testimonials</h1>
+    
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="title_left">
+                <h1>Testimonials</h1>
+            </div>
+        </div>
+        <div class="col-xs-6 text-right down15">   
+            <a href="editTestimonial.php" class="btn btn-info">Add New Testimonial</a>
         </div>
     </div>
 
@@ -27,20 +32,9 @@ if (isset($_GET) && !empty($_GET)) {
 
     <div class="row">
         <div class="col-xs-12">
-            <div class="x_panel table_panel">
-                <div class="x_title">
-                    <h2>All Testimonials</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
+            <div class="x_panel table_panel">  
                 <div class="x_content">
                     <div class="col-xs-12">
-
-                        <div class="pull-right">
-                            <a href="editTestimonial.php" class="btn btn-info">Add New Testimonial</a>
-                        </div>
 
                         <table class="table stripe compact" id="datatable-testimonials">
                             <thead>

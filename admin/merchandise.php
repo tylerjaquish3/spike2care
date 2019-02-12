@@ -11,10 +11,15 @@ if (!isset($_SESSION["user_id"])) {
 
 <!-- page content -->
 <div class="right_col" role="main">
-                    
-    <div class="page-title">
-        <div class="title_left">
-            <h1>Merchandise</h1>
+          
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="title_left">
+                <h1>Merchandise</h1>
+            </div>
+        </div>
+        <div class="col-xs-8 text-right down15">   
+            <a href="createItem.php" class="btn btn-info">Add Item</a>
         </div>
     </div>
 
@@ -23,19 +28,8 @@ if (!isset($_SESSION["user_id"])) {
     <div class="row">
         <div class="col-xs-12">
             <div class="x_panel">
-                <div class="x_title">
-                    <h2>All Merchandise</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
                 <div class="x_content">
                     <div class="col-xs-12">
-
-                        <div class="pull-right">
-                            <a href="createItem.php" class="btn btn-info">Add Item</a>
-                        </div>
                         <table class="table stripe compact" id="datatable-merchandise">
                             <thead>
                                 <th>Title</th>

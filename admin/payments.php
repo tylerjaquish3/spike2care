@@ -11,13 +11,16 @@ if (!isset($_SESSION["user_id"])) {
 
 <!-- page content -->
 <div class="right_col" role="main">
-                    
-    <div class="page-title">
-        <div class="title_left">
-            <h1>Payments</h1>
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <div class="title_left">
+                <h1>Payments</h1>
+            </div>
         </div>
-        <a class="btn btn-primary" href="causes.php">Manage Causes</a>
-        <a class="btn btn-primary" href="exportPayments.php">Export Payments</a>
+        <div class="col-xs-12 col-md-8 text-right down15">   
+            <a class="btn btn-primary" href="causes.php">Manage Causes</a>
+            <a class="btn btn-primary" href="exportPayments.php">Export Payments</a>
+        </div>
     </div>
 
     <div class="clearfix"></div>
@@ -26,7 +29,7 @@ if (!isset($_SESSION["user_id"])) {
         <div class="col-xs-12">
             <div class="x_panel table_panel">
                 <div class="x_content">
-                    <div class="col-md-12 col-sm-12">
+                    <div class="col-xs-12">
                         <table class="table table-bordered table-striped table-responsive" id="datatable-payments">
                             <thead>
                                 <th>Paid By</th>

@@ -16,32 +16,26 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
 
 <!-- page content -->
 <div class="right_col" role="main">
-                    
-    <div class="page-title">
-        <div class="title_left">
-            <h1>Events</h1>
+
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="title_left">
+                <h1>Events</h1>
+            </div>
+        </div>
+        <div class="col-xs-8 text-right down15">   
+            <a href="createEvent.php" class="btn btn-info">Create Event</a>
         </div>
     </div>
 
     <div class="clearfix"></div>
 
     <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-xs-12">
             <div class="x_panel table_panel">
-                <div class="x_title">
-                    <h2>All Events</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
                 <div class="x_content">
                     <div class="col-xs-12">
-
-                        <div class="pull-right">
-                            <a href="createEvent.php" class="btn btn-info">Create Event</a>
-                        </div>
-                        <table class="table stripe compact" id="datatable-events">
+                        <table class="table  table-bordered table-striped table-responsive stripe compact" id="datatable-events">
                             <thead>
                                 <th>Title</th>
                                 <th>Date</th>

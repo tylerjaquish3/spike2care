@@ -352,9 +352,13 @@ nav.navbar .nav>li.login>a {
     text-shadow: none
 }
 
-#testimonials {
+#testimonials, #teams {
     background: #0098D1;
     color: #FFF;
+}
+
+#teams h4 {
+    color: #000;
 }
 
 .total-event-card {
@@ -452,6 +456,10 @@ nav.navbar .nav>li.login>a {
 #services h5,
 #services h6 {
     color: #fff
+}
+
+.services .btn-large {
+    width: 125px;
 }
 #main-contents {
     margin-top: 20px
@@ -1159,6 +1167,10 @@ a#forgot-password {
     /*padding: 7px 0px;*/
 }
 
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding: 8px 14px;
+}
+
 /*.select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 45px;
 }*/
@@ -1175,9 +1187,9 @@ span.glyphicon.glyphicon-chevron-left, span.glyphicon.glyphicon-chevron-right {
     margin-bottom: 20px;
 }
 
-div#myCarousel img {
+/*div#myCarousel img {
     height: 300px;
-}
+}*/
 
 section#contact-page, section#about-us, section#merchandise, section#contact-page, section.services {
     padding-bottom: 85px;
@@ -1186,4 +1198,8 @@ section#contact-page, section#about-us, section#merchandise, section#contact-pag
 span.subtitle {
     font-size: 11px;
     font-style: italic;
+}
+
+.padding5 {
+    padding: 5px;
 }

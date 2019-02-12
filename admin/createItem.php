@@ -53,7 +53,7 @@ if (isset($_GET) && !empty($_GET)) {
                     
     <div class="page-title">
         <div class="title_left">
-            <h1>Merchandise</h1>
+            <h1>Create Item</h1>
         </div>
     </div>
 
@@ -62,13 +62,6 @@ if (isset($_GET) && !empty($_GET)) {
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-                <div class="x_title">
-                    <h2>Create Item</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
                 <div class="x_content">
                     <form action="includes/handleForm.php" method="POST" enctype="multipart/form-data">
                         <div class="col-sm-12">
@@ -198,9 +191,10 @@ if (isset($_GET) && !empty($_GET)) {
 <?php
 include('includes/footer.php');
 ?>
-
+<!-- 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> -->
+<script src="/js/select2.min.js"></script>
 
 <script>
 

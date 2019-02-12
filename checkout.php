@@ -181,12 +181,10 @@
                                     <input type="text" id="donation" name="donation" class="input-block-level" placeholder="Donation Amount">
                                     <span class="full" id="msg_donation"></span>
                                 </div>
-                            </div>
-                            <div class="row checkout">
-                                <div class="col-xs-3 col-md-6 col-md-push-2">
+                            
+                                <div class="col-xs-12 col-md-6">
                                     Choose a specific cause (optional):
-                                </div>
-                                <div class="col-xs-9 col-md-6">
+                                <br />
                                     <select id="causes" name="cause[]" class="form-control">
                                         <!-- <option selected value="0">S2C General Fund</option> -->
                                     </select>
@@ -262,6 +260,8 @@
             </div>
         </div>
     </section>
+
+    <br /><br /><br />
 
     <?php
     include('footer.php');

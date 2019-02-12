@@ -80,77 +80,78 @@ include('header.php');
                     $recapId = $row['id'];
                     $eventId = $row['event_id'];
                 ?>
-                        <div class="event-recap">
-                            <div class="recap-text">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <h3><?php echo $row['title']; ?></h3>
-                                        <h4><?php echo date_create($row['event_date'])->format('D, M j'); ?></h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <p><?php echo $row['recap_text']; ?></p>
-                                    </div>
+                    <div class="event-recap">
+                        <div class="recap-text">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h3><?php echo $row['title']; ?></h3>
+                                    <h4><?php echo date_create($row['event_date'])->format('D, M j'); ?></h4>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <div class="row">
-                                        <?php
-                                        $photos = mysqli_query($conn,"SELECT * FROM photos WHERE event_id = ".$eventId." ORDER BY id DESC LIMIT 4");
-                                        while($photo = mysqli_fetch_array($photos)) 
-                                        {
-                                        ?>
-                                        <div class="col-xs-12 col-md-3 frame">
-                                            <img src="images/recaps/<?php echo $photo['image_path']; ?>" width="100%">
-                                        </div>
-                                        <?php } ?>
-                                    </div>
+                                    <p><?php echo $row['recap_text']; ?></p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="container comment-section">
-
-                            <h4>Comments</h4>
-                            <?php
-                            $result2 = mysqli_query($conn,"SELECT * FROM recap_comments as rc JOIN recaps as r ON rc.recap_id = r.id WHERE r.is_active = 1 AND rc.recap_id = $recapId ORDER BY rc.created_at ASC");
-                            while($row2 = mysqli_fetch_array($result2)) 
-                            {
-                            ?>
-                                <div class="row comment">
-                                    <div class="col-xs-12">
-                                        <?php echo $row2['comment_text']; ?>
-                                        <br />
-                                        - <?php echo $row2['commenter_name']; ?>
-                                    </div>
-                                </div>
-                            <?php } ?>
-
-                            <form action="" class="recap-comment">
-                                <input type="hidden" name="recap-id" value="<?php echo $recapId; ?>">
+                        <div class="row">
+                            <div class="col-xs-12">
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-8">
-                                        <input type="text" name="comment" class="comment-input" placeholder="Add a comment about this event...">
+                                    <?php
+                                    $photos = mysqli_query($conn,"SELECT * FROM photos WHERE event_id = ".$eventId." ORDER BY id DESC LIMIT 4");
+                                    while($photo = mysqli_fetch_array($photos)) 
+                                    {
+                                    ?>
+                                    <div class="col-xs-12 col-md-3 frame">
+                                        <img src="images/recaps/<?php echo $photo['image_path']; ?>" width="100%">
                                     </div>
-                                    <div class="col-xs-12 col-sm-2">
-                                        <input type="text" name="commenter" placeholder="Name (optional)">
-                                    </div>
-                                    <div class="col-xs-12 col-sm-2 center">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
+                                    <?php } ?>
                                 </div>
-                            </form>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="container comment-section">
+
+                        <h4>Comments</h4>
+                        <?php
+                        $result2 = mysqli_query($conn,"SELECT * FROM recap_comments as rc JOIN recaps as r ON rc.recap_id = r.id WHERE r.is_active = 1 AND rc.recap_id = $recapId ORDER BY rc.created_at ASC");
+                        while($row2 = mysqli_fetch_array($result2)) 
+                        {
+                        ?>
+                            <div class="row comment">
+                                <div class="col-xs-12">
+                                    <?php echo $row2['comment_text']; ?>
+                                    <br />
+                                    - <?php echo $row2['commenter_name']; ?>
+                                </div>
+                            </div>
+                        <?php } ?>
+
+                        <form action="" class="recap-comment">
+                            <input type="hidden" name="recap-id" value="<?php echo $recapId; ?>">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-8">
+                                    <input type="text" name="comment" class="comment-input" placeholder="Add a comment about this event...">
+                                </div>
+                                <div class="col-xs-12 col-sm-2">
+                                    <input type="text" name="commenter" placeholder="Name (optional)">
+                                </div>
+                                <div class="col-xs-12 col-sm-2 center">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 
                     <hr />
-                <?php }
-                } else {
-                    echo '<center><h4>No recaps yet, sit tight!</h4></center>';
-                } ?>
+                <?php 
+                }
+            } else {
+                echo '<center><h4>No recaps yet, sit tight!</h4></center>';
+            } ?>
 
-            
+            <br /><br /><br />
         </div>
     </section>
 
