@@ -136,8 +136,8 @@ if (isset($_GET)) {
                                         <?php 
                                         $sql = "SELECT title, price, quantity, color, size FROM sales s 
                                             JOIN catalog c on s.catalog_id = c.id
-                                            JOIN colors on s.color_id = colors.id
-                                            JOIN sizes on s.size_id = sizes.id
+                                            LEFT JOIN colors on s.color_id = colors.id
+                                            LEFT JOIN sizes on s.size_id = sizes.id
                                             WHERE person_id = $personId";
                                         $sales = mysqli_query($conn, $sql);
                                         if (mysqli_num_rows($sales) > 0) {

@@ -11,16 +11,19 @@ require_once('../stripe/init.php');
 
 	// when a new recap comment is added
 	if (isset($_GET['comment'])) {
-		$recap_id = $_GET['recap_id'];
+		$recapId = $_GET['recap_id'];
 		$comment = escape($_GET['comment']);
 		$commenter = 'Anonymous';
+		$date = date('Y-m-d H:i:s');
 
 		if (isset($_GET['commenter']) && $_GET['commenter'] != '') {
 			$commenter = escape($_GET['commenter']);
 		}
 
-		$sql = "INSERT INTO recap_comments (recap_id, comment_text, commenter_name, created_at) VALUES (".$recap_id.",'".$comment."','".$commenter."','".date('Y-m-d H:i:s')."')";
-		$succeeded = mysqli_query($conn, $sql);
+		$sql = $conn->prepare("INSERT INTO recap_comments (recap_id, comment_text, commenter_name, created_at) VALUES (?,?,?,?)");
+		$sql->bind_param('isss', $recapId, $comment, $commenter, $date);
+
+		$succeeded = $sql->execute();
 		$success = ['success' => $succeeded];
 
 		echo json_encode($success);
@@ -43,13 +46,19 @@ require_once('../stripe/init.php');
 
 		if ($type == 'freeAgent') {
 			$division = $_POST['division'];
-			$sql = "INSERT INTO people (full_name, phone, email, paid, created_at) VALUES ('".$name."', '".$phone."', '".$email."', 0, '".$created_at."')";
-			mysqli_query($conn, $sql);
-			$newPersonId = mysqli_insert_id($conn);
-			// Store in session for saving later
-			$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+			$paid = 0;
+			$sql = $conn->prepare("INSERT INTO people (full_name, phone, email, paid, created_at) VALUES (?,?,?,?,?)");
+			$sql->bind_param('sssis', $name, $phone, $email, $paid, $created_at);
+			$sql->execute();
 
-			$sql = "INSERT INTO free_agents (people_id, event_id, division_id) VALUES (".$newPersonId.", ".$eventId.", ".$division.")";
+			$newPersonId = $conn->insert_id;
+			// Store in session for saving later
+			$_SESSION['newPersonId'] = $newPersonId;
+
+			$sql = $conn->prepare("INSERT INTO free_agents (people_id, event_id, division_id) VALUES (?,?,?)");
+			$sql->bind_param('iii', $newPersonId, $eventId, $division);
+			
+			$sql->execute();
 			mysqli_query($conn, $sql);
 
 		} elseif ($type == 'existing') {
@@ -78,18 +87,26 @@ require_once('../stripe/init.php');
 			}
 
 			if ($shouldInsertNew) {
-				$sql = "INSERT INTO people (full_name, phone, email, paid, created_at) VALUES ('".$name."', '".$phone."', '".$email."', 0, '".$created_at."')";
-				mysqli_query($conn, $sql);
-				$newPersonId = mysqli_insert_id($conn);
+				$paid = 0;
+				$sql = $conn->prepare("INSERT INTO people (full_name, phone, email, paid, created_at) VALUES (?,?,?,?,?)");
+				$sql->bind_param('sssis', $name, $phone, $email, $paid, $created_at);
+				$sql->execute();
+
+				$newPersonId = $conn->insert_id;
 				// Save new person's id in session
-				$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+				$_SESSION['newPersonId'] = $newPersonId;
 				// Only insert if name match is less than 85%
-				$sql = "INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (".$teamId.",".$newPersonId.",0,1)";
-				mysqli_query($conn, $sql);
+				$captain = 0;
+				$active = 1;
+				$sql = $conn->prepare("INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (?,?,?,?)");
+				$sql->bind_param('iiii', $teamId, $newPersonId, $captain, $active);
+				$sql->execute();
+
 			} else {
 				// else update user information with form data
-				$sql = "UPDATE people SET full_name = '".trim($_POST['full_name'])."', phone = '".$_POST['phone']."', email = '".trim($_POST['email'])."' WHERE id = $playerFoundId";
-				mysqli_query($conn, $sql);
+				$sql = $conn->prepare("UPDATE people SET full_name = ?, phone = ?, email = ? WHERE id = ?");
+				$sql->bind_param('sssi', $name, $phone, $email, $playerFoundId);
+				$sql->execute();
 				$_SESSION['newPersonId'] = $playerFoundId;
 			}
 
@@ -103,7 +120,6 @@ require_once('../stripe/init.php');
 						if ($percent > 85) {
 							// Update free agent to inactive
 							$sql = "UPDATE free_agents SET is_active = 0 WHERE people_id = ".$row['people_id'];
-							//var_dump($sql);
 							mysqli_query($conn, $sql);
 						}
 					}
@@ -114,31 +130,43 @@ require_once('../stripe/init.php');
 			$division = $_POST['division'];
 			$teamName = mysqli_real_escape_string($conn, trim($_POST['team_name']));
 			$passcode = mysqli_real_escape_string($conn, trim($_POST['passcode']));
+			$paid = 0;
 
-			$sql = "INSERT INTO people (full_name, phone, email, paid, created_at) VALUES ('".$name."', '".$phone."', '".$email."', 0, '".$created_at."')";
-			mysqli_query($conn, $sql);
-			$newCaptainId = mysqli_insert_id($conn);
+			$sql = $conn->prepare("INSERT INTO people (full_name, phone, email, paid, created_at) VALUES (?,?,?,?,?)");
+			$sql->bind_param('sssis', $name, $phone, $email, $paid, $created_at);
+			$sql->execute();
+
+			$newCaptainId = $conn->insert_id;
 			// Save new person's id in session
-			$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+			$_SESSION['newPersonId'] = $newCaptainId;
+			$isActive = 0;
 
-			$sql = "INSERT INTO teams (team_name, passcode, event_id, division_id, captain_id, is_active, created_at) VALUES ('".$teamName."', '".$passcode."', '".$eventId."', '".$division."', '".$newCaptainId."', 0, '".$created_at."')";
-			mysqli_query($conn, $sql);
+			$sql = $conn->prepare("INSERT INTO teams (team_name, passcode, event_id, division_id, captain_id, is_active, created_at) VALUES (?,?,?,?,?,?,?)");
+			$sql->bind_param('ssiiiis', $teamName, $passcode, $eventId, $division, $newCaptainId, $isActive, $created_at);
+			$sql->execute();
 
-			$newTeamId = mysqli_insert_id($conn);
+			$newTeamId = $conn->insert_id;
 
-			$sql = "INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (".$newTeamId.",".$newCaptainId.",true, true)";
-			mysqli_query($conn, $sql);
+			$isCaptain = $isActive = true;
+			$sql = $conn->prepare("INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (?,?,?,?)");
+			$sql->bind_param('iiii', $newTeamId, $newCaptainId, $isCaptain, $isActive);
+			$sql->execute();
 			
 			foreach ($_POST['players'] as $player) {
 				if ($player != '') {
 
-					$sql = "INSERT INTO people (full_name, paid, created_at) VALUES ('".$player."', 0,'".$created_at."')";
-					mysqli_query($conn, $sql);
+					$paid = 0;
+					$sql = $conn->prepare("INSERT INTO people (full_name, paid, created_at) VALUES (?,?,?)");
+					$sql->bind_param('sis', $player, $paid, $created_at);
+					$sql->execute();
 					
-					$newPlayerId = mysqli_insert_id($conn);
-					
-					$sql = "INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (".$newTeamId.",".$newPlayerId.",false, true)";
-					mysqli_query($conn, $sql);
+					$newPlayerId = $conn->insert_id;
+
+					$isCaptain = false;
+					$isActive = true;
+					$sql = $conn->prepare("INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (?,?,?,?)");
+					$sql->bind_param('iiii', $newTeamId, $newPlayerId, $isCaptain, $isActive);
+					$sql->execute();
 				}
 			}
 		}
@@ -189,13 +217,19 @@ require_once('../stripe/init.php');
 
 		$created_at = date('Y-m-d H:i:s');
 		$cause = (int)$_POST['cause'][0];
+		$name = trim($_POST['full_name']);
+		$phone = $_POST['phone'];
+		$email = trim($_POST['email']);
+		$paid = 1;
 
 		// user needs to get added into people
-		$sql = "INSERT INTO people (full_name, phone, email, created_at) VALUES ('".trim($_POST['full_name'])."', '".$_POST['phone']."', '".trim($_POST['email'])."', '".$created_at."')";
-		mysqli_query($conn, $sql);
-		$newPersonId = mysqli_insert_id($conn);
+		$sql = $conn->prepare("INSERT INTO people (full_name, phone, email, paid, created_at) VALUES (?,?,?,?,?)");
+		$sql->bind_param('sssis', $name, $phone, $email, $paid, $created_at);
+		$sql->execute();
+
+		$newPersonId = $conn->insert_id;
 		// Store in session to use later
-		$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+		$_SESSION['newPersonId'] = $newPersonId;
 		
 		try {
 
@@ -223,21 +257,18 @@ require_once('../stripe/init.php');
 
 			// If the user donated to a specific cause, add the event_id to the payment
 			if ($cause != 0) {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+				$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES (?,?,?,?,?)");
+				$sql->bind_param('iiiss', $newPersonId, $_POST['totalDonation'], $cause, $chargeToken, $created_at);
+				$sql->execute();
 			} else {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$created_at."')";
+				$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES (?,?,?,?)");
+				$sql->bind_param('iiss', $newPersonId, $_POST['totalDonation'], $chargeToken, $created_at);
+				$sql->execute();
 			}
-			
-			mysqli_query($conn, $sql);
 
 		} catch (Exception $e) {
 			// TODO: error handling
 		}
-
-		// if ($cause != 0) {
-		// 	$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-		// 	mysqli_query($conn, $sql);
-		// }
 
 		header("Location: ../index.php?message=thankyou");
 		die();
@@ -308,11 +339,14 @@ require_once('../stripe/init.php');
 			$donation = $_POST['totalDonation'];
 			// If the user donated to a specific cause, add the event_id to the payment
 			if ($cause != 0) {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ('".$paidBy."', '".$_POST['totalDonation']."', '".$cause."', '".$chargeToken."', '".$createdAt."')";
+				$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES (?,?,?,?,?)");
+				$sql->bind_param('iiiss', $paidBy, $_POST['totalDonation'], $cause, $chargeToken, $createdAt);
+				$sql->execute();
 			} else {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$paidBy."', '".$_POST['totalDonation']."', '".$chargeToken."', '".$createdAt."')";
+				$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES (?,?,?,?)");
+				$sql->bind_param('iiss', $paidBy, $_POST['totalDonation'], $chargeToken, $createdAt);
+				$sql->execute();
 			}
-			mysqli_query($conn, $sql);
 		}
 
 		// update team to paid
@@ -321,14 +355,9 @@ require_once('../stripe/init.php');
 
 		$eventEntry = $eventPrice * $quantity;
 		// Add to payments for event entry
-		$sql = "INSERT INTO payments (paid_by, paid_for, entry_amount, quantity, event_id, token, created_at) VALUES ($paidBy, $paidBy, '$eventEntry', $quantity, $eventId, '$chargeToken', '$createdAt')";
-		mysqli_query($conn, $sql);
-		
-		// if a cause was specified, update the event with the new total
-		// if ($cause != 0) {
-		// 	$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-		// 	mysqli_query($conn, $sql);
-		// }
+		$sql = $conn->prepare("INSERT INTO payments (paid_by, paid_for, entry_amount, quantity, event_id, token, created_at) VALUES (?,?,?,?,?,?,?)");
+		$sql->bind_param('iiiiiss', $paidBy, $paidBy, $eventEntry, $quantity, $eventId, $chargeToken, $createdAt);
+		$sql->execute();
 
 		header("Location: ../showSpecialEvent.php?eventId=".$eventId."&message=success");
 		die();
@@ -392,6 +421,7 @@ require_once('../stripe/init.php');
 		} catch (Exception $e) {
 			// TODO: error handling
 			echo $e;
+			// Fake token
 			$chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
 		}
 
@@ -402,19 +432,14 @@ require_once('../stripe/init.php');
 
 			// If the user donated to a specific cause, add the event_id to the payment
 			if ($cause != 0) {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ($paidBy, $donation, $cause, '$chargeToken', '$createdAt')";
+				$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES (?,?,?,?,?)");
+				$sql->bind_param('iiiss', $paidBy, $_POST['totalDonation'], $cause, $chargeToken, $createdAt);
+				$sql->execute();
 			} else {
-				$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ($paidBy, $donation, '$chargeToken', '$createdAt')";
+				$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES (?,?,?,?)");
+				$sql->bind_param('iiss', $paidBy, $_POST['totalDonation'], $chargeToken, $createdAt);
+				$sql->execute();
 			}
-
-			mysqli_query($conn, $sql);
-
-			// $cause = (int)$_POST['cause'][0];
-
-			// if ($cause != 0) {
-			// 	$sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-			// 	mysqli_query($conn, $sql);
-			// }
 		}
 
 		// Get any existing players paid and update it
@@ -436,8 +461,10 @@ require_once('../stripe/init.php');
 		foreach ($playersPaid as $player) {
 			$sql = "UPDATE people SET paid = 1, token = '$chargeToken' WHERE id = ".$player;
 			mysqli_query($conn, $sql);
-			$sql = "INSERT INTO payments (paid_by, paid_for, entry_amount, event_id, token, created_at) VALUES ($paidBy, $player, '$eventPrice', $eventId, '$chargeToken', '$createdAt')";
-			mysqli_query($conn, $sql);
+
+			$sql = $conn->prepare("INSERT INTO payments (paid_by, paid_for, entry_amount, event_id, token, created_at) VALUES (?,?,?,?,?,?)");
+			$sql->bind_param('iiiiss', $paidBy, $player, $eventPrice, $eventId, $chargeToken, $createdAt);
+			$sql->execute();
 		}
 
 		header("Location: ../showEvent.php?eventId=".$eventId);
@@ -449,18 +476,19 @@ require_once('../stripe/init.php');
 		$paid = $_GET['paid'];
 		$teamId = $_GET['teamId'];
 
-		$sql = "SELECT * FROM teams AS t 
-		JOIN team_players AS tp ON tp.team_id = t.id
-		JOIN people AS p ON tp.people_id = p.id 
-		WHERE tp.is_active = 1 AND t.id = ".$teamId." AND paid = $paid";
-
-		$result = mysqli_query($conn, $sql);
+		$sql = $conn->prepare("SELECT * FROM teams AS t 
+			JOIN team_players AS tp ON tp.team_id = t.id
+			JOIN people AS p ON tp.people_id = p.id 
+			WHERE tp.is_active = 1 AND t.id = ? AND paid = ?");
+		$sql->bind_param('ii', $teamId, $paid);
+		$sql->execute();
 
 		$playerArray = $data = [];
 		$count = 1;
+		$result = $sql->get_result();
 
-        if (mysqli_num_rows($result) > 0) {
-	        while($row = mysqli_fetch_array($result)) 
+        if ($result->num_rows > 0) {
+	        while($row = $result->fetch_assoc()) 
 	        {
 	        	array_push($data, $playerArray[$count] = [
 	        		'id' => $row['id'],
@@ -495,194 +523,194 @@ require_once('../stripe/init.php');
 	    die;
 	}
 
-	if(isset($_POST['refund-precheck'])) {
+	// if(isset($_POST['refund-precheck'])) {
 
-		$email = $_POST['email'];
-		$passcode = $_POST['passcode'];
-		$eventId = (int)$_POST['eventId'];
-		$captain = false;
+	// 	$email = $_POST['email'];
+	// 	$passcode = $_POST['passcode'];
+	// 	$eventId = (int)$_POST['eventId'];
+	// 	$captain = false;
 
-		$sql = "SELECT p.id as userId, t.id as teamId, token, p.full_name, captain_id FROM teams AS t 
-		JOIN team_players AS tp ON tp.team_id = t.id
-		JOIN people AS p ON tp.people_id = p.id 
-			JOIN events e ON t.event_id = e.id
-			WHERE email = '$email'
-			AND event_id = $eventId
-			AND passcode = '$passcode'";
-			// probly need to check is_active on tp
+	// 	$sql = "SELECT p.id as userId, t.id as teamId, token, p.full_name, captain_id FROM teams AS t 
+	// 	JOIN team_players AS tp ON tp.team_id = t.id
+	// 	JOIN people AS p ON tp.people_id = p.id 
+	// 		JOIN events e ON t.event_id = e.id
+	// 		WHERE email = '$email'
+	// 		AND event_id = $eventId
+	// 		AND passcode = '$passcode'";
+	// 		// probly need to check is_active on tp
 
-		$result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-	        while($row = mysqli_fetch_array($result)) 
-	        {
-	        	$token = $row['token'];
-	        	$userId = $row['userId'];
-	        	$teamId = $row['teamId'];
-	        	$playerName = $row['full_name'];
-	        	if ($row['captain_id'] == $userId) {
-	        		$captain = true;
-	        	}
-	        }
+	// 	$result = mysqli_query($conn, $sql);
+ //        if (mysqli_num_rows($result) > 0) {
+	//         while($row = mysqli_fetch_array($result)) 
+	//         {
+	//         	$token = $row['token'];
+	//         	$userId = $row['userId'];
+	//         	$teamId = $row['teamId'];
+	//         	$playerName = $row['full_name'];
+	//         	if ($row['captain_id'] == $userId) {
+	//         		$captain = true;
+	//         	}
+	//         }
 
-	        $payments = "SELECT * FROM payments WHERE event_id = $eventId AND paid_by = $userId";
-	        $result = mysqli_query($conn, $payments);
-	        if (mysqli_num_rows($result) > 0) {
-		        while($row = mysqli_fetch_array($result)) 
-		        {
-		        	$paidFor[] = $row['paid_for'];
-		        }
-		    }
-	        $result = ['type' => 'success', 'token' => $token, 'userId' => $userId, 'teamId' => $teamId, 'playerName' => $playerName, 'captain' => $captain, 'paidFor' => $paidFor, 'eventId' => $eventId];
-        } else {
-        	$result = ['type' => 'error', 'message' => 'There was an error matching the email and passcode. <br /><a href="contact.php">Click here to message Spike2Care for assistance.</a>'];
-        }
+	//         $payments = "SELECT * FROM payments WHERE event_id = $eventId AND paid_by = $userId";
+	//         $result = mysqli_query($conn, $payments);
+	//         if (mysqli_num_rows($result) > 0) {
+	// 	        while($row = mysqli_fetch_array($result)) 
+	// 	        {
+	// 	        	$paidFor[] = $row['paid_for'];
+	// 	        }
+	// 	    }
+	//         $result = ['type' => 'success', 'token' => $token, 'userId' => $userId, 'teamId' => $teamId, 'playerName' => $playerName, 'captain' => $captain, 'paidFor' => $paidFor, 'eventId' => $eventId];
+ //        } else {
+ //        	$result = ['type' => 'error', 'message' => 'There was an error matching the email and passcode. <br /><a href="contact.php">Click here to message Spike2Care for assistance.</a>'];
+ //        }
 
-        echo json_encode($result);
-	    die;
-	}
+ //        echo json_encode($result);
+	//     die;
+	// }
 
-	if(isset($_POST['refund-form'])) {
+	// if(isset($_POST['refund-form'])) {
 		
-		$token = $_POST['token'];
-		$userId = $_POST['userId'];
-		$eventId = $_POST['eventId'];
-		$teamId = $_POST['teamId'];
-		$captainChoice = $_POST['captainChoice'];
+	// 	$token = $_POST['token'];
+	// 	$userId = $_POST['userId'];
+	// 	$eventId = $_POST['eventId'];
+	// 	$teamId = $_POST['teamId'];
+	// 	$captainChoice = $_POST['captainChoice'];
 
-		// Loop through each team member and issue refunds for each payment
-		if ($captainChoice == 'refund-entire-team') {
-			$sql = "SELECT * FROM teams WHERE id = ".$teamId;
-			$result = mysqli_query($conn, $sql);
-	        if (mysqli_num_rows($result) > 0) {
-		        while($row = mysqli_fetch_array($result)) 
-		        {
-		        	for ($x=2; $x<9; $x++) {
-		        		if ($row['player'.$x.'_id']) {
-		        			$response = refundPlayer($conn, $eventId, $teamId, $row['player'.$x.'_id']);
-		        		} else if ($row['captain_id']) {
-		        			$response = refundPlayer($conn, $eventId, $teamId, $row['captain_id']);
-		        		}
-		        	}
-		        }
-		    }
+	// 	// Loop through each team member and issue refunds for each payment
+	// 	if ($captainChoice == 'refund-entire-team') {
+	// 		$sql = "SELECT * FROM teams WHERE id = ".$teamId;
+	// 		$result = mysqli_query($conn, $sql);
+	//         if (mysqli_num_rows($result) > 0) {
+	// 	        while($row = mysqli_fetch_array($result)) 
+	// 	        {
+	// 	        	for ($x=2; $x<9; $x++) {
+	// 	        		if ($row['player'.$x.'_id']) {
+	// 	        			$response = refundPlayer($conn, $eventId, $teamId, $row['player'.$x.'_id']);
+	// 	        		} else if ($row['captain_id']) {
+	// 	        			$response = refundPlayer($conn, $eventId, $teamId, $row['captain_id']);
+	// 	        		}
+	// 	        	}
+	// 	        }
+	// 	    }
 
-		    $sql = "UPDATE teams SET is_active = 0, players_paid = 0 WHERE id = ".$teamId;
-			mysqli_query($conn, $sql);
+	// 	    $sql = "UPDATE teams SET is_active = 0, players_paid = 0 WHERE id = ".$teamId;
+	// 		mysqli_query($conn, $sql);
 
-		} else if ($captainChoice == 'refund-specific-players') {
-			//Refund specific players
-			if (isset($_POST['refund-players'])) {
-				$refundPlayers = $_POST['refund-players'];
-				foreach ($refundPlayers as $index => $playerId) {
-					$response = refundPlayer($conn, $eventId, $teamId, $playerId);
-				}
-			}
+	// 	} else if ($captainChoice == 'refund-specific-players') {
+	// 		//Refund specific players
+	// 		if (isset($_POST['refund-players'])) {
+	// 			$refundPlayers = $_POST['refund-players'];
+	// 			foreach ($refundPlayers as $index => $playerId) {
+	// 				$response = refundPlayer($conn, $eventId, $teamId, $playerId);
+	// 			}
+	// 		}
 
-			// Save the new captain
-			if (isset($_POST['new-captain'])) {
-				$newCaptain = $_POST['new-captain'];
-				for ($x=2; $x<9; $x++) {
-					if ($team['player'.$x.'_id'] == $newCaptain) {
-						$resetPlayerId = 'player'.$x.'_id';
-					}
-				}
+	// 		// Save the new captain
+	// 		if (isset($_POST['new-captain'])) {
+	// 			$newCaptain = $_POST['new-captain'];
+	// 			for ($x=2; $x<9; $x++) {
+	// 				if ($team['player'.$x.'_id'] == $newCaptain) {
+	// 					$resetPlayerId = 'player'.$x.'_id';
+	// 				}
+	// 			}
 				
-				$sql = "UPDATE teams SET captain_id = $newCaptain, $resetPlayerId = null WHERE id = ".$teamId;
-				mysqli_query($conn, $sql);
-			}
-		}
+	// 			$sql = "UPDATE teams SET captain_id = $newCaptain, $resetPlayerId = null WHERE id = ".$teamId;
+	// 			mysqli_query($conn, $sql);
+	// 		}
+	// 	}
 
-		echo json_encode($response);
-	    die;
-    }
+	// 	echo json_encode($response);
+	//     die;
+ //    }
 
-	function refundPlayer($conn, $eventId, $teamId, $playerId)
-	{
-		$response = '';
-		// Look up the token from payments table
-		$sql = "SELECT * FROM payments WHERE event_id = ".$eventId." AND paid_for =".$playerId;
-		$result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-	        while($payment = mysqli_fetch_array($result)) 
-	        {
-	        	if ($payment['entry_amount'] && $payment['entry_amount'] > 0) {
-	        		$token = $payment['token'];
+	// function refundPlayer($conn, $eventId, $teamId, $playerId)
+	// {
+	// 	$response = '';
+	// 	// Look up the token from payments table
+	// 	$sql = "SELECT * FROM payments WHERE event_id = ".$eventId." AND paid_for =".$playerId;
+	// 	$result = mysqli_query($conn, $sql);
+ //        if (mysqli_num_rows($result) > 0) {
+	//         while($payment = mysqli_fetch_array($result)) 
+	//         {
+	//         	if ($payment['entry_amount'] && $payment['entry_amount'] > 0) {
+	//         		$token = $payment['token'];
 
-	        		// If a token is found, create the refund
-			        if (isset($token) && $token != '') {
+	//         		// If a token is found, create the refund
+	// 		        if (isset($token) && $token != '') {
 
-			        	// Issue the refund
-			        	$response = issueRefund($token);
+	// 		        	// Issue the refund
+	// 		        	$response = issueRefund($token);
 
-						// Set player as unpaid
-						$sql = "UPDATE people SET paid = 0 WHERE id = ".$playerId;
-						mysqli_query($conn, $sql);
+	// 					// Set player as unpaid
+	// 					$sql = "UPDATE people SET paid = 0 WHERE id = ".$playerId;
+	// 					mysqli_query($conn, $sql);
 
-						// Remove player from team and decrement number of players paid
-						$sql = "SELECT * FROM teams WHERE id = ".$teamId;
-						$result = mysqli_query($conn, $sql);
-				        if (mysqli_num_rows($result) > 0) {
-					        while($team = mysqli_fetch_array($result)) 
-					        {
-					        	$playersPaid = $team['players_paid'];
-					        	// If player is on team, get the player column to nullify
-					        	for ($x=2; $x<9; $x++) {
-		        					if ($team['player'.$x.'_id'] == $playerId) {
-		        						$resetPlayerId = 'player'.$x.'_id';
-		        					}
-	        					}
-	        					if ($team['captain_id'] == $playerId) {
-	        						$resetPlayerId = 'captain_id';
-	        					}
-					        }
-					    }
-					    $newPlayersPaid = $playersPaid-1;
+	// 					// Remove player from team and decrement number of players paid
+	// 					$sql = "SELECT * FROM teams WHERE id = ".$teamId;
+	// 					$result = mysqli_query($conn, $sql);
+	// 			        if (mysqli_num_rows($result) > 0) {
+	// 				        while($team = mysqli_fetch_array($result)) 
+	// 				        {
+	// 				        	$playersPaid = $team['players_paid'];
+	// 				        	// If player is on team, get the player column to nullify
+	// 				        	for ($x=2; $x<9; $x++) {
+	// 	        					if ($team['player'.$x.'_id'] == $playerId) {
+	// 	        						$resetPlayerId = 'player'.$x.'_id';
+	// 	        					}
+	//         					}
+	//         					if ($team['captain_id'] == $playerId) {
+	//         						$resetPlayerId = 'captain_id';
+	//         					}
+	// 				        }
+	// 				    }
+	// 				    $newPlayersPaid = $playersPaid-1;
 
-					    if (isset($resetPlayerId)) {
-							$sql = "UPDATE teams SET ".$resetPlayerId." = null, players_paid = ".$newPlayersPaid." WHERE id = ".$teamId;
-							mysqli_query($conn, $sql);
-						}
+	// 				    if (isset($resetPlayerId)) {
+	// 						$sql = "UPDATE teams SET ".$resetPlayerId." = null, players_paid = ".$newPlayersPaid." WHERE id = ".$teamId;
+	// 						mysqli_query($conn, $sql);
+	// 					}
 
-						// Set payment to refunded
-						$sql = "UPDATE payments SET is_refunded = 1 WHERE id = ".$payment['id'];
-						mysqli_query($conn, $sql);
+	// 					// Set payment to refunded
+	// 					$sql = "UPDATE payments SET is_refunded = 1 WHERE id = ".$payment['id'];
+	// 					mysqli_query($conn, $sql);
 
 						
-			        } else {
-			        	$response = ['type' => 'error', 'message' => 'Error matching email and passcode. <a class="white-link" href="contact.php">Click here to message Spike2Care for assistance.</a>'];
-			        }
-	        	}
-        	}
-    	}
+	// 		        } else {
+	// 		        	$response = ['type' => 'error', 'message' => 'Error matching email and passcode. <a class="white-link" href="contact.php">Click here to message Spike2Care for assistance.</a>'];
+	// 		        }
+	//         	}
+ //        	}
+ //    	}
 
-        return $response;
-    }
+ //        return $response;
+ //    }
 
-	function issueRefund($token) 
-	{
-		$response = ['type' => 'success', 'message' => 'Refund has been issued and may take 5-10 business days to credit your original payment method.'];
+	// function issueRefund($token) 
+	// {
+	// 	$response = ['type' => 'success', 'message' => 'Refund has been issued and may take 5-10 business days to credit your original payment method.'];
 
-		try {
-			if (IS_DEV) {
-		        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
-		    } else {
-				\Stripe\Stripe::setApiKey(LIVE_KEY);
-			}
+	// 	try {
+	// 		if (IS_DEV) {
+	// 	        \Stripe\Stripe::setApiKey("sk_test_xjdaWuWDrUpmVfeuEhmovSk4");
+	// 	    } else {
+	// 			\Stripe\Stripe::setApiKey(LIVE_KEY);
+	// 		}
 
-			$re = \Stripe\Refund::create(array(
-			  "charge" => $token
-			));
-		} catch (Exception $e) {
-			//var_dump($e);
-			if (strpos($e->httpBody, 'invalid_request_error') !== false) {
-				$result = ['type' => 'error', 'message' => 'Charge has already been refunded.'];
-			} else {
-				var_dump($e);
-			}
-		}
+	// 		$re = \Stripe\Refund::create(array(
+	// 		  "charge" => $token
+	// 		));
+	// 	} catch (Exception $e) {
+	// 		//var_dump($e);
+	// 		if (strpos($e->httpBody, 'invalid_request_error') !== false) {
+	// 			$result = ['type' => 'error', 'message' => 'Charge has already been refunded.'];
+	// 		} else {
+	// 			var_dump($e);
+	// 		}
+	// 	}
 
-		return $response;
-	}
+	// 	return $response;
+	// }
 
 	// Look up a team by passcode
 	if (isset($_POST['eventId']) && isset($_POST['email']) && isset($_POST['passcode'])) {
@@ -693,12 +721,18 @@ require_once('../stripe/init.php');
 
 		if ($passcode != '') {
 
-			$sql = "SELECT t.*, team_players, full_name FROM teams as t JOIN spike2care.`events` as e ON t.event_id = e.id JOIN people on people.id = t.captain_id WHERE t.is_active = 1 AND e.is_active = 1 AND e.id = ".$eventId." AND people.email = '".$email."' AND BINARY t.passcode = '".$passcode."'";
-			$result = mysqli_query($conn, $sql);
+			$sql = $conn->prepare("SELECT t.*, team_players, full_name 
+				FROM teams as t 
+				JOIN events as e ON t.event_id = e.id 
+				JOIN people on people.id = t.captain_id 
+				WHERE t.is_active = 1 AND e.is_active = 1 AND e.id = ? AND people.email = ? AND BINARY t.passcode = ?");
+			$sql->bind_param('iss', $eventId, $email, $passcode);
+			$sql->execute();
 
-	        if (mysqli_num_rows($result) > 0) {
-		        while($team = mysqli_fetch_array($result)) 
-		        {
+			$result = $sql->get_result();
+
+	        if ($result->num_rows > 0) {
+		        while($row = $result->fetch_assoc()) {
 		        	$message = '<h4>Team found!</h4> Joining team: '.$team['team_name'].', Captain: '.$team['full_name']
 		        	.'<input type="hidden" name="teamId" value="'.$team['id'].'">';
 		        	$return = ['type' => 'success', 'message' => $message];
@@ -751,20 +785,29 @@ require_once('../stripe/init.php');
 		$name = mysqli_real_escape_string($conn, trim($_POST['paidBySpecial']));
 		$phone = mysqli_real_escape_string($conn, $_POST['phone']);
 		$email = mysqli_real_escape_string($conn, trim($_POST['email']));
+		$paid = 0;
 
-		$sql = "INSERT INTO people (full_name, phone, email, paid, created_at) VALUES ('".$name."', '".$phone."', '".$email."', 0, '".$createdAt."')";
-		mysqli_query($conn, $sql);
-		$newCaptainId = mysqli_insert_id($conn);
+		$sql = $conn->prepare("INSERT INTO people (full_name, phone, email, paid, created_at) VALUES (?,?,?,?,?)");
+		$sql->bind_param('sssis', $name, $phone, $email, $paid, $createdAt);
+		$sql->execute();
+
+		$newCaptainId = $conn->insert_id;
 		// Save new person's id in session
-		$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+		$_SESSION['newPersonId'] = $newCaptainId;
+		$passcode = '';
+		$division = 1;
+		$isActive = 0;
 
-		$sql = "INSERT INTO teams (team_name, passcode, event_id, division_id, captain_id, is_active, created_at) VALUES ('".$name."', '', '".$eventId."', 1, '".$newCaptainId."', 0, '".$createdAt."')";
-		mysqli_query($conn, $sql);
+		$sql = $conn->prepare("INSERT INTO teams (team_name, passcode, event_id, division_id, captain_id, is_active, created_at) VALUES (?,?,?,?,?,?,?)");
+		$sql->bind_param('ssiiiis', $name, $passcode, $eventId, $division, $newCaptainId, $isActive, $createdAt);
+		$sql->execute();
 
-		$newTeamId = mysqli_insert_id($conn);
+		$newTeamId = $conn->insert_id;
+		$isCaptain = $isActive = 1;
 
-		$sql = "INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (".$newTeamId.",".$newCaptainId.",true, true)";
-		mysqli_query($conn, $sql);
+		$sql = $conn->prepare("INSERT INTO team_players (team_id, people_id, is_captain, is_active) VALUES (?,?,?,?)");
+		$sql->bind_param('iiii', $newTeamId, $newCaptainId, $isCaptain, $isActive);
+		$sql->execute();
 
 		echo json_encode("../checkout.php?specialEventId=".$eventId);
 		die;
@@ -831,26 +874,28 @@ require_once('../stripe/init.php');
 	// Checkout for new merchandise purchase
 	if (isset($_POST['merchandise']) && isset($_SESSION['items'])) {
 
-		$created_at = date('Y-m-d H:i:s');
+		$createdAt = date('Y-m-d H:i:s');
 		$cause = (int)$_POST['cause'][0];
 		$donation = $_POST['totalDonation'];
 		$merchandiseAmount = $_POST['totalAmount'] - $donation;
 
-		// user needs to get added into people
-		$sql = "INSERT INTO people (full_name, phone, email, address, city, state, zip, paid, created_at) VALUES (
-			'".trim($_POST['full_name'])."',
-			'".$_POST['phone']."',
-			'".trim($_POST['email'])."',
-			'".trim($_POST['address'])."',
-			'".trim($_POST['city'])."',
-			'".trim($_POST['state'])."',
-			'".trim($_POST['zip'])."', 0,
-			'".$created_at."')";
+		$name = trim($_POST['full_name']);
+		$phone = $_POST['phone'];
+		$email = trim($_POST['email']);
+		$address = trim($_POST['address']);
+		$city = trim($_POST['city']);
+		$state = trim($_POST['state']);
+		$zip = trim($_POST['zip']);
+		$paid = 0;
 
-		mysqli_query($conn, $sql);
-		$newPersonId = mysqli_insert_id($conn);
+		// user needs to get added into people
+		$sql = $conn->prepare("INSERT INTO people (full_name, phone, email, address, city, state, zip, paid, created_at) VALUES (?,?,?,?,?,?,?,?,?)");
+		$sql->bind_param('sssssssis', $name, $phone, $email, $address, $city, $state, $zip, $paid, $createdAt);
+		$sql->execute();
+		
+		$newPersonId = $conn->insert_id;
 		// Store in session to use later
-		$_SESSION['newPersonId'] = mysqli_insert_id($conn);
+		$_SESSION['newPersonId'] = $newPersonId;
 	
 		try {
 
@@ -885,33 +930,37 @@ require_once('../stripe/init.php');
 			if ($donation > 0) {
 				// If the user donated to a specific cause, add the event_id to the payment
 				if ($cause != 0) {
-					// $sql = "UPDATE events SET specified_donations = specified_donations + ".$_POST['donation']." WHERE id = ".$cause;
-					// mysqli_query($conn, $sql);
-
-					$sql = "INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$cause."', '".$chargeToken."', '".$created_at."')";
+					$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, cause_id, token, created_at) VALUES (?,?,?,?,?)");
+					$sql->bind_param('iiiss', $newPersonId, $donation, $cause, $chargeToken, $createdAt);
+					$sql->execute();
 				} else {
-					$sql = "INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES ('".$newPersonId."', '".$donation."', '".$chargeToken."', '".$created_at."')";
+					$sql = $conn->prepare("INSERT INTO payments (paid_by, donation_amount, token, created_at) VALUES (?,?,?,?)");
+					$sql->bind_param('iiss', $newPersonId, $donation, $chargeToken, $createdAt);
+					$sql->execute();
 				}
-				mysqli_query($conn, $sql);
 			}
 				
 			// Add sales payment
-			$sql = "INSERT INTO payments (paid_by, merchandise_amount, token, created_at) VALUES ('".$newPersonId."', '".$merchandiseAmount."', '".$chargeToken."', '".$created_at."')";
-			// var_dump($sql);
-			mysqli_query($conn, $sql);
-			$newPaymentId = mysqli_insert_id($conn);
+			$sql = $conn->prepare("INSERT INTO payments (paid_by, merchandise_amount, token, created_at) VALUES (?,?,?,?)");
+			$sql->bind_param('iiss', $newPersonId, $merchandiseAmount, $chargeToken, $createdAt);
+			$sql->execute();
+
+			$newPaymentId = $conn->insert_id;
 
 			// Add items to sales
 			foreach ($_SESSION['items'] as $item) {
-				$sql = "INSERT INTO sales (person_id, catalog_id, quantity, size_id, color_id, status, created_at) VALUES ('".$newPersonId."', '".$item['itemId']."', '".$item['quantity']."', '".$item['size']."', '".$item['color']."', 'Created', '".$created_at."')";
-				mysqli_query($conn, $sql);
-				// var_dump($sql);
-				$newSalesId = mysqli_insert_id($conn);
+				$status = 'Created';
+
+				$sql = $conn->prepare("INSERT INTO sales (person_id, catalog_id, quantity, size_id, color_id, status, created_at) VALUES (?,?,?,?,?,?,?)");
+				$sql->bind_param('iiiiiss', $newPersonId, $item['itemId'], $item['quantity'], $item['size'], $item['color'], $status, $createdAt);
+				$sql->execute();
+
+				$newSalesId = $conn->insert_id;
 
 				// Add to sales_payments pivot table
-				$sql = "INSERT INTO sales_payments (payment_id, sales_id) VALUES ('".$newPaymentId."', '".$newSalesId."')";
-				// var_dump($sql);
-				mysqli_query($conn, $sql);
+				$sql = $conn->prepare("INSERT INTO sales_payments (payment_id, sales_id) VALUES (?,?)");
+				$sql->bind_param('ii', $newPaymentId, $newSalesId);
+				$sql->execute();
 			}
 			
 			// Send email to admin team
@@ -924,16 +973,20 @@ require_once('../stripe/init.php');
 	            $subject = 'New merchandise order from spike2care.org';
 	            $itemsTable = 'To view all details of the order/payment, login to <a href="spike2care.org/admin">spike2care admin</a>.<br /><br />';
 	            $itemsTable .= '<table><tr><th>Item</th><th>Quantity</th><th>Color</th><th>Size</th></tr>';
+	           
 	            // Add order items into table
-	            $sql = "SELECT title, price, quantity, color, size FROM sales s 
-                    JOIN catalog c on s.catalog_id = c.id
-                    JOIN colors on s.color_id = colors.id
-                    JOIN sizes on s.size_id = sizes.id
-                    WHERE person_id = $newPersonId";
-                $sales = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($sales) > 0) {
-                    while($row = mysqli_fetch_array($sales)) 
-                    {
+	            $sql = $conn->prepare("SELECT title, price, quantity, color, size FROM sales s 
+					JOIN catalog c on s.catalog_id = c.id
+					JOIN colors on s.color_id = colors.id
+					JOIN sizes on s.size_id = sizes.id
+					WHERE person_id = ?");
+				$sql->bind_param('i', $newPersonId);
+				$sql->execute();
+
+				$result = $sql->get_result();
+
+		        if ($result->num_rows > 0) {
+			        while($row = $result->fetch_assoc()) {
                         $itemsTable .= '<tr>
                             <td>'.$row['title'].'</td>
                             <td>'.$row['quantity'].'</td>
@@ -964,8 +1017,8 @@ require_once('../stripe/init.php');
 	                '{{items}}'=>$itemsTable
 	            ];
 
-	            $email_template = 'orderEmailTemplate.html';
-	            $templateContents = file_get_contents( dirname(__FILE__) . '/'.$email_template);
+	            $emailTemplate = 'orderEmailTemplate.html';
+	            $templateContents = file_get_contents( dirname(__FILE__) . '/'.$emailTemplate);
 	            $contents =  strtr($templateContents, $templateTags);
 
 	            try {

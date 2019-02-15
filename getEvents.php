@@ -21,6 +21,10 @@ if(isset($_GET)) {
 		$result[$i]['class'] = 'event-info';
 		$result[$i]['start'] = strtotime("+1 day", strtotime($event['event_date']))*1000;
 		$result[$i]['end'] = strtotime("+1 day", strtotime($event['event_date']))*1000;
+		$result[$i]['page'] = 'showEvent.php';
+		if ($event['special_event']) {
+			$result[$i]['page'] = 'showSpecialEvent.php';
+		}
 
 		$i++;
 	}

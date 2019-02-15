@@ -9,28 +9,41 @@ if (isset($_GET)) {
     $existingSizes = [];
     $message = false;
 
-    $items = mysqli_query($conn,"SELECT * FROM catalog WHERE id = ".$id);
-    while($row = mysqli_fetch_array($items)) 
-    {
-        $title = $row['title'];
-        $image1_path = $row['image1_path'];
-        $image2_path = $row['image2_path'];
-        $image3_path = $row['image3_path'];
-        //$category = $row['category_id'];
-        $price = $row['price'];
-        $description = $row['description'];
+    $sql = $conn->prepare("SELECT * FROM catalog WHERE id = ?");
+    $sql->bind_param('i', $id);
+    $sql->execute();
+    $result = $sql->get_result();
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $title = $row['title'];
+            $image1_path = $row['image1_path'];
+            $image2_path = $row['image2_path'];
+            $image3_path = $row['image3_path'];
+            //$category = $row['category_id'];
+            $price = $row['price'];
+            $description = $row['description'];
+        }
     }
 
-    $colors = mysqli_query($conn,"SELECT * FROM catalog_colors WHERE catalog_id = ".$id);
-    if (mysqli_num_rows($colors) > 0) {
-        while($row = mysqli_fetch_array($colors)) {
+    $sql = $conn->prepare("SELECT * FROM catalog_colors WHERE catalog_id = ?");
+    $sql->bind_param('i', $id);
+    $sql->execute();
+    $result = $sql->get_result();
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
             $existingColors[] = $row['color_id'];
         }
     }
 
-    $sizes = mysqli_query($conn,"SELECT * FROM catalog_sizes WHERE catalog_id = ".$id);
-    if (mysqli_num_rows($sizes) > 0) {
-        while($row = mysqli_fetch_array($sizes)) {
+    $sql = $conn->prepare("SELECT * FROM catalog_sizes WHERE catalog_id = ?");
+    $sql->bind_param('i', $id);
+    $sql->execute();
+    $result = $sql->get_result();
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
             $existingSizes[] = $row['size_id'];
         }
     }
@@ -164,9 +177,7 @@ if (isset($_GET)) {
 <?php
 include('footer.php');
 ?>
-<!-- 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> -->
+
 <script src="js/select2.min.js"></script>
 <script type="text/javascript" src="js/full_sparkle.js"></script>
 
