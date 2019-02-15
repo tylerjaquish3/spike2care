@@ -25,10 +25,14 @@ if ($_GET) {
     </section>
 
     <?php
-    $result = mysqli_query($conn,"SELECT * FROM events WHERE id = ".$eventId);
-    if (mysqli_num_rows($result) == 1) {
-        while($row = mysqli_fetch_array($result)) {
-    ?>
+    $sql = $conn->prepare("SELECT * FROM events WHERE id = ?");
+    $sql->bind_param('i', $eventId);
+    $sql->execute();
+
+    $result = $sql->get_result();
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) { ?>
             <section class="services">
                 <div class="container">
                     <div class="total-event-card">
@@ -52,14 +56,12 @@ if ($_GET) {
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-4">
-                                <!-- <div class="pull-right"> -->
-                                    <?php
-                                    $today = date('Y-m-d H:i:s');
-                                    // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
-                                    if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
-                                        <a class="btn btn-primary btn-large" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
-                                    <?php } ?>
-                                <!-- </div> -->
+                                <?php
+                                $today = date('Y-m-d H:i:s');
+                                
+                                if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
+                                    <a class="btn btn-primary btn-large" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
+                                <?php } ?>
                             </div>
                         </div>
                         <div class="row">

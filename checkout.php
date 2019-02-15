@@ -8,10 +8,14 @@
     	$eventId = $_GET['eventId'];
 
         // Check if event is per person or per team, etc.
-        $sql = "SELECT * FROM events WHERE id = ".$eventId;
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)) {
+        $sql = $conn->prepare("SELECT * FROM events WHERE id = ?");
+        $sql->bind_param('i', $eventId);
+        $sql->execute();
+
+        $result = $sql->get_result();
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
                 if ($row['price_for'] == 'per player' || $row['price_for'] == 'per person' || $row['price_for'] == 'na') {
                     $perPerson = "true";
                 }
@@ -32,16 +36,27 @@
     $specialEvent = false;
     if (isset($_GET['specialEventId'])) {
         $specialEvent = true;
-        $result = mysqli_query($conn,"SELECT * FROM events WHERE id = ".$_GET['specialEventId']);
-        while($row = mysqli_fetch_array($result)) {
-            $eventId = $row['id'];
+        $sql = $conn->prepare("SELECT * FROM events WHERE id = ?");
+        $sql->bind_param('i', $_GET['specialEventId']);
+        $sql->execute();
+
+        $result = $sql->get_result();
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $eventId = $row['id'];
+            }
         }
 
         // Check if event is per person or per table, etc.
-        $sql = "SELECT * FROM events WHERE id = ".$eventId;
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)) {
+        $sql = $conn->prepare("SELECT * FROM events WHERE id = ?");
+        $sql->bind_param('i', $eventId);
+        $sql->execute();
+
+        $result = $sql->get_result();
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
                 if ($row['price_for'] == 'per player' || $row['price_for'] == 'per person' || $row['price_for'] == 'na') {
                     $perPerson = "true";
                 }
@@ -100,65 +115,75 @@
                         </div>
                     </div>
                     <?php 
-                    $result = mysqli_query($conn,"SELECT * FROM events WHERE id = $eventId ORDER BY event_date DESC");
-                    while($event = mysqli_fetch_array($result)) 
-                    {
-                    ?>
-                        <input type="hidden" name="specialEvent" value="<?php echo $specialEvent; ?>">
-                        <input type="hidden" id="eventPrice" name="eventPrice" value="<?php echo $event['price']; ?>">
-                        <div class="row checkout" id="event-form">
-                            <div class="col-xs-12">
-                                <?php 
-                                if ($teamId == '' && !$specialEvent) { ?>
-                                    <div class="col-xs-12 text-center">
-                                        <p>You have been successfully added to the free agent list. Free agent registration payment is not required at this time, but donations are always welcome.</p>
-                                    </div>
-                                <?php } else { ?>
-                                    <input type="hidden" id="teamId" name="team_id" value="<?php echo $teamId; ?>">
-                                    <input type="hidden" id="team-players" value="<?php echo $event['team_players']; ?>">
+                    $sql = $conn->prepare("SELECT * FROM events WHERE id = ? ORDER BY event_date DESC");
+                    $sql->bind_param('i', $eventId);
+                    $sql->execute();
 
-                                    <div class="row">
-                                        <div class="col-xs-6 col-md-6 col-md-push-2">
-                                            Entry Fee:
-                                        </div>
-                                        <div class="col-xs-6">
-                                            $ <span id="player-fee"><?php echo $event['price']; ?></span>
-                                        </div>
-                                    </div>
-                                    <?php if ($specialEvent) { ?>
-                                        <div class="row">
-                                            <div class="col-xs-4 col-md-6 col-md-push-2">
-                                                Quantity: 
-                                            </div>
-                                            <div class="col-xs-8 col-md-4">
-                                                <input type="number" class="form-control" name="quantity" id="quantity">
-                                            </div>
-                                        </div>
-                                    <?php } elseif ($perPerson == "true") { ?>
-                                        <div class="row">
-                                            <div class="col-xs-4 col-md-6 col-md-push-2">
-                                                Paying for: 
-                                            </div>
-                                            <div class="col-xs-8 col-md-4">
-                                                <select id="paying-for" name="players_paid[]" class="form-control" multiple="multiple">></select>
-                                            </div>
-                                        </div>
-                                    <?php } ?>
-                                    <div class="row">
-                                        <div class="col-xs-6 col-md-6 col-md-push-2">
-                                            Subtotal: 
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <span id="amount"></span>
-                                        </div>
-                                    </div>
+                    $result = $sql->get_result();
 
-                                <?php } ?>
-                                
+                    if ($result->num_rows > 0) {
+                        while($event = $result->fetch_assoc()) { ?>
+                            <input type="hidden" name="specialEvent" value="<?php echo $specialEvent; ?>">
+                            <input type="hidden" id="eventPrice" name="eventPrice" value="<?php echo $event['price']; ?>">
+                            <div class="row checkout" id="event-form">
+                                <div class="col-xs-12">
+                                    <?php 
+                                    if ($teamId == '' && !$specialEvent) { ?>
+                                        <div class="col-xs-12 text-center">
+                                            <p>You have been successfully added to the free agent list. Free agent registration payment is not required at this time, but donations are always welcome.</p>
+                                        </div>
+                                    <?php 
+                                    } else { ?>
+                                        <input type="hidden" id="teamId" name="team_id" value="<?php echo $teamId; ?>">
+                                        <input type="hidden" id="team-players" value="<?php echo $event['team_players']; ?>">
+
+                                        <div class="row">
+                                            <div class="col-xs-6 col-md-6 col-md-push-2">
+                                                Entry Fee:
+                                            </div>
+                                            <div class="col-xs-6">
+                                                $ <span id="player-fee"><?php echo $event['price']; ?></span>
+                                            </div>
+                                        </div>
+                                        <?php 
+                                        if ($specialEvent) { ?>
+                                            <div class="row">
+                                                <div class="col-xs-4 col-md-6 col-md-push-2">
+                                                    Quantity: 
+                                                </div>
+                                                <div class="col-xs-8 col-md-4">
+                                                    <input type="number" class="form-control" name="quantity" id="quantity">
+                                                </div>
+                                            </div>
+                                        <?php 
+                                        } elseif ($perPerson == "true") { ?>
+                                            <div class="row">
+                                                <div class="col-xs-4 col-md-6 col-md-push-2">
+                                                    Paying for: 
+                                                </div>
+                                                <div class="col-xs-8 col-md-4">
+                                                    <select id="paying-for" name="players_paid[]" class="form-control" multiple="multiple">></select>
+                                                </div>
+                                            </div>
+                                        <?php 
+                                        } ?>
+                                        <div class="row">
+                                            <div class="col-xs-6 col-md-6 col-md-push-2">
+                                                Subtotal: 
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <span id="amount"></span>
+                                            </div>
+                                        </div>
+
+                                    <?php 
+                                    } ?>
+                                    
+                                </div>
                             </div>
-                        </div>
-
-                <?php }
+                        <?php 
+                        }
+                    }
                 } ?>
 
                 <div class="row checkout-item" id="add-donation">

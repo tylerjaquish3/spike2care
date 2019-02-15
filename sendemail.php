@@ -16,13 +16,16 @@
 
     $createdAt = date('Y-m-d H:i:s');
     
-    $sql = "INSERT INTO people (full_name, email, created_at) VALUES ('$name', '$email', '$createdAt')";
-    mysqli_query($conn, $sql);
+    $sql = $conn->prepare("INSERT INTO people (full_name, email, created_at) VALUES (?,?,?)");
+    $sql->bind_param('sss', $name, $email, $createdAt);
+    $sql->execute();
 
-    $newPersonId = mysqli_insert_id($conn);
+    $newPersonId = $conn->insert_id;
+    $status = 'New';
 
-    $sql = "INSERT INTO messages (people_id, message_text, status, created_at) VALUES ('$newPersonId', '$message', 'New', '$createdAt')";
-    mysqli_query($conn, $sql);
+    $sql = $conn->prepare("INSERT INTO messages (people_id, message_text, status, created_at) VALUES (?,?,?,?)");
+    $sql->bind_param('isss', $newPersonId, $message, $status, $createdAt);
+    $sql->execute();
 
     $email_template = 'includes/emailTemplate.html';
     
