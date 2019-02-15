@@ -24,9 +24,14 @@ if ($_GET) {
         <div class="container">
             
             <?php
-            $result = mysqli_query($conn,"SELECT * FROM events WHERE id = ".$eventId);
-            if (mysqli_num_rows($result) == 1) {
-                while($row = mysqli_fetch_array($result)) {
+            $sql = $conn->prepare("SELECT * FROM events WHERE id = ?");
+            $sql->bind_param('i', $eventId);
+            $sql->execute();
+
+            $result = $sql->get_result();
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
                     $deadline = strtotime($row['event_date'].' -3 days'); 
             ?>
 
@@ -127,22 +132,38 @@ if ($_GET) {
                         
                         <h3>Teams</h3>
                         <?php
-                        $teams = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId);
+
+                        $sql = $conn->prepare("SELECT * FROM teams WHERE is_active = 1 AND event_id = ?");
+                        $sql->bind_param('i', $eventId);
+                        $sql->execute();
+
+                        $teams = $sql->get_result();
+                        
                         ?>
                         
                         <?php 
-                        $sql = mysqli_query($conn,"SELECT d.id, division_label, max_teams FROM event_divisions ed JOIN divisions d ON d.id = ed.division_id WHERE event_id = ".$eventId." ORDER BY d.id ASC");
-                        if (mysqli_num_rows($sql) > 0) {
-                            while($divisions = mysqli_fetch_array($sql)) {
+                        $sql = $conn->prepare("SELECT d.id, division_label, max_teams FROM event_divisions ed JOIN divisions d ON d.id = ed.division_id WHERE event_id = ? ORDER BY d.id ASC");
+                        $sql->bind_param('i', $eventId);
+                        $sql->execute();
+
+                        $result = $sql->get_result();
+
+                        if ($result->num_rows > 0) {
+                            while($divisions = $result->fetch_assoc()) {
                         
                                 $sql2 = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId." AND division_id = ".$divisions['id']." ORDER BY id ASC");
                                 $teamCount = mysqli_num_rows($sql2);
 
                                 echo '<br /><h4>'.$divisions['division_label'].' Division <span class="subtitle">'.$teamCount.'/'.$divisions['max_teams']. ' spots filled</span></h4><hr>';
                                 
-                                $sql3 = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId." AND division_id = ".$divisions['id']." ORDER BY id ASC");
-                                if (mysqli_num_rows($sql3) > 0) {
-                                    while($team = mysqli_fetch_array($sql3)) { ?>
+                                $sql3 = $conn->prepare("SELECT * FROM teams WHERE is_active = 1 AND event_id = ? AND division_id = ? ORDER BY id ASC");
+                                $sql3->bind_param('ii', $eventId, $divisions['id']);
+                                $sql3->execute();
+
+                                $result3 = $sql3->get_result();
+
+                                if ($result3->num_rows > 0) {
+                                    while($team = $result3->fetch_assoc()) { ?>
 
                                         <div class="row">
                                             <div class="col-xs-12 col-md-10 col-md-push-1">
@@ -151,13 +172,17 @@ if ($_GET) {
                                                 <?php
                                                 $teamMembers = '';
 
-                                                $sql4 = mysqli_query($conn,"SELECT * FROM teams AS t 
+                                                $sql4 = $conn->prepare("SELECT * FROM teams AS t 
                                                     JOIN team_players AS tp ON tp.team_id = t.id
                                                     JOIN people AS p ON tp.people_id = p.id 
-                                                    WHERE tp.is_active = 1 AND t.id = ".$team['id']);
+                                                    WHERE tp.is_active = 1 AND t.id = ?");
+                                                $sql4->bind_param('i', $team['id']);
+                                                $sql4->execute();
 
-                                                if (mysqli_num_rows($sql4) > 0) {
-                                                    while($player = mysqli_fetch_array($sql4)) {
+                                                $result4 = $sql4->get_result();
+
+                                                if ($result4->num_rows > 0) {
+                                                    while($player = $result4->fetch_assoc()) { 
                                                         $teamMembers .= $player['full_name'].', ';
                                                     }
                                                 }
