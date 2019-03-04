@@ -30,11 +30,11 @@
                 <ul class="nav side-menu">
                     <li><a href="index.php"><i class="fa fa-tachometer"></i> Dashboard</a></li>
                     <?php
-                    if ($roleId == 1 || $roleId == 4 || $roleId == 5)
+                    if ($roleId == 1 || $roleId == 3 || $roleId == 4 || $roleId == 5)
                     echo '<li><a href="events.php"><i class="fa fa-sun-o"></i> Events</a></li>';
                     if ($roleId == 1 || $roleId == 4 || $roleId == 5)
                     echo '<li><a href="payments.php"><i class="fa fa-credit-card"></i> Payments</a></li>';
-                    if ($roleId == 1 || $roleId == 2 || $roleId == 5)
+                    if ($roleId == 1 || $roleId == 2 || $roleId == 3 || $roleId == 5)
                     echo '<li><a href="merchandise.php"><i class="fa fa-shirtsinbulk"></i> Merchandise</a></li>';
                     if ($roleId == 1 || $roleId == 2 || $roleId == 5)
                     echo '<li><a href="sales.php"><i class="fa fa-shopping-cart"></i> Sales</a></li>';

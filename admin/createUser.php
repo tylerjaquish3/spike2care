@@ -99,8 +99,8 @@ while($row = mysqli_fetch_array($roles)) {
                                 <ul>
                                     <li>Administrator - has access to all modules, including editing other admin users</li>
                                     <li>Board - has access to all modules (only role able to access Applications)</li>
-                                    <li>Merchandise - has access to Dashboard, Sales, and Messages</li>
-                                    <li>Content - has access to Dashboard, Content, Testimonials, and Messages</li>
+                                    <li>Merchandise - has access to Dashboard, Merchandise, Sales, and Messages</li>
+                                    <li>Marketing - has access to Dashboard, Events, Merchandise, Content, Testimonials, and Messages</li>
                                     <li>Events - has access to Dashboard, Events, and Messages</li>
                                 </ul>
                             </div>

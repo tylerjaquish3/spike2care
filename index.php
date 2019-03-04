@@ -158,6 +158,7 @@ if (mysqli_num_rows($content) > 0) {
                                             ?>
                                         </p>
                                         <?php } ?>
+                                        <br />
                                     </div>
                                 </div>
                             </div>
