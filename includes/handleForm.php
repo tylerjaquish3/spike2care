@@ -364,7 +364,8 @@ require_once('../stripe/init.php');
 	}
 
 	// New registration with players paid
-	if ((isset($_POST['players_paid']) && $_POST['players_paid'] != '') || isset($_POST['paidBy']) && isset($_POST['donation']) && $_POST['donation'] > 0)  {
+	// if ((isset($_POST['players_paid']) && $_POST['players_paid'] != '') || isset($_POST['paidBy']) && isset($_POST['donation']) && $_POST['donation'] > 0)  {
+	if (isset($_POST['action']) && $_POST['action'] == 'teamCheckout') {
 
 		$chargeToken = '';
 		$eventId = $teamId = $playersPaid = $paidBy = $eventPrice = $donation = null;
@@ -420,9 +421,9 @@ require_once('../stripe/init.php');
 
 		} catch (Exception $e) {
 			// TODO: error handling
-			echo $e;
+			echo $e->getMessage();
 			// Fake token
-			$chargeToken = 'susd08sd0ukosdjg0d7gg0du9gidg';
+			$chargeToken = 'fake_susd08sd0ukosdjg0d7gg0du9gidg';
 		}
 
 		$createdAt = date('Y-m-d H:i:s');

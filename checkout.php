@@ -83,6 +83,7 @@
                 <input type="hidden" id="paidBy" name="paidBy" value="<?php echo $paidBy; ?>">
                 <input type="hidden" id="totalDonation" name="totalDonation">
                 <input type="hidden" id="totalAmount" name="totalAmount">
+                <input type="hidden" name="action" value="teamCheckout">
 
                 <?php if (isset($eventId)) { ?>
                     <input type="hidden" id="eventId" name="event_id" value="<?php echo $eventId; ?>">
