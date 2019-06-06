@@ -5,6 +5,16 @@ include('header.php');
 
 if ($_GET) {
     $eventId = $_GET['eventId'];
+
+    if (isset($_GET['message'])) {
+        if ($_GET['message'] == "invalid") {
+            $success = false;
+            $message = "There was a problem with your payment. Please contact S2C if you need assistance.";
+        } elseif ($_GET['message'] == "success") {
+            $success = true;
+            $message = "You have been registered. Thank you for your support of Spike2Care!";
+        }
+    }
 } else {
     die('<script type="text/javascript">window.location.href="404.php";</script>');
 }
@@ -248,3 +258,18 @@ include('footer.php');
 
 <script type="text/javascript" src="js/full_sparkle.js"></script>
 <script src="js/select2.min.js"></script>
+
+<script type="text/javascript">
+    $('.carousel').carousel();
+
+    var success = "<?php echo $success;?>";
+    var message = "<?php echo $message;?>";
+    if (message != "") {
+        if (success == "1") {
+            addAlertToPage('success', 'Thank You', message, 0);
+        } else {
+            addAlertToPage('error', 'Error', message, 0);
+        }
+        
+    }
+</script>

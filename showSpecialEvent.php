@@ -94,6 +94,7 @@ if ($_GET) {
                         </div>
                     </div>
                 </div>
+                <br /><br /><br />
             </section>               
 
     <?php } 

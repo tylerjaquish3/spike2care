@@ -423,7 +423,10 @@ require_once('../stripe/init.php');
 			// TODO: error handling
 			echo $e->getMessage();
 			// Fake token
-			$chargeToken = 'fake_susd08sd0ukosdjg0d7gg0du9gidg';
+			$chargeToken = 'invalid';
+			// Redirect user with error message
+			header("Location: ../showEvent.php?eventId=".$eventId."&message=invalid");
+			die();
 		}
 
 		$createdAt = date('Y-m-d H:i:s');
@@ -468,7 +471,7 @@ require_once('../stripe/init.php');
 			$sql->execute();
 		}
 
-		header("Location: ../showEvent.php?eventId=".$eventId);
+		header("Location: ../showEvent.php?eventId=".$eventId."&message=success");
 		die();
 	}
 
