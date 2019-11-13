@@ -26,10 +26,10 @@ if ($result->num_rows > 0) {
                     if ($team['num_teams'] == $row['max_teams']) {
                         $eventFull = true;
                     }
-                } 
-            } 
+                }
+            }
         }
-    
+
 ?>
 
         <section class="title">
@@ -37,6 +37,20 @@ if ($result->num_rows > 0) {
                 <div class="row-fluid">
                     <div class="span6">
                         <h1>Register</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="services">
+            <div class="container notice">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h3>Notice!</h3>
+                        When you are ready to register for a Spike2Care tournament, PLEASE make sure you fhave RSVP'd FIRST on Facebook in the event you are registering for.
+                        If you register on this website before RSVPing on Facebook and the rosters are already full, you will be put on the waitlist for that event and we will message you.
+                        <br /><br />
+                        If you do not have Facebook, or if you do not know where to find the event(s) on Facebook, we accept messages through the <a href="/contact.php">contact form</a> on the website. If we receive a message from you BEFORE registration is done, we can put your name on the Facebook list and your spot is secured.
                     </div>
                 </div>
             </div>
@@ -54,17 +68,17 @@ if ($result->num_rows > 0) {
 
             <hr>
 
-            <form id="registration-form" name="registration-form" method="post" action="includes/handleForm.php">  
+            <form id="registration-form" name="registration-form" method="post" action="includes/handleForm.php">
                 <input type="hidden" name="event_id" value="<?php echo $row['id']; ?>">
-                <div class="row-fluid">   
-                
+                <div class="row-fluid">
+
                     <div class="col-xs-12 col-md-6">
-                        
+
                         <div class="row">
-                            
+
                             <?php if ($specialEvent) { ?>
                                 <div class="desc">
-                                    In order to reserve your spot in this special event, fill in the required fields below and submit your payment on the next step.   
+                                    In order to reserve your spot in this special event, fill in the required fields below and submit your payment on the next step.
                                 </div>
                             <?php } else { ?>
                                 <div class="desc">
@@ -102,14 +116,14 @@ if ($result->num_rows > 0) {
                         <div class="row">
                             <?php if (!$specialEvent) { ?>
                                 <label>Please choose one of the following: </label><br />
-                                <input type="radio" name="type" required value="new" <?php if ($eventFull) { echo 'disabled'; } ?>> 
+                                <input type="radio" name="type" required value="new" <?php if ($eventFull) { echo 'disabled'; } ?>>
                                     <label>Registering new team as captain</label><?php if ($eventFull) { echo '<span class="full">Event full!</span>'; } ?><br />
                                 <input type="radio" name="type" required value="freeAgent"> <label>Registering as free agent</label><br />
                                 <input type="radio" name="type" required value="existing"> <label>Joining an existing team</label>
                                 <br><label for="type" class="error" style="display: none;"></label>
                             <?php } ?>
-                            
-                        </div>   
+
+                        </div>
                     </div>
 
                     <div class="col-xs-12 col-md-6">
@@ -121,9 +135,9 @@ if ($result->num_rows > 0) {
                                 <div class="col-xs-8">
                                     <select class="input-block-level" required name="division">
                                         <option selected disabled value="0">Select</option>
-                                        <?php 
+                                        <?php
                                         $divisions = mysqli_query($conn,"SELECT divisions.id, divisions.division_label, event_divisions.max_teams FROM divisions JOIN event_divisions ON event_divisions.division_id = divisions.id JOIN events ON events.id = event_divisions.event_id WHERE events.id = ".$eventId);
-                                        while($division = mysqli_fetch_array($divisions)) 
+                                        while($division = mysqli_fetch_array($divisions))
                                         {
                                             $sql2 = mysqli_query($conn,"SELECT * FROM teams WHERE is_active = 1 AND event_id = ".$eventId." AND division_id = ".$division['id']);
                                             $teamCount = mysqli_num_rows($sql2);
@@ -133,7 +147,7 @@ if ($result->num_rows > 0) {
                                             } else {
                                                 echo '<option value="'.$division['id'].'">'.$division['division_label'].'</option>';
                                             }
-                                
+
                                         } ?>
                                     </select>
                                 </div>
@@ -160,11 +174,11 @@ if ($result->num_rows > 0) {
                                     <br /><span style="display:none;" class="full" id="duplicatePasscodeError">Passcode in use, please choose a unique passcode.</span>
                                 </div>
                             </div>
-                            <div class="row"> 
+                            <div class="row">
                                 <div class="desc col-xs-12">
                                     (Optional) It is best to only add the players you will be paying for. Other teammates can be added later using the passcode you set. (Note: Do not add yourself here.)
                                 </div>
-                                <?php 
+                                <?php
                                 $numPlayers = $row['team_players'];
                                 for($i = 1; $i < $numPlayers + 4; $i++) {
                                 ?>
@@ -175,7 +189,7 @@ if ($result->num_rows > 0) {
                                         <div class="col-xs-8">
                                             <input type="text" class="input-block-level" name="players[]">
                                         </div>
-                                    
+
                                     </div>
                                 <?php
                                 }
@@ -191,9 +205,9 @@ if ($result->num_rows > 0) {
                                 <div class="col-xs-8">
                                     <select class="input-block-level" required name="division">
                                         <option selected disabled value="0">Select</option>
-                                        <?php 
+                                        <?php
                                         $divisions = mysqli_query($conn,"SELECT divisions.id, divisions.division_label FROM divisions JOIN event_divisions ON event_divisions.division_id = divisions.id JOIN events ON events.id = event_divisions.event_id WHERE events.id = ".$eventId);
-                                        while($division = mysqli_fetch_array($divisions)) 
+                                        while($division = mysqli_fetch_array($divisions))
                                         {
                                         ?>
                                             <option value="<?php echo $division['id']; ?>">
@@ -238,10 +252,10 @@ if ($result->num_rows > 0) {
                                     <input type="checkbox" name="current-free-agent"> Check this box if you were on the free agent list for this event.
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
-                
+
                 </div>
 
                 <div class="row">
@@ -259,7 +273,7 @@ if ($result->num_rows > 0) {
     }
 }
 include('footer.php');
-?> 
+?>
 
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
@@ -330,8 +344,8 @@ include('footer.php');
                 complete: function(data){
                     response = $.parseJSON(data.responseText);
                     if (response.type == 'failure') {
-                        $('#duplicatePasscodeError').show(); 
-                        validPasscode = false;   
+                        $('#duplicatePasscodeError').show();
+                        validPasscode = false;
                     }
                 }
             });
@@ -362,7 +376,7 @@ include('footer.php');
                         'paidBySpecial': $('#full_name').val(),
                         'phone': $('#phone').val(),
                         'email': $('#email').val()
-                    }, 
+                    },
                     complete: function(data) {
                         link = $.parseJSON(data.responseText);
                         window.location.replace(link);
@@ -387,7 +401,7 @@ include('footer.php');
                         if (form.valid() && (registerType == 'existing' || validPasscode)) {
                             // if passcode not found, don't submit form
                             $.get('includes/handleForm.php', { passcode: passcode }).done(function(data) {
-                   
+
                                 if (registerType == 'existing' && (passcode == '' || data.trim() == 'No team found.')) {
                                     $('#team-search-result').html(data);
                                 } else {
@@ -407,7 +421,7 @@ include('footer.php');
                 });
             }
         }
-        
+
     });
 
     function isEmail(email) {
@@ -421,4 +435,5 @@ include('footer.php');
     }
 
 </script>
+
 
