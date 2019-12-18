@@ -43,6 +43,7 @@ if (isset($_GET) && !empty($_GET)) {
                     <div class="col-md-12 col-sm-12">
 
                         <div class="pull-right">
+                            <a href="addTeam.php?eventId=<?php echo $eventId; ?>" class="btn btn-info">Add Team</a>
                             <a href="exportTeams.php?eventId=<?php echo $eventId; ?>" class="btn btn-info">Export Teams</a>
                         </div>
                         <table class="table table-bordered table-striped table-responsive" id="datatable-teams">
@@ -60,8 +61,13 @@ if (isset($_GET) && !empty($_GET)) {
                                     FROM teams t 
                                     JOIN divisions d on t.division_id = d.id 
                                     JOIN people p on p.id = t.captain_id 
-                                    WHERE event_id = $eventId AND t.is_active = 1
-                                    GROUP BY t.id";
+                                    WHERE t.event_id = $eventId AND t.is_active = 1
+                                    GROUP BY t.id
+                                    UNION
+                                    (SELECT rt.id, NULL, division_label, NULL, captain_name, 0 
+                                    FROM reserved_teams rt
+                                    JOIN divisions ON divisions.id = rt.division_id
+                                    WHERE event_id = $eventId)";
                                 $teams = mysqli_query($conn, $sql);
                                 if (mysqli_num_rows($teams) > 0) {
                                     while($team = mysqli_fetch_array($teams)) 
@@ -166,7 +172,7 @@ include('includes/footer.php');
     $(document).ready(function(){
         $('#datatable-teams').DataTable({
             stateSave: true,
-            "order": [[ 1, "desc" ]]
+            "order": [[ 3, "desc" ]]
         });
 
         $('#datatable-freeagents').DataTable({

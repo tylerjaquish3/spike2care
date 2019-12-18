@@ -7,9 +7,9 @@ include 'password.php';
 
 require_once('../../stripe/init.php');
 
+// var_dump($_GET);die;
 	if(isset($_POST['save-event'])) {
 
-		// var_dump($_POST);die;
 
 		$specialEvent = $registrationOpen = false;
 		$fields = $insertItems = $setValues = '';
@@ -258,7 +258,7 @@ require_once('../../stripe/init.php');
 			
 				$to = $email;
 
-				$emailSent = sendEmail($to, $subject, $message);
+				$emailSent = sendEmail($to, $subject, $message, 'genericTemplate.html');
 
 				$result = ['type' => 'success', 'message' => $message];
 			} else {
@@ -501,7 +501,7 @@ require_once('../../stripe/init.php');
 			$headers = 'From: Spike2Care.org' . "\r\n" .
 			'X-Mailer: PHP/' . phpversion();
 
-			$emailSent = sendEmail($to, $subject, $message);
+			$emailSent = sendEmail($to, $subject, $message, 'genericTemplate.html');
 
 			$return = ['type' => 'success', 'message' => 'Email sent!'];
 		} else {
@@ -512,10 +512,8 @@ require_once('../../stripe/init.php');
 	}
 
 
-	function sendEmail($to, $subject, $message)
+	function sendEmail($to, $subject, $message, $template)
 	{
-		$email_template = 'genericTemplate.html';
-
 		if (IS_DEV) {
 	        $to = 'tylerjaquish@gmail.com';
 	    }
@@ -525,16 +523,16 @@ require_once('../../stripe/init.php');
 	    $headers .= "MIME-Version: 1.0\r\n";
 	    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-	    $templateTags =  array(
+	    $templateTags =  [
 	        '{{subject}}' => $subject,
-	        '{{message}}'=>$message
-	        );
+	        '{{message}}' => $message
+		];
 
-	    $templateContents = file_get_contents( dirname(__FILE__) . '/'.$email_template);
+	    $templateContents = file_get_contents( dirname(__FILE__) . '/'.$template);
 	    $contents =  strtr($templateContents, $templateTags);
 
-	    if (mail( $to, $subject, $contents, $headers)) {
-	    	return true;
+	    if (mail($to, $subject, $contents, $headers)) {
+			return true;
     	}
 
     	return false;
@@ -924,5 +922,74 @@ require_once('../../stripe/init.php');
 		}
 
 		echo json_encode($response);
+	}
+
+	// Delete meeting minutes from database
+	if ($_GET && array_key_exists('action', $_GET) && $_GET['action'] == 'findEmail') {
+
+		$result = [];
+		$i=0;
+		$captainName = $_GET['name'];
+		$sql = "SELECT DISTINCT email FROM people where full_name LIKE '".$captainName."'";
+
+		$getPeople = mysqli_query($conn, $sql);
+		if (mysqli_num_rows($getPeople) > 0) {
+			while($person = mysqli_fetch_array($getPeople)) 
+	        {
+				$result[] = [
+					'id' => $i,
+					'text' => $person['email']
+				];
+				$i++;
+			}
+		}
+
+		echo json_encode($result);
+		die;
+	}
+	
+	// Add a captain to the reserved teams and send the captain an email
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'add-team') {
+		
+		$success = "false";
+
+		try {
+			$name = escape($_POST['name']);
+			$eventName = escape($_POST['event-name']);
+			$eventId = $_POST['event-id'];
+			$division = $_POST['selected-division'];
+
+			if (isset($_POST['selected-email']) && $_POST['selected-email'] != '') {
+				$email = $_POST['selected-email'];
+			} else {
+				$email = escape($_POST['new-email']);
+			}
+			$active = 1;
+			$uid = uniqid();
+			$createdAt = date('Y-m-d H:i:s');
+
+			$sql = "INSERT INTO reserved_teams (event_id, captain_name, captain_email, division_id, uid, is_active, created_at) 
+				VALUES ({$eventId}, '{$name}', '{$email}', {$division}, '{$uid}', {$active}, '{$createdAt}')";
+			$result = mysqli_query($conn, $sql);
+
+			// Send email to captain
+			$subject = "Spike2Care Tournament Registration";
+			$message = "A team reservation has been made for you for the event: <br />".$eventName."<br /><br />";
+			$message .= "Please click the link below to register.<br /><br />";
+			$message .= "<a class='btn-primary' href='https://spike2care.org/register.php?uid=".$uid."'>Register</a>";
+			$to = $email;
+
+			$emailSent = sendEmail($to, $subject, $message, "teamRegistration.html");
+
+			if ($result) {
+				$success = "true";
+			} 
+		} catch (Exception $ex) {
+			$success = "false";
+			// var_dump($ex->getMessage());die;
+		}
+
+		header("Location: ".URL."/admin/addTeam.php?success=".$success."&eventId=".$eventId);
+		die();
 	}
 ?>

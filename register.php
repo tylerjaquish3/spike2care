@@ -2,11 +2,35 @@
 $currentPage = 'Events';
 include('header.php');
 
+$reserved = "false";
+$reservedArray = [];
 if (isset($_GET)) {
-    $eventId = $_GET['id'];
+
+    if (isset($_GET['uid']) && $_GET['uid'] != '') {
+        $reserved = "true";
+        $sql = $conn->prepare("SELECT * FROM reserved_teams WHERE uid = ?");
+        $sql->bind_param('s', $_GET['uid']);
+        $sql->execute();
+        $result = $sql->get_result();
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $eventId = $row['event_id'];
+                $reservedArray = $row;
+            }
+        } else {
+            notFound();
+        }
+    } elseif (isset($_GET['id']) && $_GET['id'] != '') {
+        $eventId = $_GET['id'];
+    }
 } else {
+    notFound();
+}
+
+function notFound() {
     die('<script type="text/javascript">window.location.href="404.php";</script>');
 }
+
 $eventFull = $specialEvent = false;
 
 $sql = $conn->prepare("SELECT * FROM events WHERE id = ?");
@@ -17,6 +41,11 @@ $result = $sql->get_result();
 
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
+
+        if ($row['registration_open'] == 0 || $row['is_active'] == 0) {
+            notFound();
+        }
+
         if ($row['special_event']) {
             $specialEvent = true;
         } else {
@@ -29,7 +58,6 @@ if ($result->num_rows > 0) {
                 } 
             } 
         }
-    
 ?>
 
         <section class="title">
@@ -37,6 +65,22 @@ if ($result->num_rows > 0) {
                 <div class="row-fluid">
                     <div class="span6">
                         <h1>Register</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="services">
+            <div class="container notice">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h3>Notice!</h3>
+                        Spike2Care tournament registration process has changed. 
+                        You must first reserve a spot for this tournament on the event page on Facebook. 
+                        Once the S2C admin officially reserves your spot, you will receive an email with a link to register your team.
+                        <br /><br />
+                        If you do not have Facebook, or if you do not know where to find the event on Facebook, 
+                        we accept messages through the <a href="/contact.php">contact form</a> on the website. 
                     </div>
                 </div>
             </div>
@@ -103,8 +147,12 @@ if ($result->num_rows > 0) {
                             <?php if (!$specialEvent) { ?>
                                 <label>Please choose one of the following: </label><br />
                                 <input type="radio" name="type" required value="new" <?php if ($eventFull) { echo 'disabled'; } ?>> 
-                                    <label>Registering new team as captain</label><?php if ($eventFull) { echo '<span class="full">Event full!</span>'; } ?><br />
-                                <input type="radio" name="type" required value="freeAgent"> <label>Registering as free agent</label><br />
+                                    <label>Registering new team as captain</label>
+                                    <?php if ($eventFull) { echo '<span class="full">Event full!</span>'; } ?>
+                                    <span class="full" id="notReserved" style="display:none;"><br />Must reserve a spot on Facebook to register new team</span>
+                                <br />
+                                <input type="radio" name="type" required value="freeAgent"> <label>Registering as free agent</label>
+                                <br />
                                 <input type="radio" name="type" required value="existing"> <label>Joining an existing team</label>
                                 <br><label for="type" class="error" style="display: none;"></label>
                             <?php } ?>
@@ -119,7 +167,7 @@ if ($result->num_rows > 0) {
                                     <label>Division</label>
                                 </div>
                                 <div class="col-xs-8">
-                                    <select class="input-block-level" required name="division">
+                                    <select class="input-block-level" required name="division" id="division">
                                         <option selected disabled value="0">Select</option>
                                         <?php 
                                         $divisions = mysqli_query($conn,"SELECT divisions.id, divisions.division_label, event_divisions.max_teams FROM divisions JOIN event_divisions ON event_divisions.division_id = divisions.id JOIN events ON events.id = event_divisions.event_id WHERE events.id = ".$eventId);
@@ -265,6 +313,22 @@ include('footer.php');
 
 <script type="text/javascript">
     var eventId = <?php echo $eventId; ?>;
+
+    var reserved = "<?php echo $reserved; ?>";
+
+    // User has a reserved team, so fill in the blanks
+    if (reserved == "true") {
+        
+        var reservedArray = <?php echo json_encode($reservedArray); ?>;
+        $("input[name=type][value=new]").prop('checked', true);
+        $('#new-team').show();
+        $('#full_name').val(reservedArray.captain_name);
+        $('#email').val(reservedArray.captain_email);
+        $('#division').val(reservedArray.division_id);
+    } else {
+        $("input[name=type][value=new]").prop('disabled', true);
+        $('#notReserved').show();
+    }
 
     $('input[type=radio][name=type]').change(function() {
         if (this.value == 'new') {
