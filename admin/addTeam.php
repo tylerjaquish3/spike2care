@@ -165,10 +165,13 @@ include('includes/footer.php');
         });
     });
                 
-
     $('#save').click(function (e) {
         e.preventDefault();
-        $('#add-team-confirm-modal').modal('show');
+        if ($('#division').val() == "" || $('#division').val() == null) {
+            addAlertToPage('Error', 'error', "You must select a division.");
+        } else {
+            $('#add-team-confirm-modal').modal('show');
+        }
     });  
 
     $('#add-team-btn').click(function (e) {

@@ -67,7 +67,7 @@ if (isset($_GET) && !empty($_GET)) {
                                     (SELECT rt.id, NULL, division_label, NULL, captain_name, 0 
                                     FROM reserved_teams rt
                                     JOIN divisions ON divisions.id = rt.division_id
-                                    WHERE event_id = $eventId)";
+                                    WHERE is_active = 1 AND event_id = $eventId)";
                                 $teams = mysqli_query($conn, $sql);
                                 if (mysqli_num_rows($teams) > 0) {
                                     while($team = mysqli_fetch_array($teams)) 
