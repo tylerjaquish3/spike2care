@@ -54,6 +54,7 @@ if (isset($_GET) && !empty($_GET)) {
                                 <th>Players Registered</th>
                                 <th>Players Paid</th>
                                 <th>Passcode</th>
+                                <th></th>
                             </thead>
                             <tbody>
                                 <?php 
@@ -80,6 +81,11 @@ if (isset($_GET) && !empty($_GET)) {
                                             <td><?php echo $registeredPlayers; ?></td>
                                             <td><?php echo $team['players_paid']; ?></td>
                                             <td><?php echo $team['passcode']; ?></td>
+                                            <td>
+                                                <?php if ($registeredPlayers == 0) { ?>
+                                                <a class="btn btn-sm btn-danger" onclick="removeReservation(<?php echo $team['id']; ?>)">Remove</a>
+                                                <?php } ?>
+                                            </td>
                                         </tr>
 
                                     <?php }
@@ -169,8 +175,10 @@ include('includes/footer.php');
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
-        $('#datatable-teams').DataTable({
+    var teamsTable;
+
+    // $(document).ready(function(){
+        teamsTable = $('#datatable-teams').DataTable({
             stateSave: true,
             "order": [[ 3, "desc" ]]
         });
@@ -179,7 +187,7 @@ include('includes/footer.php');
             stateSave: true,
             "order": [[ 1, "desc" ]]
         });
-    });
+    // });
 
     function removeFA(faId)
     {
@@ -213,5 +221,31 @@ include('includes/footer.php');
             }
         });
     });
+
+    function removeReservation(teamId)
+    {
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'action': 'remove-reservation',
+                'teamId': teamId
+            },
+            complete: function(data){
+                response = $.parseJSON(data.responseText);
+
+                if (response == true) {
+                    addAlertToPage('success', 'Success', "Successfully removed!", 3);
+                    setTimeout(function(){
+                        location.reload();
+                    }, 3000);
+                } else {
+                    addAlertToPage('error', 'Error', "An error occurred, please contact admin.", 3);
+                }
+                
+            }
+        });
+    }
 
 </script>

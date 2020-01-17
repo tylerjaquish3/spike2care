@@ -992,4 +992,23 @@ require_once('../../stripe/init.php');
 		header("Location: ".URL."/admin/addTeam.php?success=".$success."&eventId=".$eventId);
 		die();
 	}
+
+	// Add a captain to the reserved teams and send the captain an email
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'remove-reservation') {
+// var_dump('hello handsome');die;
+
+		$success = "false";
+		$reservationId = $_POST['teamId'];
+
+		$sql = "UPDATE reserved_teams SET is_active = 0 WHERE id = $reservationId";
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$success = "true";
+		} 
+
+		echo $success;
+		die;
+	}
+		
 ?>
