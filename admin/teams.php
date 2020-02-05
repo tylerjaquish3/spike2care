@@ -8,10 +8,10 @@ if (!isset($_SESSION["user_id"])) {
 }
 
 if (isset($_GET) && !empty($_GET)) {
-    $eventId = $_GET['eventId'];  
+    $eventId = $_GET['eventId'];
 
     $result = mysqli_query($conn,"SELECT * FROM events WHERE id = $eventId");
-    while($event = mysqli_fetch_array($result)) 
+    while($event = mysqli_fetch_array($result))
     {
         $eventName = $event['title'];
     }
@@ -20,7 +20,7 @@ if (isset($_GET) && !empty($_GET)) {
 
 <!-- page content -->
 <div class="right_col" role="main">
-                    
+
     <div class="page-title">
         <div class="title_left">
             <h1><?php echo $eventName; ?></h1>
@@ -57,23 +57,26 @@ if (isset($_GET) && !empty($_GET)) {
                                 <th></th>
                             </thead>
                             <tbody>
-                                <?php 
+                                <?php
                                 $sql = "SELECT t.id, team_name, division_label, passcode, full_name, players_paid
-                                    FROM teams t 
-                                    JOIN divisions d on t.division_id = d.id 
-                                    JOIN people p on p.id = t.captain_id 
+                                    FROM teams t
+                                    JOIN divisions d on t.division_id = d.id
+                                    JOIN people p on p.id = t.captain_id
                                     WHERE t.event_id = $eventId AND t.is_active = 1
                                     GROUP BY t.id
                                     UNION
-                                    (SELECT rt.id, NULL, division_label, NULL, captain_name, 0 
+                                    (SELECT rt.id, NULL, division_label, NULL, captain_name, 0
                                     FROM reserved_teams rt
                                     JOIN divisions ON divisions.id = rt.division_id
                                     WHERE is_active = 1 AND event_id = $eventId)";
                                 $teams = mysqli_query($conn, $sql);
                                 if (mysqli_num_rows($teams) > 0) {
-                                    while($team = mysqli_fetch_array($teams)) 
-                                    { 
-                                        $registeredPlayers = getRegisteredPlayers($conn, $team['id']); ?>
+                                    while($team = mysqli_fetch_array($teams))
+                                    {
+                                        $registeredPlayers = 0;
+                                        if ($team['team_name']) {
+                                            $registeredPlayers = getRegisteredPlayers($conn, $team['id']);
+                                        }?>
                                         <tr>
                                             <td><a href="editTeam.php?teamId=<?php echo $team[0]; ?>"><?php echo $team['team_name']; ?></a></td>
                                             <td><?php echo $team['full_name']; ?></td>
@@ -120,16 +123,16 @@ if (isset($_GET) && !empty($_GET)) {
                                 <th>Remove</th>
                             </thead>
                             <tbody>
-                                <?php 
+                                <?php
                                 $sql = "SELECT fa.id, division_label, full_name
-                                    FROM free_agents fa 
-                                    JOIN divisions d on fa.division_id = d.id 
-                                    JOIN people p on p.id = fa.people_id 
+                                    FROM free_agents fa
+                                    JOIN divisions d on fa.division_id = d.id
+                                    JOIN people p on p.id = fa.people_id
                                     WHERE event_id = $eventId AND fa.is_active = 1
                                     GROUP BY fa.id";
                                 $teams = mysqli_query($conn, $sql);
                                 if (mysqli_num_rows($teams) > 0) {
-                                    while($team = mysqli_fetch_array($teams)) 
+                                    while($team = mysqli_fetch_array($teams))
                                     { ?>
                                         <tr>
                                             <td><?php echo $team['full_name']; ?></td>
@@ -217,7 +220,7 @@ include('includes/footer.php');
                 } else {
                     addAlertToPage('error', 'Error', response.message);
                 }
-                
+
             }
         });
     });
@@ -243,7 +246,7 @@ include('includes/footer.php');
                 } else {
                     addAlertToPage('error', 'Error', "An error occurred, please contact admin.", 3);
                 }
-                
+
             }
         });
     }
