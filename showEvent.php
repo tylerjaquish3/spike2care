@@ -3,7 +3,7 @@
 $currentPage = 'Events';
 include('header.php');
 
-if ($_GET) {
+if (isset($_GET)) {
     $eventId = $_GET['eventId'];
 
     if (isset($_GET['message'])) {
@@ -16,6 +16,9 @@ if ($_GET) {
         }
     }
 } else {
+    notFound();
+}
+function notFound() {
     die('<script type="text/javascript">window.location.href="404.php";</script>');
 }
 ?>
@@ -42,6 +45,9 @@ if ($_GET) {
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    if ($row['is_active'] == 0) {
+                        notFound();
+                    }
                     $deadline = strtotime($row['event_date'].' -3 days'); 
             ?>
 
@@ -65,7 +71,6 @@ if ($_GET) {
                         <div class="pull-right">
                             <?php
                             $today = date('Y-m-d H:i:s');
-                            // $wedBefore = strtotime(date('Y-m-d 23:59:59', strtotime('previous wednesday', strtotime($row['event_date']))));
                             if ($row['registration_open'] && strtotime($today) <= strtotime($row['registration_deadline'])) { ?>
                                 <a class="btn btn-primary btn-large" href="register.php?id=<?php echo $row['id']; ?>">Register</a>
                                 <h4 class="padding5">$ <?php echo $row['price']; ?> <?php echo ($row['price_for'] != "na") ? "<small>(".$row['price_for'].")</small>" : "-"; ?></h4>

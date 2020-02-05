@@ -364,7 +364,6 @@ require_once('../stripe/init.php');
 	}
 
 	// New registration with players paid
-	// if ((isset($_POST['players_paid']) && $_POST['players_paid'] != '') || isset($_POST['paidBy']) && isset($_POST['donation']) && $_POST['donation'] > 0)  {
 	if (isset($_POST['action']) && $_POST['action'] == 'teamCheckout') {
 
 		$chargeToken = '';
@@ -454,7 +453,10 @@ require_once('../stripe/init.php');
 	        {
 	        	$existingPlayersPaid = $row['players_paid'];
         	}
-    	}
+		}
+		
+		$sql = "UPDATE reserved_teams SET is_active = 0 WHERE event_id = $eventId AND captain_email = '".$email."'";
+		$test = mysqli_query($conn, $sql);
 
     	$newPlayersPaid = $existingPlayersPaid + count($playersPaid);
 

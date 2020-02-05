@@ -43,6 +43,7 @@ if (isset($_GET) && !empty($_GET)) {
                     <div class="col-md-12 col-sm-12">
 
                         <div class="pull-right">
+                            <a href="addTeam.php?eventId=<?php echo $eventId; ?>" class="btn btn-info">Add Team</a>
                             <a href="exportTeams.php?eventId=<?php echo $eventId; ?>" class="btn btn-info">Export Teams</a>
                         </div>
                         <table class="table table-bordered table-striped table-responsive" id="datatable-teams">
@@ -53,6 +54,7 @@ if (isset($_GET) && !empty($_GET)) {
                                 <th>Players Registered</th>
                                 <th>Players Paid</th>
                                 <th>Passcode</th>
+                                <th></th>
                             </thead>
                             <tbody>
                                 <?php 
@@ -60,8 +62,13 @@ if (isset($_GET) && !empty($_GET)) {
                                     FROM teams t 
                                     JOIN divisions d on t.division_id = d.id 
                                     JOIN people p on p.id = t.captain_id 
-                                    WHERE event_id = $eventId AND t.is_active = 1
-                                    GROUP BY t.id";
+                                    WHERE t.event_id = $eventId AND t.is_active = 1
+                                    GROUP BY t.id
+                                    UNION
+                                    (SELECT rt.id, NULL, division_label, NULL, captain_name, 0 
+                                    FROM reserved_teams rt
+                                    JOIN divisions ON divisions.id = rt.division_id
+                                    WHERE is_active = 1 AND event_id = $eventId)";
                                 $teams = mysqli_query($conn, $sql);
                                 if (mysqli_num_rows($teams) > 0) {
                                     while($team = mysqli_fetch_array($teams)) 
@@ -74,6 +81,11 @@ if (isset($_GET) && !empty($_GET)) {
                                             <td><?php echo $registeredPlayers; ?></td>
                                             <td><?php echo $team['players_paid']; ?></td>
                                             <td><?php echo $team['passcode']; ?></td>
+                                            <td>
+                                                <?php if ($registeredPlayers == 0) { ?>
+                                                <a class="btn btn-sm btn-danger" onclick="removeReservation(<?php echo $team['id']; ?>)">Remove</a>
+                                                <?php } ?>
+                                            </td>
                                         </tr>
 
                                     <?php }
@@ -163,17 +175,19 @@ include('includes/footer.php');
 
 <script type="text/javascript">
 
-    $(document).ready(function(){
-        $('#datatable-teams').DataTable({
+    var teamsTable;
+
+    // $(document).ready(function(){
+        teamsTable = $('#datatable-teams').DataTable({
             stateSave: true,
-            "order": [[ 1, "desc" ]]
+            "order": [[ 3, "desc" ]]
         });
 
         $('#datatable-freeagents').DataTable({
             stateSave: true,
             "order": [[ 1, "desc" ]]
         });
-    });
+    // });
 
     function removeFA(faId)
     {
@@ -207,5 +221,31 @@ include('includes/footer.php');
             }
         });
     });
+
+    function removeReservation(teamId)
+    {
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'action': 'remove-reservation',
+                'teamId': teamId
+            },
+            complete: function(data){
+                response = $.parseJSON(data.responseText);
+
+                if (response == true) {
+                    addAlertToPage('success', 'Success', "Successfully removed!", 3);
+                    setTimeout(function(){
+                        location.reload();
+                    }, 3000);
+                } else {
+                    addAlertToPage('error', 'Error', "An error occurred, please contact admin.", 3);
+                }
+                
+            }
+        });
+    }
 
 </script>

@@ -10,13 +10,12 @@
         </div>
         <div class="row">
             <div class="cp center">
-                <span class="copy">&copy; 2017 Spike2Care. All Rights Reserved.</span> <a href="terms.php">Terms of Use</a> | <a href="privacy.php">Privacy Policy</a>
+                <span class="copy">&copy; <?php echo date('Y'); ?> Spike2Care. All Rights Reserved.</span> <a href="terms.php">Terms of Use</a> | <a href="privacy.php">Privacy Policy</a>
             </div>
         </div>
     </div>
 </footer>
 <!--/Footer-->
-
 
 <!-- <script src="js/jquery-2.1.1.js"></script> -->
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
