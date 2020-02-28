@@ -107,6 +107,34 @@ if (isset($_GET) && !empty($_GET)) {
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="x_panel table_panel">
+                <div class="x_content">
+                    <div class="col-xs-12">
+                        <p>Clean up emails for existing players</p>
+
+                        <form id="remove-email-form" action="includes/handleForm.php" method="POST" enctype="multipart/form-data">
+
+                            <input type="hidden" name="action" value="remove-email">
+                            
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input type="input" class="form-control" name="name" placeholder="Player Name" id="player-lookup" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12" id="found-emails">
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="add-team-confirm-modal" role="dialog" aria-hidden="false">
@@ -181,6 +209,44 @@ include('includes/footer.php');
         $('#selectedDivision').val($('#division').val());
 
         $('#add-captain-form').submit();
-    }) 
+    });
+
+    $('#player-lookup').focusout(function () {
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: "GET",
+            data: {
+                action: 'findEmail',
+                name: $('#player-lookup').val()
+            },
+            dataType: 'json',
+            complete: function (response) {
+                var emails = JSON.parse(response.responseText);
+                $('#found-emails').html('');
+
+                $.each(emails, function (key, value) {
+                    var removeFunction = "remove('"+value.text+"')";
+                    var stuff = value.text + ' <a class="btn btn-warning" href="#" onclick='+removeFunction+'>Remove</a><br />';
+                    $('#found-emails').append(stuff);
+                });
+            }
+        });
+    });
+
+    function remove(email) 
+    {
+        $.ajax({
+            url: 'includes/handleForm.php',
+            type: "POST",
+            data: {
+                action: 'invalidate-email',
+                email: email
+            },
+            dataType: 'json',
+            complete: function (response) {
+                location.reload();
+            }
+        });
+    }
 
 </script>

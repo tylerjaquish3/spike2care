@@ -518,9 +518,11 @@ require_once('../../stripe/init.php');
 	        $to = 'tylerjaquish@gmail.com';
 	    }
 
-	    $headers  = "From: Spike2Care.org" . "\r\n";
-	    $headers .= "Reply-To: info@spike2care.org" . "\r\n";
-	    $headers .= "MIME-Version: 1.0\r\n";
+		$headers  = "From: Spike2Care <info@spike2care.org>" . "\r\n";
+		$headers .= "Return-Path: Spike2Care <info@spike2care.com>\r\n";
+	    $headers .= "Reply-To: S2C <info@spike2care.org>" . "\r\n";
+		$headers .= "MIME-Version: 1.0\r\n";
+		$headers .= "X-Priority: 3\r\n";
 	    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
 	    $templateTags =  [
@@ -924,13 +926,13 @@ require_once('../../stripe/init.php');
 		echo json_encode($response);
 	}
 
-	// Delete meeting minutes from database
+	// Get emails for a user based on their name
 	if ($_GET && array_key_exists('action', $_GET) && $_GET['action'] == 'findEmail') {
 
 		$result = [];
 		$i=0;
 		$captainName = $_GET['name'];
-		$sql = "SELECT DISTINCT email FROM people where full_name LIKE '".$captainName."'";
+		$sql = "SELECT DISTINCT email FROM people where full_name LIKE '".$captainName."' AND email_valid = 1";
 
 		$getPeople = mysqli_query($conn, $sql);
 		if (mysqli_num_rows($getPeople) > 0) {
@@ -995,12 +997,28 @@ require_once('../../stripe/init.php');
 
 	// Add a captain to the reserved teams and send the captain an email
 	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'remove-reservation') {
-// var_dump('hello handsome');die;
 
 		$success = "false";
 		$reservationId = $_POST['teamId'];
 
 		$sql = "UPDATE reserved_teams SET is_active = 0 WHERE id = $reservationId";
+		$result = mysqli_query($conn, $sql);
+
+		if ($result) {
+			$success = "true";
+		} 
+
+		echo $success;
+		die;
+	}
+
+	// Update the user's email_valid to false
+	if ($_POST && array_key_exists('action', $_POST) && $_POST['action'] == 'invalidate-email') {
+		
+		$success = "false";
+		$email = $_POST['email'];
+
+		$sql = "UPDATE people SET email_valid = 0 WHERE email = '$email'";
 		$result = mysqli_query($conn, $sql);
 
 		if ($result) {
